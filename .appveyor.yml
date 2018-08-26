@@ -1,0 +1,19 @@
+skip_branch_with_pr: true
+
+image: Visual Studio 2017
+
+cache:
+  - c:\tools\vcpkg\installed\
+
+install:
+  - cmd: choco install gperf
+
+build_script:
+  - pwsh: .\build.windows.ps1 c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
+
+after_build:
+  - pwsh: .\upload.windows.ps1
+
+artifacts:
+  - path: tdlib.zip
+    name: tdlib
