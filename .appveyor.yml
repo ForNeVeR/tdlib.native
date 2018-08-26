@@ -6,7 +6,7 @@ cache:
   - c:\tools\vcpkg\installed\
 
 install:
-  - cmd: choco install gperf
+  - pwsh: .\install.windows.ps1
 
 build_script:
   - pwsh: .\build.windows.ps1 -VcpkgToolchain c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
