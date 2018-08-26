@@ -6,9 +6,7 @@ language: cpp
 matrix:
   include:
     - os: linux
-      env: BUILD_TYPE=RelWithDebInfo
     - os: osx
-      env: BUILD_TYPE=Debug
 
 before_install:
   - bash <(wget -O - https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/install-powershell.sh)
