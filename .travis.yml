@@ -1,0 +1,18 @@
+sudo: required
+dist: trusty
+
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      env: BUILD_TYPE=RelWithDebInfo
+    - os: osx
+      env: BUILD_TYPE=Debug
+
+before_install:
+  - bash <(wget -O - https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/install-powershell.sh)
+  - pwsh ./install.$TRAVIS_OS_NAME.ps1
+
+script:
+  - pwsh ./build.$TRAVIS_OS_NAME.ps1
