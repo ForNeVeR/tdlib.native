@@ -1,1 +1,1 @@
-Compress-Archive .\td\build\Release\*.dll tdlib.zip
+Compress-Archive .\td\build\Release\*.dll tdlib.windows.zip
