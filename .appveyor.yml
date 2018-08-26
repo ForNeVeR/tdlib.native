@@ -9,7 +9,7 @@ install:
   - cmd: choco install gperf
 
 build_script:
-  - pwsh: .\build.windows.ps1 c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
+  - pwsh: .\build.windows.ps1 -VcpkgToolchain c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
 
 after_build:
   - pwsh: .\upload.windows.ps1
