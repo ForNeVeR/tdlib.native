@@ -1,1 +1,1 @@
-Compress-Archive .\td\build\libtdjson.so tdlib.linux.zip
+Compress-Archive ./td/build/libtdjson.so tdlib.linux.zip

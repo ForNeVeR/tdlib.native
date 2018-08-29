@@ -1,19 +1,38 @@
 skip_branch_with_pr: true
 
-image: Visual Studio 2017
+image:
+  - Visual Studio 2017
+  - ubuntu
 
 cache:
   - c:\tools\vcpkg\installed\
 
 install:
-  - pwsh: .\install.windows.ps1
+  - pwsh: |
+      if ($isLinux) {
+        ./install.linux.ps1
+      } else {
+        ./install.windows.ps1
+      }
 
 build_script:
-  - pwsh: .\build.windows.ps1 -VcpkgToolchain c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
+  - pwsh: |
+      if ($isLinux) {
+        ./build.linux.ps1
+      } else {
+        .\build.windows.ps1 -VcpkgToolchain c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
+      }
 
 after_build:
-  - pwsh: .\pack.windows.ps1
+  - pwsh:
+      if ($isLinux) {
+        ./pack.linux.ps1
+      } else {
+        .\pack.windows.ps1
+      }
 
 artifacts:
-  - path: tdlib.zip
-    name: tdlib
+  - path: tdlib.windows.zip
+    name: tdlib.windows
+  - path: tdlib.linux.zip
+    name: tdlib.linux
