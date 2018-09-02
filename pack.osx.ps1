@@ -1,1 +1,1 @@
-Compress-Archive .\td\build\libtdjson.dll tdlib.osx.zip
+Compress-Archive ./td/build/libtdjson.dylib tdlib.osx.zip
