@@ -43,4 +43,4 @@ deploy:
     secure: gZMcwBPRuLO7UnRn8zrJOh52yLST5z0klrMZg9zsVVMungWPacvh8dOqBj+mkdeV
   artifact: tdlib.windows,tdlib.linux
   on:
-    appveyor_repo_tag: true
+    APPVEYOR_REPO_TAG: true
