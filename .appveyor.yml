@@ -36,3 +36,11 @@ artifacts:
     name: tdlib.windows
   - path: tdlib.linux.zip
     name: tdlib.linux
+
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: gZMcwBPRuLO7UnRn8zrJOh52yLST5z0klrMZg9zsVVMungWPacvh8dOqBj+mkdeV
+  artifact: tdlib.windows,tdlib.linux
+  on:
+    appveyor_repo_tag: true
