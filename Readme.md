@@ -1,5 +1,4 @@
 tdlib.native [![NuGet](https://img.shields.io/nuget/v/tdlib.native.svg)](https://www.nuget.org/packages/tdlib.native/)
-
 ============
 
 This is the project to pack [tdlib][] binaries for multiple common platforms.
