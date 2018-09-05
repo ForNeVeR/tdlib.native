@@ -28,7 +28,7 @@ try {
 
     Remove-Item *.zip
 
-    & $NuGet pack ../tdlib.native.nuspec
+    & $NuGet pack ../tdlib.native.nuspec -BasePath .
     if (!$?) { throw 'NuGet execution error' }
 } finally {
     Pop-Location

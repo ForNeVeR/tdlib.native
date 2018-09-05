@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>tdlib.native</id>
+    <version>1.2.0</version>
+    <authors>ForNeVeR</authors>
+    <owners>ForNeVeR</owners>
+    <licenseUrl>https://github.com/tdlib/td/blob/a9608ca379e1582552d7a123912aa9d68c2bb1ca/LICENSE_1_0.txt</licenseUrl>
+    <projectUrl>https://github.com/ForNeVeR/tdlib.native</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>NuGet packaging for tdlib: Telegram client library.</description>
+    <releaseNotes>Initial package release for 1.2.0.</releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>telegram</tags>
+  </metadata>
+</package>
