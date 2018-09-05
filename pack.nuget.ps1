@@ -22,8 +22,9 @@ if (!(Test-Path -PathType Container $BuildDirectory)) {
 Push-Location $BuildDirectory
 try {
     foreach ($artifact in $artifacts.Keys) {
+        $targetDirectory = "runtimes/$($artifacts[$artifact])/native"
         Invoke-WebRequest "$BaseAddress/$artifact" -OutFile $artifact
-        Expand-Archive $artifact -DestinationPath "runtimes/$($artifacts[$artifact])"
+        Expand-Archive $artifact -DestinationPath $targetDirectory
     }
 
     Remove-Item *.zip
