@@ -1,14 +1,14 @@
 param (
-    $Version = '1.3.0',
+    $Version = '1.4.0-preview1',
     $Tag = "v$Version",
     $BaseAddress = "https://github.com/ForNeVeR/tdlib.native/releases/download/$Tag",
     $BuildDirectory = "$PSScriptRoot/build",
-    
+
     $NuGet = 'NuGet.exe'
 )
 
 $ErrorActionPreference = 'Stop'
-Set-StrictMode -Version 6
+Set-StrictMode -Version Latest
 
 $artifacts = @{
     'tdlib.linux.zip' = 'linux-x64'
