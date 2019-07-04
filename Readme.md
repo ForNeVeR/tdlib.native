@@ -12,6 +12,8 @@ artifacts to the [Releases][releases] page.
 How to pack to NuGet
 --------------------
 
+Pack script requires NuGet 5 to be installed on a machine.
+
 ```console
 $ pwsh ./pack.nuget.ps1
 ```
