@@ -2,7 +2,7 @@ param (
     $Version = '1.3.0',
     $Tag = "v$Version",
     $BaseAddress = "https://github.com/ForNeVeR/tdlib.native/releases/download/$Tag",
-    $BuildDirectory = "$PSScriptRoot/build",
+    $BuildDirectory = "$PSScriptRoot/../build",
 
     $NuGet = 'NuGet.exe'
 )

@@ -1,5 +1,5 @@
 param (
-    $td = "$PSScriptRoot/td",
+    $td = "$PSScriptRoot/../td",
     $Platform = 'x64-windows',
     [Parameter(Mandatory = $true)] $VcpkgToolchain
 )

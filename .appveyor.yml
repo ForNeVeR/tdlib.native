@@ -10,25 +10,25 @@ cache:
 install:
   - pwsh: |
       if ($isLinux) {
-        ./install.linux.ps1
+        ./linux/install.ps1
       } else {
-        ./install.windows.ps1
+        ./windows/install.ps1
       }
 
 build_script:
   - pwsh: |
       if ($isLinux) {
-        ./build.linux.ps1
+        ./linux/build.ps1
       } else {
-        .\build.windows.ps1 -VcpkgToolchain c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
+        ./windows/build.ps1 -VcpkgToolchain c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
       }
 
 after_build:
   - pwsh:
       if ($isLinux) {
-        ./pack.linux.ps1
+        ./linux/pack.ps1
       } else {
-        .\pack.windows.ps1
+        ./windows/pack.ps1
       }
 
 artifacts:

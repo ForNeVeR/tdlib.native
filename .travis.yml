@@ -6,15 +6,15 @@ matrix:
 
 before_install:
   - bash <(wget -O - https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/install-powershell.sh)
-  - pwsh ./install.$TRAVIS_OS_NAME.ps1
+  - pwsh ./macos/install.ps1
 
 script:
-  - pwsh ./build.$TRAVIS_OS_NAME.ps1
-  - pwsh ./pack.$TRAVIS_OS_NAME.ps1
+  - pwsh ./macos/build.ps1
+  - pwsh ./macos/pack.ps1
 
 deploy:
   provider: releases
-  api_key: 
+  api_key:
     - secure: "a+lFTXGeFeQ8/pCjAjQZ5cni4+Bc0hTOrQIYSz+ShIi1j3Y8Yj4rDI+lDt9oTKiAo3Zct79tMKChV8NKjsefh7KNt1hcxQ8okhYcT1jtx29wOWYx8HL3nPDD8h4zNjZWEp3yAlPKe/KxPv4fEfHz+GgiaxH6T1FRUOuA0v8xTxnL6544bv8JpRapdKf9OoMLYW/cimVZN2srVFFiQpwcql4aInwuFj3tVmx1NDNH/JPbNwP+Ur+R/bOL5uSsKlNrrNXLBx/UYrj7jcmmIanPue5iUXjvlG3aqovV/AjUzX4PXfrfi3WeUm3sLnx4OKoCGOooFs4ISn2VEK+vIaNPyYwQhM0NXVqSHxEnc+WySCK4HjpIf515hPj075UvPvnuYxxv7d+Ag1PI/MaIUph++sPuJMa3Bg9Xa9PEsbZb6qXbCK8rKE6lJ0iDY4mpVMkwLCKrVuKFvoVlDrnYvIzo7q9GOmRB+oGtOpwBm4Q08U+FrFAsX0CVw36burpAJh7J+oIsOTTaw6BxuQD+NHdQ+jsDflrTWgqKvrP7w/SVIaLdV/NoqN+jpy9r8NBYOyvgKS8b1UpYYZA0/XWhGE9/8jKJzN0roKkyxprFjvh1OBD6r7SSi8EWKV6wBg1V7lzS6WWRWEUgU9rh1VHwrYkV/vEyAHcjGi/VTZrOdfjrgGA="
   file:
     - tdlib.osx.zip

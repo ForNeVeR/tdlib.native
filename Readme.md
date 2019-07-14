@@ -15,7 +15,7 @@ How to pack to NuGet
 Pack script requires NuGet 5 to be installed on a machine.
 
 ```console
-$ pwsh ./pack.nuget.ps1
+$ pwsh ./common/pack.nuget.ps1
 ```
 
 Then upload the `build/tdlib.native.<VERSION>.nupkg` to the NuGet server.

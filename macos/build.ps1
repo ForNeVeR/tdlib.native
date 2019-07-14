@@ -1,5 +1,5 @@
 param (
-    $td = "$PSScriptRoot/td"
+    $td = "$PSScriptRoot/../td"
 )
 
 $ErrorActionPreference = 'Stop'
@@ -12,6 +12,7 @@ Push-Location $td/build
 try {
     $cmakeArguments = @(
         '-DCMAKE_BUILD_TYPE=Release'
+        '-DOPENSSL_ROOT_DIR=/usr/local/opt/openssl/'
         '..'
     )
     $cmakeBuildArguments = @(
