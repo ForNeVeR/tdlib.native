@@ -38,7 +38,7 @@ test_script:
       } else {
         ./windows/copy-artifacts.ps1
       }
-  - pwsh: ./common/nuget-pack.ps1
+  - pwsh: ./common/nuget-pack.ps1 -Version "1.3.0.$env:APPVEYOR_BUILD_NUMBER"
   - pwsh: ./common/test.ps1
 
 artifacts:
