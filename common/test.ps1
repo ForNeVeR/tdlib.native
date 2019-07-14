@@ -10,8 +10,9 @@ param (
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-New-Item -Type Directory $PackageSource
-& $NuGet add $BuildRoot/*.nupkg -Source $PackageSource
+New-Item -Type Directory $PackageSource -ErrorAction Ignore
+$package = Get-Item $BuildRoot/*.nupkg
+& $NuGet add $package -Source $PackageSource
 if (!$?) { throw 'Cannot add a NuGet package into source' }
 
 Push-Location $TdSharpRoot
