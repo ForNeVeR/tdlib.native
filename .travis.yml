@@ -11,6 +11,9 @@ before_install:
 script:
   - pwsh ./macos/build.ps1
   - pwsh ./macos/pack.ps1
+  - pwsh ./macos/copy-artifacts.ps1
+  - pwsh ./common/nuget-pack.ps1
+  - pwsh ./common/test.ps1
 
 deploy:
   provider: releases

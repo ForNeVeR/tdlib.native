@@ -31,6 +31,16 @@ after_build:
         ./windows/pack.ps1
       }
 
+test_script:
+  - pwsh:
+      if ($isLinux) {
+        ./linux/copy-artifacts.ps1
+      } else {
+        ./windows/copy-artifacts.ps1
+      }
+  - pwsh: ./common/nuget-pack.ps1
+  - pwsh: ./common/test.ps1
+
 artifacts:
   - path: tdlib.windows.zip
     name: tdlib.windows

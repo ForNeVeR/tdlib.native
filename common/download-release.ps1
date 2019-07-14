@@ -1,10 +1,8 @@
 param (
-    $Version = '1.3.0',
-    $Tag = "v$Version",
-    $BaseAddress = "https://github.com/ForNeVeR/tdlib.native/releases/download/$Tag",
-    $BuildDirectory = "$PSScriptRoot/../build",
-
-    $NuGet = 'NuGet.exe'
+    [string] $Version = '1.3.0',
+    [string] $Tag = "v$Version",
+    [string] $BaseAddress = "https://github.com/ForNeVeR/tdlib.native/releases/download/$Tag",
+    [string] $BuildDirectory = "$PSScriptRoot/../build"
 )
 
 $ErrorActionPreference = 'Stop'
@@ -29,9 +27,6 @@ try {
     }
 
     Remove-Item *.zip
-
-    & $NuGet pack ../tdlib.native.nuspec -BasePath . -Version $Version
-    if (!$?) { throw 'NuGet execution error' }
 } finally {
     Pop-Location
 }
