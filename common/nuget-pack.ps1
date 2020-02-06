@@ -1,8 +1,8 @@
 param (
-    $Version = '1.3.0',
-    $BuildDirectory = "$PSScriptRoot/../build",
+    [string] $Version = '1.6.0',
+    [string] $BuildDirectory = "$PSScriptRoot/../build",
 
-    $NuGet = 'NuGet.exe'
+    [string] $NuGet = 'NuGet.exe'
 )
 
 $ErrorActionPreference = 'Stop'
