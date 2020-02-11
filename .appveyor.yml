@@ -32,7 +32,7 @@ after_build:
       }
 
 test_script:
-  - pwsh:
+  - pwsh: |
       if ($isLinux) {
         ./linux/copy-artifacts.ps1
       } else {

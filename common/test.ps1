@@ -3,6 +3,7 @@ param (
     [string] $PackageSource = "$BuildRoot/../build/nuget/",
     [string] $TdSharpRoot = "$PSScriptRoot/../tdsharp",
     [string] $TdSharpTestProjectName = 'TDLib.Tests',
+    [string] $TdSharpProjectToRemove = 'Samples/TdLib.Samples.GetChats',
     [string] $PackageName = 'tdlib.native',
 
     [string] $NuGet = 'NuGet.exe',
@@ -23,6 +24,10 @@ if (!$?) { throw 'Cannot add a NuGet package into source' }
 
 Push-Location $TdSharpRoot
 try {
+    Write-Output "Removing a project $TdSharpProjectToRemove from the solution file"
+    & $dotnet sln remove $TdSharpProjectToRemove
+    if (!$?) { throw 'Cannot remove an unnecessary project from the solution' }
+
     Write-Output "Removing a package $PackageName from the project $TdSharpTestProjectName"
     & $dotnet remove $TdSharpTestProjectName package $PackageName
     if (!$?) { throw 'Cannot uninstall package from the test project' }
