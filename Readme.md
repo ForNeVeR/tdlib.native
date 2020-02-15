@@ -6,8 +6,8 @@ This is the project to pack [tdlib][] binaries for multiple common platforms.
 How to build
 ------------
 
-Push the tag to this repository. CI servers will do their job and upload the
-artifacts to the [Releases][releases] page.
+Push a version tag (`v1.x.x`) to this repository. CI servers will do their job
+and upload the artifacts to the [Releases][releases] page.
 
 How to pack to NuGet
 --------------------
