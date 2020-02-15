@@ -1,7 +1,7 @@
 param (
-    $td = "$PSScriptRoot/../td",
-    $Platform = 'x64-windows',
-    [Parameter(Mandatory = $true)] $VcpkgToolchain
+    [string] $td = "$PSScriptRoot/../td",
+    [string] $Platform = 'x64-windows',
+    [Parameter(Mandatory = $true)] [string] $VcpkgToolchain
 )
 
 $ErrorActionPreference = 'Stop'

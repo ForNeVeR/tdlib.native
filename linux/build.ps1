@@ -1,5 +1,5 @@
 param (
-    $td = "$PSScriptRoot/../td"
+    [string] $td = "$PSScriptRoot/../td"
 )
 
 $ErrorActionPreference = 'Stop'

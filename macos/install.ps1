@@ -1,4 +1,5 @@
 $ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
 
 brew install gperf nuget openssl
 if (!$?) { throw 'Cannot install dependencies from brew' }

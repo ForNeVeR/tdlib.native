@@ -1,6 +1,6 @@
 param (
-    $NuGetDownloadUrl = 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe',
-    $NuGetPath = "$PSScriptRoot/../tools/nuget.exe"
+    [string] $NuGetDownloadUrl = 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe',
+    [string] $NuGetPath = "$PSScriptRoot/../tools/nuget.exe"
 )
 
 $ErrorActionPreference = 'Stop'
@@ -16,3 +16,4 @@ Invoke-WebRequest -OutFile $NuGetPath $NuGetDownloadUrl
 
 Write-Output 'Updating the Git submobules'
 git submodule update --init --recursive
+if (!$?) { throw 'Cannot update the Git submodules' }
