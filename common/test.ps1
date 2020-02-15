@@ -19,7 +19,11 @@ New-Item -Type Directory $PackageSource -ErrorAction Ignore
 $package = Get-Item $BuildRoot/*.nupkg
 
 Write-Output "Adding a package $package into NuGet source $PackageSource"
-& $NuGet add $package -Source $PackageSource
+if ($UseMono) {
+    & $Mono $NuGet add $package -Source $PackageSource
+} else {
+    & $NuGet add $package -Source $PackageSource
+}
 if (!$?) { throw 'Cannot add a NuGet package into source' }
 
 Push-Location $TdSharpRoot

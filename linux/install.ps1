@@ -1,6 +1,18 @@
-$ErrorActionPreference = 'Stop'
+param (
+    $NuGetDownloadUrl = 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe',
+    $NuGetPath = "$PSScriptRoot/../tools/nuget.exe"
+)
 
+$ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
+
+Write-Output 'Installing gperf'
 sudo apt-get install gperf
 if (!$?) { throw 'Cannot install dependencies from apt-get' }
 
+Write-Output "Downloading NuGet client to $NuGetPath"
+New-Item -Type Directory ([IO.Path]::GetDirectoryName($NuGetPath))
+Invoke-WebRequest -OutFile $NuGetPath $NuGetDownloadUrl
+
+Write-Output 'Updating the Git submobules'
 git submodule update --init --recursive

@@ -35,11 +35,13 @@ test_script:
   - pwsh: |
       if ($isLinux) {
         ./linux/copy-artifacts.ps1
+        ./common/nuget-pack.ps1 -Version "1.6.0.$env:APPVEYOR_BUILD_NUMBER" -UseMono -NuGet "$env:APPVEYOR_BUILD_FOLDER/tools/nuget.exe"
+        ./common/test.ps1 -UseMono -NuGet "$env:APPVEYOR_BUILD_FOLDER/tools/nuget.exe"
       } else {
         ./windows/copy-artifacts.ps1
+        ./common/nuget-pack.ps1 -Version "1.6.0.$env:APPVEYOR_BUILD_NUMBER"
+        ./common/test.ps1
       }
-  - pwsh: ./common/nuget-pack.ps1 -Version "1.6.0.$env:APPVEYOR_BUILD_NUMBER"
-  - pwsh: ./common/test.ps1
 
 artifacts:
   - path: tdlib.windows.zip
