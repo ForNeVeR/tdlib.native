@@ -5,6 +5,7 @@ param (
 )
 
 $ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
 
 if (-not (Test-Path $td/build)) {
     New-Item -Type Directory $td/build
