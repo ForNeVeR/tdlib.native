@@ -1,4 +1,8 @@
+param (
+    [string] $BuildRoot = "$PSScriptRoot/../td/build"
+)
+
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-Compress-Archive ./td/build/libtdjson.so tdlib.linux.zip
+Compress-Archive "$BuildRoot/libtdjson.so" tdlib.linux.zip
