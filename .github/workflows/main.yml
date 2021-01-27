@@ -1,0 +1,48 @@
+name: Main
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  main:
+    runs-on: macos-10.15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      # Build:
+      - name: Install
+        shell: pwsh
+        run: ./macos/install.github.ps1
+      - name: Build
+        shell: pwsh
+        run: ./macos/build.ps1
+      - name: Pack
+        shell: pwsh
+        run: ./macos/pack.ps1 # produces tdlib.osx.zip
+
+      - name: Upload build result
+        uses: actions/upload-artifact@v2
+        with:
+          name: tdlib.osx
+          path: tdlib.osx.zip
+
+      # Test
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '2.2.100'
+      - name: Pack NuGet
+        shell: pwsh
+        run: ./common/nuget-pack.ps1 -Version "1.6.0.${{ github.run_id }}" -NuGet nuget
+      - name: Test
+        shell: pwsh
+        run: ./common/test.ps1 -NuGet nuget -dotnet /usr/local/share/dotnet/dotnet
+
+      # TODO[F]: Upload release
