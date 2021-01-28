@@ -34,6 +34,9 @@ jobs:
           path: tdlib.osx.zip
 
       # Test
+      - name: Copy artifacts
+        shell: pwsh
+        run: ./macos/copy-artifacts.ps1
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v1
         with:
