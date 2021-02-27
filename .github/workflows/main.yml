@@ -46,6 +46,6 @@ jobs:
         run: ./common/nuget-pack.ps1 -Version "1.6.0.${{ github.run_id }}" -NuGet nuget
       - name: Test
         shell: pwsh
-        run: ./common/test.ps1 -NuGet nuget -dotnet /usr/local/share/dotnet/dotnet
+        run: ./common/test.ps1 -NuGet nuget
 
       # TODO[F]: Upload release
