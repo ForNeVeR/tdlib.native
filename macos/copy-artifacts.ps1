@@ -1,6 +1,6 @@
 param (
     [string] $Target = "$PSScriptRoot/../build/runtimes/osx-x64/native/",
-    [string] $Source = "$PSScriptRoot/../td/build/libtdjson.dylib"
+    [string] $Source = "$PSScriptRoot/../artifacts/libtdjson.dylib"
 )
 
 $ErrorActionPreference = 'Stop'

@@ -23,15 +23,15 @@ jobs:
       - name: Build
         shell: pwsh
         run: ./macos/build.ps1
-      - name: Pack
+      - name: Prepare Artifact
         shell: pwsh
-        run: ./macos/pack.ps1 # produces tdlib.osx.zip
+        run: ./macos/prepare-artifact.ps1 # produces artifacts/libtdjson.dylib
 
       - name: Upload build result
         uses: actions/upload-artifact@v2
         with:
           name: tdlib.osx
-          path: tdlib.osx.zip
+          path: artifacts/*
 
       # Test
       - name: Copy artifacts
