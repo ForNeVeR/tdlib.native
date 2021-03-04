@@ -12,6 +12,10 @@ on:
 jobs:
   main:
     runs-on: macos-10.15
+    env:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -46,6 +50,12 @@ jobs:
       - name: Pack NuGet
         shell: pwsh
         run: ./common/nuget-pack.ps1 -Version "1.6.0.${{ github.run_id }}" -NuGet nuget
+
+      - name: NuGet cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
       - name: Test
         shell: pwsh
         run: ./common/test.ps1 -NuGet nuget
