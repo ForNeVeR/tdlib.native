@@ -25,7 +25,7 @@ jobs:
       # Build:
       - name: Install
         shell: pwsh
-        run: ./macos/install.github.ps1
+        run: ./macos/install.ps1
       - name: Build
         shell: pwsh
         run: ./macos/build.ps1
