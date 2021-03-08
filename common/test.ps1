@@ -36,6 +36,10 @@ try {
     & $dotnet remove $TdSharpTestProjectName package $PackageName
     if (!$?) { throw 'Cannot uninstall package from the test project' }
 
+    Write-Output 'Performing dotnet restore'
+    & $dotnet restore
+    if (!$?) { throw 'Cannot perform dotnet restore' }
+
     Write-Output "Adding a package $PackageName from the project $TdSharpTestProjectName"
     & $dotnet add $TdSharpTestProjectName package $PackageName --source $PackageSource
     if (!$?) { throw 'Cannot add package into the test project' }
