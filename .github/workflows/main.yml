@@ -95,3 +95,4 @@ jobs:
           upload_url: ${{ steps.release.outputs.upload_url }}
           asset_name: tdlib.osx.zip
           asset_path: ./artifacts/osx/*
+          asset_content_type: application/octet-stream
