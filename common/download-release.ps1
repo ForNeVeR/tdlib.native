@@ -1,5 +1,5 @@
 param (
-    [string] $Version = '1.6.0',
+    [string] $Version = '1.7.0',
     [string] $Tag = "v$Version",
     [string] $BaseAddress = "https://github.com/ForNeVeR/tdlib.native/releases/download/$Tag",
     [string] $BuildDirectory = "$PSScriptRoot/../build"

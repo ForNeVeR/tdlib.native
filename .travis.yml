@@ -12,7 +12,7 @@ script:
   - pwsh ./macos/build.ps1
   - pwsh ./macos/pack.ps1
   - pwsh ./macos/copy-artifacts.ps1
-  - pwsh ./common/nuget-pack.ps1 -Version "1.6.0.$TRAVIS_BUILD_NUMBER" -NuGet nuget
+  - pwsh ./common/nuget-pack.ps1 -Version "1.7.0.$TRAVIS_BUILD_NUMBER" -NuGet nuget
   - pwsh ./common/test.ps1 -NuGet nuget -dotnet /usr/local/share/dotnet/dotnet
 
 deploy:
