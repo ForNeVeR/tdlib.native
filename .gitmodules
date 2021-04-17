@@ -3,4 +3,4 @@
 	url = https://github.com/tdlib/td.git
 [submodule "tdsharp"]
 	path = tdsharp
-	url = https://github.com/ForNeVeR/tdsharp.git
+	url = https://github.com/p9os/tdsharp
