@@ -21,8 +21,10 @@ $package = Get-Item $BuildRoot/*.nupkg
 Write-Output "Adding a package $package into NuGet source $PackageSource"
 if ($UseMono) {
     & $Mono $NuGet add $package -Source $PackageSource
+	& $dotnet nuget add source --name 'tdlib.native' ( Resolve-Path $PackageSource )
 } else {
     & $NuGet add $package -Source $PackageSource
+    & $dotnet nuget add source --name 'tdlib.native' ( Resolve-Path $PackageSource )
 }
 if (!$?) { throw 'Cannot add a NuGet package into source' }
 
@@ -37,7 +39,7 @@ try {
     if (!$?) { throw 'Cannot uninstall package from the test project' }
 
     Write-Output "Adding a package $PackageName from the project $TdSharpTestProjectName"
-    & $dotnet add $TdSharpTestProjectName package $PackageName --source $PackageSource
+    & $dotnet add $TdSharpTestProjectName package $PackageName --version 1.7.0
     if (!$?) { throw 'Cannot add package into the test project' }
 
     Write-Output "Running tests"
