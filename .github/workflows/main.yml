@@ -72,6 +72,9 @@ jobs:
         with:
           name: tdlib.osx
           path: ./artifacts/osx
+      - name: Archive macOS artifact
+        shell: pwsh
+        run: Set-Location ./artifacts/osx && zip -r ./tdlib.osx.zip *
 
       - name: Read version from ref
         id: version
@@ -94,5 +97,5 @@ jobs:
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
           asset_name: tdlib.osx.zip
-          asset_path: ./artifacts/osx/*
-          asset_content_type: application/octet-stream
+          asset_path: ./artifacts/osx/tdlib.osx.zip
+          asset_content_type: application/zip
