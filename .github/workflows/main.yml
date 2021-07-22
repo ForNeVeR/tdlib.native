@@ -12,12 +12,8 @@ on:
     - cron: '0 0 * * 0'
 
 jobs:
-  main:
+  build:
     runs-on: macos-10.15
-    env:
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -41,7 +37,20 @@ jobs:
           name: tdlib.osx
           path: artifacts/*
 
-      # Test
+  test:
+    needs: build
+    runs-on: macos-10.15
+    env:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
+    steps:
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: tdlib.osx
+          path: ./artifacts
+
       - name: Copy artifacts
         shell: pwsh
         run: ./macos/copy-artifacts.ps1
@@ -65,7 +74,7 @@ jobs:
   release:
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-20.04
-    needs: main
+    needs: build
     steps:
       - name: Download macOS artifact
         uses: actions/download-artifact@v2
