@@ -52,7 +52,7 @@ artifacts:
 deploy:
   provider: GitHub
   auth_token:
-    secure: gZMcwBPRuLO7UnRn8zrJOh52yLST5z0klrMZg9zsVVMungWPacvh8dOqBj+mkdeV
+    secure: '+pruwhFWbdEiV5mLJCaPihxpu/ZxM+sWsBTEUJqVcVwi+TlKTHac7zKgbh9iBwMP'
   artifact: tdlib.windows,tdlib.linux
   on:
     APPVEYOR_REPO_TAG: true
