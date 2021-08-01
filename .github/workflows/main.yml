@@ -44,6 +44,7 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
+      PACKAGE_VERSION_BASE: 1.6.0
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -65,7 +66,7 @@ jobs:
           dotnet-version: '2.2.x'
       - name: Pack NuGet
         shell: pwsh
-        run: ./common/nuget-pack.ps1 -Version "1.6.0.${{ github.run_id }}" -NuGet nuget
+        run: ./common/nuget-pack.ps1 -Version "${{ env.PACKAGE_VERSION_BASE }}.${{ github.run_id }}" -NuGet nuget
 
       - name: NuGet cache
         uses: actions/cache@v2

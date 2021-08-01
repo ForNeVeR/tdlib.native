@@ -10,6 +10,8 @@ param (
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
+Write-Output "Preparing a NuGet package version $Version."
+
 Push-Location $BuildDirectory
 try {
     if ($UseMono) {
