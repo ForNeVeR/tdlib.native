@@ -21,6 +21,6 @@ Documentation
 
 [docs.license]: ./LICENSE_1_0.txt
 [docs.maintainership]: ./MAINTAINERSHIP.md
-[nuget]: https://www.nuget.org/packages/tdlib.native/)
+[nuget]: https://www.nuget.org/packages/tdlib.native/
 [releases]: releases
 [tdlib]: https://github.com/tdlib/td
