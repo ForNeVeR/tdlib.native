@@ -1,6 +1,7 @@
 param (
     [string] $Version = '1.7.0',
-    [string] $BuildDirectory = "$PSScriptRoot/../build",
+    [string] $SrcDirectory = "$PSScriptRoot/..",
+    [string] $BuildDirectory = "$SrcDirectory/build",
 
     [string] $NuGet = 'NuGet.exe',
     [switch] $UseMono,
@@ -14,6 +15,8 @@ Write-Output "Preparing a NuGet package version $Version."
 
 Push-Location $BuildDirectory
 try {
+    Copy-Item -Force $SrcDirectory/LICENSE_1_0.txt $BuildDirectory
+
     if ($UseMono) {
         & $Mono $NuGet pack ../tdlib.native.nuspec -BasePath . -Version $Version
     } else {
