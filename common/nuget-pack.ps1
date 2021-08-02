@@ -1,5 +1,5 @@
 param (
-    [string] $Version = '1.6.0',
+    [string] $Version = '1.7.0',
     [string] $BuildDirectory = "$PSScriptRoot/../build",
 
     [string] $NuGet = 'NuGet.exe',

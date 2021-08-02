@@ -3,7 +3,6 @@ param (
     [string] $PackageSource = "$BuildRoot/../build/nuget/",
     [string] $TdSharpRoot = "$PSScriptRoot/../tdsharp",
     [string] $TdSharpTestProjectName = 'TDLib.Tests',
-    [string] $TdSharpProjectToRemove = 'Samples/TdLib.Samples.GetChats',
     [string] $PackageName = 'tdlib.native',
 
     [string] $NuGet = 'NuGet.exe',
@@ -26,14 +25,10 @@ if ($UseMono) {
 }
 if (!$?) { throw 'Cannot add a NuGet package into source' }
 
-Push-Location $TdSharpRoot
+Push-Location "$TdSharpRoot/$TdSharpTestProjectName"
 try {
-    Write-Output "Removing a project $TdSharpProjectToRemove from the solution file"
-    & $dotnet sln remove $TdSharpProjectToRemove
-    if (!$?) { throw 'Cannot remove an unnecessary project from the solution' }
-
     Write-Output "Removing a package $PackageName from the project $TdSharpTestProjectName"
-    & $dotnet remove $TdSharpTestProjectName package $PackageName
+    & $dotnet remove "$TdSharpTestProjectName.csproj" package $PackageName
     if (!$?) { throw 'Cannot uninstall package from the test project' }
 
     Write-Output 'Performing dotnet restore'
@@ -41,7 +36,7 @@ try {
     if (!$?) { throw 'Cannot perform dotnet restore' }
 
     Write-Output "Adding a package $PackageName from the project $TdSharpTestProjectName"
-    & $dotnet add $TdSharpTestProjectName package $PackageName --source $PackageSource
+    & $dotnet add "$TdSharpTestProjectName.csproj" package $PackageName --source $PackageSource
     if (!$?) { throw 'Cannot add package into the test project' }
 
     Write-Output "Running tests"
