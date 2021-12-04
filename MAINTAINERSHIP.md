@@ -13,11 +13,12 @@ Publish a New Version
     - `common/nuget-pack.ps1`: `$Version` variable default value
     - `.appveyor.yml`: `test_script` section (2 occurrences)
 5. Update the `releaseNotes` element in the `tdlib.native.nuspec` file.
-6. Push a version tag (`v1.x.x`) to this repository. CI servers will do their job and upload the artifacts to the [Releases][releases] page.
-7. Copy the release notes from the `.nuspec` to the GitHub release.
-8. Mark the GitHub release as published.
-9. Pack and upload the NuGet, as described below.
-10. Attach the `.nupkg` to the GitHub release.
+6. Create a pull request, verify that the tests are okay.
+7. Push a version tag (`v1.x.x`) to this repository. CI servers will do their job and upload the artifacts to the [Releases][releases] page.
+8. Copy the release notes from the `.nuspec` to the GitHub release.
+9. Mark the GitHub release as published.
+10. Pack and upload the NuGet, as described below.
+11. Attach the `.nupkg` to the GitHub release.
 
 How to pack to NuGet
 --------------------
