@@ -16,10 +16,16 @@ jobs:
     runs-on: ubuntu-20.04
     container: ubuntu:18.04
     steps:
+      - name: Set up Git
+        run: apt-get update && apt-get install -y software-properties-common && apt-get update && add-apt-repository -y ppa:git-core/ppa && apt-get update && apt-get install -y git
+
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          submodules: true
+      - run: cd $GITHUB_WORKSPACE
+      - run: ls
+      - run: pwd
+      - name: Initialize repository submodules
+        run: git submodule init
 
       # Build:
       - name: Install
@@ -70,6 +76,10 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.7.9
     steps:
+      - run: apt-get update
+      - name: Set up Git
+        run: apt-get install git
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
