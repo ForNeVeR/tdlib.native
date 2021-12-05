@@ -3,9 +3,9 @@ tdlib.native
 
 This is a project to pack [TDLib][tdlib] (the Telegram Database library) binaries built for several platforms:
 
-- MacOS 10.15 (x64)
-- Ubuntu 20.04 (x64)
-- Windows Server 2019 (x64)
+- [MacOS 10.15][spec.macos] (x64) _(GitHub Actions image: `macos-10.15`)_
+- [Ubuntu 18.04.4][spec.linux] (x64) _(Appveyor image: `ubuntu`)_
+- [Windows Server 2019][spec.windows] (x64) _(Appveyor image: `Visual Studio 2019`)_
 
 Getting Started
 ---------------
@@ -23,4 +23,7 @@ Documentation
 [docs.maintainership]: ./MAINTAINERSHIP.md
 [nuget]: https://www.nuget.org/packages/tdlib.native/
 [releases]: releases
+[spec.linux]: https://www.appveyor.com/docs/linux-images-software/
+[spec.macos]: https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md
+[spec.windows]: https://www.appveyor.com/docs/windows-images-software/
 [tdlib]: https://github.com/tdlib/td
