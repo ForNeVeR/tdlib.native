@@ -7,7 +7,7 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
 Write-Output 'Installing gperf'
-sudo apt-get install gperf
+apt-get install gperf
 if (!$?) { throw 'Cannot install dependencies from apt-get' }
 
 Write-Output "Downloading NuGet client to $NuGetPath"
