@@ -30,7 +30,7 @@ jobs:
       # Build:
       - name: Install
         shell: pwsh
-        run: ./linux/install.ps1
+        run: ./linux/install.ps1 -ForBuild
       - name: Build
         shell: pwsh
         run: ./linux/build.ps1
@@ -90,6 +90,10 @@ jobs:
       - name: Install PowerShell
         run: bash ./linux/install-pwsh.sh
 
+      - name: Install
+        shell: pwsh
+        run: ./linux/install.ps1 -ForTests
+
       - name: Download Linux artifact
         uses: actions/download-artifact@v2
         with:
@@ -105,7 +109,7 @@ jobs:
           dotnet-version: '2.2.x'
       - name: Pack NuGet
         shell: pwsh
-        run: ./common/nuget-pack.ps1 -Version "${{ env.PACKAGE_VERSION_BASE }}.${{ github.run_id }}" -NuGet nuget
+        run: ./common/nuget-pack.ps1 -Version "${{ env.PACKAGE_VERSION_BASE }}.${{ github.run_id }}" -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono
 
       - name: NuGet cache
         uses: actions/cache@v2
@@ -114,7 +118,7 @@ jobs:
           key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
       - name: Test
         shell: pwsh
-        run: ./common/test.ps1 -NuGet nuget
+        run: ./common/test.ps1 -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono
 
   test-macos:
     needs: build-macos
