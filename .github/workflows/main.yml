@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: tdlib.linux
-          path: build/runtimes/linux-x64/native/*
+          path: build/runtimes/linux-x64/native/libtdjson.so
 
   build-macos:
     runs-on: macos-10.15

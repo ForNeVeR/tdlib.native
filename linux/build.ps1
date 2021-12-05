@@ -1,6 +1,6 @@
 param (
     [string] $td = "$PSScriptRoot/../td",
-    [string] $target = "$PSScriptRoot/build/runtimes/linux-x64/native/"
+    [string] $target = "$PSScriptRoot/../build/runtimes/linux-x64/native/"
 )
 
 $ErrorActionPreference = 'Stop'
