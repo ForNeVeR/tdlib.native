@@ -33,13 +33,16 @@ jobs:
         run: ./linux/install.ps1
       - name: Build
         shell: pwsh
-        run: ./linux/build.ps1 # produces build/runtimes/linux-x64/native/
+        run: ./linux/build.ps1
+      - name: Prepare artifact
+        shell: pwsh
+        run: ./linux/prepare-artifact.ps1 # produces artifacts/libtdjson.so
 
       - name: Upload build result
         uses: actions/upload-artifact@v2
         with:
           name: tdlib.linux
-          path: build/runtimes/linux-x64/native/libtdjson.so
+          path: artifacts/*
 
   build-macos:
     runs-on: macos-10.15
@@ -91,8 +94,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: tdlib.linux
-          path: ./build/runtimes/linux-x64/native
+          path: ./artifacts
 
+      - name: Copy artifacts
+        shell: pwsh
+        run: ./linux/copy-artifacts.ps1
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v1
         with:
@@ -163,7 +169,7 @@ jobs:
           path: ./artifacts/linux
       - name: Archive Linux artifact
         shell: pwsh
-        run: Set-Location build/runtimes/linux-x64/native && zip -r ../../../../artifacts/tdlib.linux.zip *
+        run: Set-Location ./artifacts/linux && zip -r ./tdlib.linux.zip *
 
       - name: Download macOS artifact
         uses: actions/download-artifact@v2
@@ -197,8 +203,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_name: tdlib.osx.zip
-          asset_path: ./artifacts/tdlib.linux.zip
+          asset_name: tdlib.linux.zip
+          asset_path: ./artifacts/linux/tdlib.linux.zip
           asset_content_type: application/zip
       - name: Upload macOS artifact
         if: startsWith(github.ref, 'refs/tags/v')

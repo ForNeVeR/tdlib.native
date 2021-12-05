@@ -1,6 +1,6 @@
 param (
     [string] $td = "$PSScriptRoot/../td",
-    [string] $target = "$PSScriptRoot/../build/runtimes/linux-x64/native/"
+    [string] $InstallPrefix = "$PSScriptRoot/../build/install"
 )
 
 $ErrorActionPreference = 'Stop'
@@ -14,7 +14,7 @@ Push-Location $td/build
 try {
     $cmakeArguments = @(
         '-DCMAKE_BUILD_TYPE=Release'
-        "-DCMAKE_INSTALL_PREFIX:PATH=$target"
+        "-DCMAKE_INSTALL_PREFIX:PATH=$InstallPrefix"
         '..'
     )
     $cmakePrepareCrossCompilingArguments = @(
