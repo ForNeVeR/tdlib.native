@@ -23,7 +23,6 @@ Documentation
 [docs.maintainership]: ./MAINTAINERSHIP.md
 [nuget]: https://www.nuget.org/packages/tdlib.native/
 [releases]: releases
-[spec.linux.appveyor]: https://www.appveyor.com/docs/linux-images-software/
 [spec.linux]: https://hub.docker.com/_/ubuntu
 [spec.macos]: https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md
 [spec.windows]: https://www.appveyor.com/docs/windows-images-software/
