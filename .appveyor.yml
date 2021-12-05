@@ -2,56 +2,36 @@ skip_branch_with_pr: true
 
 image:
   - Visual Studio 2019
-  - ubuntu
 
 cache:
   - c:\tools\vcpkg\installed\
 
 install:
   - pwsh: |
-      if ($isLinux) {
-        ./linux/install.ps1
-      } else {
-        ./windows/install.ps1
-      }
+      ./windows/install.ps1
 
 build_script:
   - pwsh: |
-      if ($isLinux) {
-        ./linux/build.ps1
-      } else {
-        ./windows/build.ps1 -VcpkgToolchain c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
-      }
+      ./windows/build.ps1 -VcpkgToolchain c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
 
 after_build:
   - pwsh: |
-      if ($isLinux) {
-        ./linux/pack.ps1
-      } else {
-        ./windows/pack.ps1
-      }
+      ./windows/pack.ps1
 
 test_script:
   - pwsh: |
-      if ($isLinux) {
-        ./common/nuget-pack.ps1 -Version "1.7.9.$env:APPVEYOR_BUILD_NUMBER" -UseMono -NuGet "$env:APPVEYOR_BUILD_FOLDER/tools/nuget.exe"
-        ./common/test.ps1 -UseMono -NuGet "$env:APPVEYOR_BUILD_FOLDER/tools/nuget.exe"
-      } else {
-        ./windows/copy-artifacts.ps1
-        ./common/nuget-pack.ps1 -Version "1.7.9.$env:APPVEYOR_BUILD_NUMBER"
-        ./common/test.ps1
-      }
+      ./windows/copy-artifacts.ps1
+      ./common/nuget-pack.ps1 -Version "1.7.9.$env:APPVEYOR_BUILD_NUMBER"
+      ./common/test.ps1
 
 artifacts:
   - path: tdlib.windows.zip
     name: tdlib.windows
-  - path: tdlib.linux.zip
-    name: tdlib.linux
 
 deploy:
   provider: GitHub
   auth_token:
     secure: 'nUaUQmuMlgr29xKXfE73I0bM4Oy4mDz+00ORoJIjYNnXmt5/1yUC3QCKQ/ia64xG'
-  artifact: tdlib.windows,tdlib.linux
+  artifact: tdlib.windows
   on:
     APPVEYOR_REPO_TAG: true

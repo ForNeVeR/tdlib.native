@@ -4,7 +4,6 @@ tdlib.native
 This is a project to pack [TDLib][tdlib] (the Telegram Database library) binaries built for several platforms:
 
 - [MacOS 10.15][spec.macos] (x64) _(GitHub Actions image: `macos-10.15`)_
-- [Ubuntu 18.04.4][spec.linux.appveyor] (x64) _(Appveyor image: `ubuntu`)_
 - [Ubuntu 18.04][spec.linux] (x64) _(Docker image: `ubuntu:18.04`)_
 - [Windows Server 2019][spec.windows] (x64) _(Appveyor image: `Visual Studio 2019`)_
 
