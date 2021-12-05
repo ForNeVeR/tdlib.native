@@ -21,11 +21,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v2
-      - run: cd $GITHUB_WORKSPACE
-      - run: ls
-      - run: pwd
-      - name: Initialize repository submodules
-        run: git submodule init
+        with:
+          submodules: true
 
       # Build:
       - name: Install
@@ -76,9 +73,8 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.7.9
     steps:
-      - run: apt-get update
       - name: Set up Git
-        run: apt-get install git
+        run: apt-get update && apt-get install -y software-properties-common && apt-get update && add-apt-repository -y ppa:git-core/ppa && apt-get update && apt-get install -y git
 
       - name: Checkout
         uses: actions/checkout@v2

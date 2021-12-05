@@ -8,7 +8,7 @@ Publish a New Version
 2. Update the license, if required.
 3. Update the copyright year in the `copyright` section of the `tdlib.native.nuspec` file.
 4. Update the version in the following places:
-    - `.github/workflows/main.yml`: `PACKAGE_VERSION_BASE` environment variable
+    - `.github/workflows/main.yml`: `PACKAGE_VERSION_BASE` environment variable (2 occurrences)
     - `common/download-release.ps1`: `$Version` variable default value
     - `common/nuget-pack.ps1`: `$Version` variable default value
     - `.appveyor.yml`: `test_script` section (2 occurrences)
