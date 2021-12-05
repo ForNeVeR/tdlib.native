@@ -1,5 +1,6 @@
 param (
-    [string] $td = "$PSScriptRoot/../td"
+    [string] $td = "$PSScriptRoot/../td",
+    [string] $target = "$PSScriptRoot/build/runtimes/linux-x64/native/"
 )
 
 $ErrorActionPreference = 'Stop'
@@ -13,21 +14,40 @@ Push-Location $td/build
 try {
     $cmakeArguments = @(
         '-DCMAKE_BUILD_TYPE=Release'
+        "-DCMAKE_INSTALL_PREFIX:PATH=$target"
         '..'
+    )
+    $cmakePrepareCrossCompilingArguments = @(
+        '--build'
+        '.'
+        '--target', 'prepare_cross_compiling'
     )
     $cmakeBuildArguments = @(
         '--build'
         '.'
+        '--target', 'install'
     )
 
-    cmake $cmakeArguments
+    cmake @cmakeArguments
     if (!$?) {
         throw 'Cannot execute cmake'
     }
 
-    cmake $cmakeBuildArguments
+    cmake @cmakePrepareCrossCompilingArguments
     if (!$?) {
-        throw 'Cannot execute cmake --build'
+        throw 'Cannot execute cmake --build --target prepare_cross_compiling'
+    }
+
+    Set-Location ..
+    php SplitSource.php
+    if (!$?) {
+        throw 'Cannot execute php SplitSource.php'
+    }
+
+    Set-Location build
+    cmake @cmakeBuildArguments
+    if (!$?) {
+        throw 'Cannot execute cmake --build --target install'
     }
 } finally {
     Pop-Location
