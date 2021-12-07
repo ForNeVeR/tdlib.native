@@ -12,6 +12,7 @@ install:
 
 build_script:
   - pwsh: |
+      ./common/verify-encoding.ps1
       ./windows/build.ps1 -VcpkgToolchain c:\tools\vcpkg\scripts\buildsystems\vcpkg.cmake
 
 after_build:

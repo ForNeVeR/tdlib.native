@@ -27,6 +27,11 @@ jobs:
       - name: Install PowerShell
         run: sh ./linux/install-pwsh.sh
 
+      # Verify:
+      - name: Verify encoding
+        shell: pwsh
+        run: ./common/verify-encoding.ps1
+
       # Build:
       - name: Install
         shell: pwsh
@@ -51,6 +56,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
+
+      # Verify:
+      - name: Verify encoding
+        shell: pwsh
+        run: ./common/verify-encoding.ps1
 
       # Build:
       - name: Install
