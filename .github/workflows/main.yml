@@ -24,7 +24,7 @@ jobs:
         with:
           submodules: true
 
-      - name: Install PowerShell
+      - name: Set up PowerShell
         run: sh ./linux/install-pwsh.sh
 
       # Verify:
@@ -97,7 +97,7 @@ jobs:
         with:
           submodules: true
 
-      - name: Install PowerShell
+      - name: Set up PowerShell
         run: sh ./linux/install-pwsh.sh
 
       - name: Install
