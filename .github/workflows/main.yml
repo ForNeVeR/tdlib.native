@@ -88,7 +88,7 @@ jobs:
           submodules: true
 
       - name: Install PowerShell
-        run: bash ./linux/install-pwsh.sh
+        run: sh ./linux/install-pwsh.sh
 
       - name: Install
         shell: pwsh
