@@ -1,4 +1,4 @@
-﻿tdlib.native Maintainership
+tdlib.native Maintainership
 ===========================
 
 Publish a New Version

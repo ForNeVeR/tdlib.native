@@ -1,4 +1,4 @@
-﻿param (
+param (
     [string] $InstallPrefix = "$PSScriptRoot/../build/install",
     [string] $Target = "$PSScriptRoot/../artifacts"
 )
