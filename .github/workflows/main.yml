@@ -87,7 +87,7 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.7.9
+      PACKAGE_VERSION_BASE: 1.7.9.1
     steps:
       - name: Set up Git
         run: apt-get update && apt-get install -y software-properties-common && apt-get update && add-apt-repository -y ppa:git-core/ppa && apt-get update && apt-get install -y git
@@ -119,7 +119,8 @@ jobs:
           dotnet-version: '2.2.x'
       - name: Pack NuGet
         shell: pwsh
-        run: ./common/nuget-pack.ps1 -Version "${{ env.PACKAGE_VERSION_BASE }}.${{ github.run_id }}" -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono
+        run: ./common/nuget-pack.ps1 -Version "${{ env.PACKAGE_VERSION_BASE }}" -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono
+        # TODO: Add ${{ github.run_id }} as a patch version
 
       - name: NuGet cache
         uses: actions/cache@v2
@@ -137,7 +138,7 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.7.9
+      PACKAGE_VERSION_BASE: 1.7.9.1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -159,7 +160,8 @@ jobs:
           dotnet-version: '2.2.x'
       - name: Pack NuGet
         shell: pwsh
-        run: ./common/nuget-pack.ps1 -Version "${{ env.PACKAGE_VERSION_BASE }}.${{ github.run_id }}" -NuGet nuget
+        run: ./common/nuget-pack.ps1 -Version "${{ env.PACKAGE_VERSION_BASE }}" -NuGet nuget
+        # TODO: Add ${{ github.run_id }} as a patch version
 
       - name: NuGet cache
         uses: actions/cache@v2

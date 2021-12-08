@@ -22,7 +22,7 @@ after_build:
 test_script:
   - pwsh: |
       ./windows/copy-artifacts.ps1
-      ./common/nuget-pack.ps1 -Version "1.7.9.$env:APPVEYOR_BUILD_NUMBER"
+      ./common/nuget-pack.ps1 -Version "1.7.9.1" # TODO: Add $env:APPVEYOR_BUILD_NUMBER as a patch version
       ./common/test.ps1
 
 artifacts:
