@@ -19,6 +19,12 @@ jobs:
       - name: Set up Git
         run: apt-get update && apt-get install -y software-properties-common && apt-get update && add-apt-repository -y ppa:git-core/ppa && apt-get update && apt-get install -y git
 
+      # See this: https://github.blog/2022-04-12-git-security-vulnerability-announced/
+      #
+      # If this step is not performed, then verify-encoding will fail.
+      - name: Set up Git safe directory
+        run: git config --global --add safe.directory /__w/tdlib.native/tdlib.native
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
