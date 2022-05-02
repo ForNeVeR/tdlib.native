@@ -1,4 +1,4 @@
-# TODO: Remove, no longer required on GitHub Actions
+# TODO[#24]: Remove, no longer required on GitHub Actions
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
