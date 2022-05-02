@@ -15,6 +15,7 @@ Push-Location $td/build
 try {
     $vcpkgArguments = @(
         'install'
+        "gperf:$platform"
         "openssl:$platform"
         "zlib:$platform"
     )

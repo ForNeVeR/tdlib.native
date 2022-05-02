@@ -99,9 +99,6 @@ jobs:
         run: ./common/verify-encoding.ps1
 
       # Build:
-      - name: Install
-        shell: pwsh
-        run: ./windows/install.ps1
       - name: Build
         shell: pwsh
         run: ./windows/build.ps1 -VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake
