@@ -85,6 +85,36 @@ jobs:
           name: tdlib.osx
           path: artifacts/*
 
+  build-windows:
+    runs-on: windows-2019
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      # Verify:
+      - name: Verify encoding
+        shell: pwsh
+        run: ./common/verify-encoding.ps1
+
+      # Build:
+      - name: Install
+        shell: pwsh
+        run: ./windows/install.ps1
+      - name: Build
+        shell: pwsh
+        run: ./windows/build.ps1 -VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake
+      - name: Prepare Artifact
+        shell: pwsh
+        run: ./windows/prepare-artifact.ps1 # produces artifacts/*.dll
+
+      - name: Upload build result
+        uses: actions/upload-artifact@v2
+        with:
+          name: tdlib.windows
+          path: artifacts/*
+
   test-ubuntu1804:
     needs: build-linux
     runs-on: ubuntu-20.04
