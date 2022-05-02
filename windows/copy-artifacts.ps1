@@ -1,6 +1,6 @@
 param (
-    [string] $Target = "$PSScriptRoot/../build/runtimes/win-x64/native/",
-    [string] $Source = "$PSScriptRoot/../td/build/Release/*.dll"
+    [string] $Source = "$PSScriptRoot/../artifacts/*",
+    [string] $Target = "$PSScriptRoot/../build/runtimes/win-x64/native/"
 )
 
 $ErrorActionPreference = 'Stop'

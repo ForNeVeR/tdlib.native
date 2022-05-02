@@ -120,7 +120,7 @@ jobs:
     runs-on: ubuntu-20.04
     container: ubuntu:18.04
     env:
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_NOLOGO: 1
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.1.0
@@ -171,7 +171,7 @@ jobs:
     needs: build-macos
     runs-on: macos-10.15
     env:
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_NOLOGO: 1
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.1.0
@@ -190,6 +190,47 @@ jobs:
       - name: Copy artifacts
         shell: pwsh
         run: ./macos/copy-artifacts.ps1
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '2.2.x'
+      - name: Pack NuGet
+        shell: pwsh
+        run: ./common/nuget-pack.ps1 -Version "${{ env.PACKAGE_VERSION_BASE }}" -NuGet nuget
+        # TODO: Add ${{ github.run_id }} as a patch version
+
+      - name: NuGet cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
+      - name: Test
+        shell: pwsh
+        run: ./common/test.ps1 -NuGet nuget
+
+  test-windows:
+    needs: build-windows
+    runs-on: windows-2019
+    env:
+      DOTNET_NOLOGO: 1
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
+      PACKAGE_VERSION_BASE: 1.8.1.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: tdlib.windows
+          path: ./artifacts
+
+      - name: Copy artifacts
+        shell: pwsh
+        run: ./windows/copy-artifacts.ps1
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v1
         with:
