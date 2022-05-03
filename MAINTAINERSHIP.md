@@ -11,7 +11,6 @@ Publish a New Version
     - `.github/workflows/main.yml`: `PACKAGE_VERSION_BASE` environment variable (3 occurrences)
     - `common/download-release.ps1`: `$Version` variable default value
     - `common/nuget-pack.ps1`: `$Version` variable default value
-    - `.appveyor.yml`: `test_script` section (2 occurrences)
 5. Update the `releaseNotes` element in the `tdlib.native.nuspec` file.
 6. Create a pull request, verify that the tests are okay.
 7. Push a version tag (`v1.x.x`) to this repository. CI servers will do their job and upload the artifacts to the [Releases][releases] page.
