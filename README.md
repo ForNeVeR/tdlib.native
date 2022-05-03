@@ -5,7 +5,7 @@ This is a project to pack [TDLib][tdlib] (the Telegram Database library) binarie
 
 - [MacOS 10.15][spec.macos] (x64) _(GitHub Actions image: `macos-10.15`)_
 - [Ubuntu 18.04][spec.linux] (x64) _(Docker image: `ubuntu:18.04`)_
-- [Windows Server 2019][spec.windows] (x64) _(Appveyor image: `Visual Studio 2019`)_
+- [Windows Server 2019][spec.windows] (x64) _(GitHub Actions image: `windows-2019`)_
 
 Getting Started
 ---------------
@@ -29,6 +29,6 @@ Documentation
 [releases]: https://github.com/ForNeVeR/tdlib.native/releases
 [spec.linux]: https://hub.docker.com/_/ubuntu
 [spec.macos]: https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md
-[spec.windows]: https://www.appveyor.com/docs/windows-images-software/
+[spec.windows]: https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
 [tdlib]: https://github.com/tdlib/td
 [tdsharp]: https://github.com/egramtel/tdsharp
