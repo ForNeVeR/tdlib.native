@@ -255,6 +255,9 @@ jobs:
     env:
       PACKAGE_VERSION_BASE: 1.8.1
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Download Linux artifact
         uses: actions/download-artifact@v2
         with:
