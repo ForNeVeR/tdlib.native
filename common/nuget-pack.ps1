@@ -1,5 +1,6 @@
 param (
-    [string] $Version = '1.8.1.0',
+    [Parameter(Mandatory = $true)]
+    [string] $Version,
     [string] $SrcDirectory = "$PSScriptRoot/..",
     [string] $BuildDirectory = "$SrcDirectory/build",
 
