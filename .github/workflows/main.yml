@@ -351,6 +351,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_name: tdlib.nupkg
+          asset_name: tdlib.native.${{ steps.version.outputs.version }}.nupkg
           asset_path: ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg
           asset_content_type: application/zip
