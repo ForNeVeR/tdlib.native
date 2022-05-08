@@ -152,7 +152,7 @@ jobs:
           dotnet-version: '2.2.x'
       - name: Pack NuGet
         shell: pwsh
-        run: ./common/nuget-pack.ps1 -Version "${{ env.PACKAGE_VERSION_BASE }}" -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono
+        run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
         # TODO[#64]: Add ${{ github.run_id }} as a patch version
 
       - name: NuGet cache
@@ -193,7 +193,7 @@ jobs:
           dotnet-version: '2.2.x'
       - name: Pack NuGet
         shell: pwsh
-        run: ./common/nuget-pack.ps1 -Version "${{ env.PACKAGE_VERSION_BASE }}" -NuGet nuget
+        run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
         # TODO[#64]: Add ${{ github.run_id }} as a patch version
 
       - name: NuGet cache
@@ -234,7 +234,7 @@ jobs:
           dotnet-version: '2.2.x'
       - name: Pack NuGet
         shell: pwsh
-        run: ./common/nuget-pack.ps1 -Version "${{ env.PACKAGE_VERSION_BASE }}" -NuGet nuget
+        run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
         # TODO[#64]: Add ${{ github.run_id }} as a patch version
 
       - name: NuGet cache
@@ -285,9 +285,10 @@ jobs:
         shell: pwsh
         run: Set-Location ./build/runtimes/win-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.windows.zip *
 
-      - name: Install dependencies for release
-        shell: pwsh
-        run: ./linux/install.ps1 -ForRelease
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
 
       - name: Read version from ref
         id: version
@@ -296,7 +297,7 @@ jobs:
 
       - name: Prepare NuGet package
         shell: pwsh
-        run: ./common/nuget-pack.ps1 -UseMono -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -Version '${{ steps.version.outputs.version }}'
+        run: dotnet pack -p:PackageVersion=${{ steps.version.outputs.version }} --output build
 
       - name: Upload NuGet package
         uses: actions/upload-artifact@v2

@@ -1,16 +1,20 @@
 <?xml version="1.0"?>
 <package>
-  <metadata>
-    <id>tdlib.native</id>
-    <version>$version$</version>
-    <authors>ForNeVeR</authors>
-    <owners>ForNeVeR</owners>
-    <license type="expression">BSL-1.0</license>
-    <projectUrl>https://github.com/ForNeVeR/tdlib.native</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>NuGet packaging for tdlib: Telegram client library.</description>
-    <releaseNotes>Updated to 1.8.1.</releaseNotes>
-    <copyright>Copyright 2022</copyright>
-    <tags>telegram</tags>
-  </metadata>
+    <metadata>
+        <id>tdlib.native</id>
+        <version>$version$</version>
+        <authors>ForNeVeR</authors>
+        <owners>ForNeVeR</owners>
+        <license type="expression">BSL-1.0</license>
+        <projectUrl>https://github.com/ForNeVeR/tdlib.native</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>NuGet packaging for tdlib: Telegram client library.</description>
+        <releaseNotes>Updated to 1.8.1.</releaseNotes>
+        <copyright>Copyright 2022</copyright>
+        <tags>telegram</tags>
+    </metadata>
+    <files>
+        <file src="build\runtimes\**" target="runtimes" />
+        <file src="LICENSE_1_0.txt" />
+    </files>
 </package>

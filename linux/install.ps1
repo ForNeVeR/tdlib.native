@@ -2,8 +2,7 @@ param (
     [string] $NuGetDownloadUrl = 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe',
     [string] $NuGetPath = "$PSScriptRoot/../tools/nuget.exe",
     [switch] $ForBuild,
-    [switch] $ForTests,
-    [switch] $ForRelease
+    [switch] $ForTests
 )
 
 $ErrorActionPreference = 'Stop'
@@ -63,9 +62,7 @@ if ($ForTests) {
     if (!$?) {
         throw 'Cannot execute apt-get update.'
     }
-}
 
-if ($ForTests -or $ForRelease) {
     Write-Output "Downloading NuGet client to $NuGetPath"
     New-Item -Type Directory ([IO.Path]::GetDirectoryName($NuGetPath))
     Invoke-WebRequest -OutFile $NuGetPath $NuGetDownloadUrl
