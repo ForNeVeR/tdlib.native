@@ -21,12 +21,12 @@ try {
         '.'
     )
 
-    cmake $cmakeArguments
+    cmake @cmakeArguments
     if (!$?) {
         throw 'Cannot execute cmake'
     }
 
-    cmake $cmakeBuildArguments
+    cmake @cmakeBuildArguments
     if (!$?) {
         throw 'Cannot execute cmake --build'
     }
