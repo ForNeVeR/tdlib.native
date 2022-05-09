@@ -22,9 +22,11 @@ For other technologies or if you don't want to use tdsharp in .NET, you can just
 Documentation
 -------------
 
+- [Changelog][docs.changelog]
 - [License][docs.license]
 - [Maintainership][docs.maintainership]
 
+[docs.changelog]: ./CHANGELOG.md
 [docs.license]: ./LICENSE_1_0.txt
 [docs.maintainership]: ./MAINTAINERSHIP.md
 [nuget]: https://www.nuget.org/packages/tdlib.native/
