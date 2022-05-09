@@ -381,3 +381,7 @@ jobs:
           asset_name: tdlib.native.${{ steps.version.outputs.version }}.nupkg
           asset_path: ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg
           asset_content_type: application/zip
+
+      - name: Push the package to nuget.org
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+        run: dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_KEY }} ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg

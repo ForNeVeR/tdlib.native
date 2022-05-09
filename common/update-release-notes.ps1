@@ -7,5 +7,5 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
 [xml] $contents = Get-Content $TargetFile
-$contents.package.metadata.releaseNotes = Get-Content $ReleaseNotesFile
+$contents.package.metadata.releaseNotes = Get-Content -Raw $ReleaseNotesFile
 $contents.Save($(Resolve-Path $TargetFile))
