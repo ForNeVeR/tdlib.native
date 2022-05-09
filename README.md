@@ -7,6 +7,8 @@ This is a project to pack [TDLib][tdlib] (the Telegram Database library) binarie
 - [Ubuntu 18.04][spec.linux] (x64) _(Docker image: `ubuntu:18.04`)_
 - [Windows Server 2019][spec.windows] (x64) _(GitHub Actions image: `windows-2019`)_
 
+We aim to create a transparent process with no manual intervention, where every artifact is produced in a clean CI environment, and uploaded automatically.
+
 Getting Started
 ---------------
 
