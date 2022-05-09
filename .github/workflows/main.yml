@@ -304,6 +304,23 @@ jobs:
         shell: pwsh
         run: Write-Output "::set-output name=version::$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { "$env:PACKAGE_VERSION_BASE-preview" })"
 
+      - name: Prepare the release notes (text)
+        uses: ForNeVeR/ChangelogAutomation.action@v1
+        with:
+          input: ./CHANGELOG.md
+          output: ./releaseNotes.txt
+          format: PlainText
+      - name: Prepare the release notes (Markdown)
+        uses: ForNeVeR/ChangelogAutomation.action@v1
+        with:
+          input: ./CHANGELOG.md
+          output: ./release-notes.md
+          format: Markdown
+
+      - name: Update the release notes
+        shell: pwsh
+        run: ./common/update-release-notes.ps1 ./releaseNotes.txt
+
       - name: Prepare NuGet package
         shell: pwsh
         run: dotnet pack -p:PackageVersion=${{ steps.version.outputs.version }} --output build
@@ -323,7 +340,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: v${{ steps.version.outputs.version }}
-          draft: true
+          body_path: ./release-notes.md
       - name: Release Linux artifact
         if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-release-asset@v1

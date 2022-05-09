@@ -9,7 +9,7 @@
         <projectUrl>https://github.com/ForNeVeR/tdlib.native</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>NuGet packaging for tdlib: Telegram client library.</description>
-        <releaseNotes>Updated to 1.8.1.</releaseNotes>
+        <releaseNotes>[To be replaced on release]</releaseNotes>
         <copyright>Copyright 2022</copyright>
         <tags>telegram</tags>
     </metadata>
