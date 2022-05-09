@@ -19,6 +19,11 @@ If using .NET, then you'll probably need to also install [tdsharp][], and then u
 
 For other technologies or if you don't want to use tdsharp in .NET, you can just download the binaries and then use them in a manner your technology allows to use dynamically loaded libraries. Consult the [TDLib][tdlib] documentation for further directions.
 
+Library Dependencies
+--------------------
+
+On Windows, [Microsoft Visual C++ Redistributable][cpp.redist] of version 2019 or higher is required by TDLib.
+
 Documentation
 -------------
 
@@ -26,6 +31,7 @@ Documentation
 - [License][docs.license]
 - [Maintainership][docs.maintainership]
 
+[cpp.redist]: https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160
 [docs.changelog]: ./CHANGELOG.md
 [docs.license]: ./LICENSE_1_0.txt
 [docs.maintainership]: ./MAINTAINERSHIP.md

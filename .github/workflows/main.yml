@@ -229,6 +229,10 @@ jobs:
           name: tdlib.windows
           path: ./artifacts
 
+      - name: Windows-specific testing
+        shell: pwsh
+        run: ./windows/test.ps1
+
       - name: Prepare package for testing
         shell: pwsh
         run: ./windows/prepare-package.ps1
