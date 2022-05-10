@@ -229,6 +229,16 @@ jobs:
           name: tdlib.windows
           path: ./artifacts
 
+      - name: Cache downloads for Windows
+        uses: actions/cache@v2
+        with:
+          path: build/downloads
+          key: ${{ hashFiles('windows/install.ps1') }}
+
+      - name: Install dependencies
+        shell: pwsh
+        run: ./windows/install.ps1
+
       - name: Windows-specific testing
         shell: pwsh
         run: ./windows/test.ps1

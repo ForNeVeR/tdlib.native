@@ -1,4 +1,6 @@
 param (
+    [string] $Dependencies = "$PSScriptRoot/../build/tools/dependencies/Dependencies.exe",
+
     [string] $Artifacts = "$PSScriptRoot/../artifacts",
     [string] $GoldFile = "$PSScriptRoot/../windows/libraries.gold.txt",
     [string] $ResultFile = "$PSScriptRoot/../windows/libraries.temp.txt",
@@ -17,13 +19,13 @@ if (Test-Path $ResultFile) {
 Get-ChildItem "$Artifacts/*.dll" | Sort-Object -Property Name | ForEach-Object {
     $libraryPath = $_.FullName
 
-    Write-Output "Checking file $libraryPath…"
-    $output = dumpbin /DEPENDENTS $libraryPath
+    Write-Output "Checking file `"$libraryPath`"…"
+    $output = & $Dependencies -json -imports $libraryPath | ConvertFrom-Json
     if (!$?) {
-        throw "dumpbin /DEPENDENTS $libraryPath returned an exit code $LASTEXITCODE; output: $output"
+        throw "Dependencies.exe returned an exit code $LASTEXITCODE."
     }
 
-    $libraryNames = $output | Where-Object { $_ -match '^    [^ ]' } | ForEach-Object { $_.TrimStart() } | Sort-Object
+    $libraryNames = $output.Imports | Select-Object -ExpandProperty Name | Sort-Object
     $_.Name >> $ResultFile
     $libraryNames | ForEach-Object { "  $_" >> $ResultFile }
 }
