@@ -4,6 +4,7 @@ libcrypto-3-x64.dll
   api-ms-win-crt-environment-l1-1-0.dll
   api-ms-win-crt-filesystem-l1-1-0.dll
   api-ms-win-crt-heap-l1-1-0.dll
+  api-ms-win-crt-locale-l1-1-0.dll
   api-ms-win-crt-runtime-l1-1-0.dll
   api-ms-win-crt-stdio-l1-1-0.dll
   api-ms-win-crt-string-l1-1-0.dll
