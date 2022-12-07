@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased] (1.8.9)
+### Changed
+- Update TDLib to commit `29752073cf2fe586ecefe572d3821a8cf853fab5`, v1.8.9.
+
 ## [1.8.1] - 2022-04-10
 ### Changed
 - Update TDLib [to a commit from v1.8.1](https://github.com/tdlib/td/tree/1e1ab5d1b0e4811e6d9e1584a82da08448d0cada)
