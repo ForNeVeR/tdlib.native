@@ -21,6 +21,7 @@ try {
     )
     $cmakeArguments = @(
         "-DCMAKE_TOOLCHAIN_FILE=$VcpkgToolchain"
+        '-DCMAKE_DISABLE_FIND_PACKAGE_Readline=TRUE' # workaround for #76
         '..'
     )
     $cmakeBuildArguments = @(
