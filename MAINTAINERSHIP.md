@@ -26,6 +26,8 @@ To update the key:
 1. Sign in onto nuget.org.
 2. Go to the [API keys][nuget.api-keys] section.
 3. Create a new key with permission to **Push new packages and package versions** and only allowed to publish **tdlib.native** package.
+
+   Alternately, if you have such key already and want to regenerate it, press the **Regenerate** button in its page section.
 4. Paste the generated API keys to the [action secrets][github.secrets] section on GitHub settings (update the `NUGET_KEY` secret).
 
 [docs.unlist]: https://docs.microsoft.com/en-us/nuget/nuget-org/policies/deleting-packages#unlisting-a-package
