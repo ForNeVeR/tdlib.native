@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+### Changed
+- **(Breaking change!)** The package now only supports macOS 11, since macOS 10 is out of support by the OS (and CI infrastructure) vendor.
+
 ## [1.8.12] - 2023-03-18
 ### Changed
 - Update TDLib [to a commit from v1.8.12](https://github.com/tdlib/td/tree/70bee089d492437ce931aa78446d89af3da182fc).
