@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Changed
 - **(Breaking change!)** The package now only supports macOS 11, since macOS 10 is out of support by the OS (and CI infrastructure) vendor.
+- **(Breaking change!)** The package now only supports Ubuntu 20.04 and newer, since Ubuntu 18.04 has reached EOL.
 
 ## [1.8.12] - 2023-03-18
 ### Changed

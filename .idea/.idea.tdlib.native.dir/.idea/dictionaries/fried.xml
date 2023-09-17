@@ -2,7 +2,9 @@
   <dictionary name="fried">
     <words>
       <w>maintainership</w>
+      <w>nologo</w>
       <w>nupkg</w>
+      <w>optout</w>
       <w>tdlib</w>
       <w>tdsharp</w>
     </words>

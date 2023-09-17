@@ -53,7 +53,7 @@ if ($ForTests) {
         throw "Error exit code from gpg: $LASTEXITCODE."
     }
 
-    echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list
+    echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
     if (!$?) {
         throw "Cannot add a package source, exit code: $LASTEXITCODE."
     }
