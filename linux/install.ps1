@@ -26,7 +26,7 @@ if ($ForBuild) {
         )
 
         Write-Output 'Installing dependencies.'
-        apt-get install -y @dependencies
+        sudo apt-get install -y @dependencies
         if (!$?) {
             throw 'Cannot install dependencies from apt-get'
         }
@@ -42,13 +42,13 @@ if ($ForTests) {
     )
 
     Write-Output 'Installing dependencies.'
-    apt-get install -y @dependencies
+    sudo apt-get install -y @dependencies
     if (!$?) {
         throw 'Cannot install dependencies from apt-get'
     }
 
     Write-Output 'Installing Mono.'
-    gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    sudo gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
     if (!$?) {
         throw "Error exit code from gpg: $LASTEXITCODE."
     }
@@ -58,12 +58,12 @@ if ($ForTests) {
         throw "Cannot add a package source, exit code: $LASTEXITCODE."
     }
 
-    apt update
+    sudo apt update
     if (!$?) {
         throw "Cannot execute apt update, exit code: $LASTEXITCODE."
     }
 
-    apt install -y mono-devel
+    sudo apt install -y mono-devel
     if (!$?) {
         throw "Cannot execute apt install, exit code: $LASTEXITCODE."
     }
