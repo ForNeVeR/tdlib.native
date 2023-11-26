@@ -129,9 +129,7 @@ jobs:
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: |
-            2.2.x
-            6.0.x
+          dotnet-version: '7.0.x'
       - name: Pack NuGet
         shell: pwsh
         run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
@@ -172,9 +170,7 @@ jobs:
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: |
-            2.2.x
-            6.0.x
+          dotnet-version: '7.0.x'
       - name: Pack NuGet
         shell: pwsh
         run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
@@ -229,9 +225,7 @@ jobs:
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: |
-            2.2.x
-            6.0.x
+          dotnet-version: '7.0.x'
       - name: Pack NuGet
         shell: pwsh
         run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
@@ -291,7 +285,7 @@ jobs:
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '7.0.x'
 
       - name: Read version from ref
         id: version

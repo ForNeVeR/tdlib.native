@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.Build.NoTargets/3.4.0">
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework> <!-- this is a dummy value -->
+        <TargetFramework>net7.0</TargetFramework> <!-- this is a dummy value -->
         <NuspecFile>$(MSBuildThisFileDirectory)\tdlib.native.nuspec</NuspecFile>
         <NuspecProperties>version=$(PackageVersion)</NuspecProperties>
     </PropertyGroup>
