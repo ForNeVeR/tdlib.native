@@ -16,7 +16,9 @@ libcrypto-3-x64.dll
   WS2_32.dll
 libssl-3-x64.dll
   api-ms-win-crt-convert-l1-1-0.dll
+  api-ms-win-crt-environment-l1-1-0.dll
   api-ms-win-crt-filesystem-l1-1-0.dll
+  api-ms-win-crt-heap-l1-1-0.dll
   api-ms-win-crt-runtime-l1-1-0.dll
   api-ms-win-crt-stdio-l1-1-0.dll
   api-ms-win-crt-string-l1-1-0.dll
