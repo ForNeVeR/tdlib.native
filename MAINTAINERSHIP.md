@@ -13,9 +13,10 @@ Publish a New Version
 7. Update the version in the following places:
     - `.github/workflows/main.yml`: `PACKAGE_VERSION_BASE` environment variable (4 occurrences)
 8. Create a pull request, verify that the tests are okay. Merge it afterward.
-9. Push a version tag (`v1.x.x`) to this repository. CI servers will do their job and upload the artifacts to the [Releases][releases] page.
-10. Mark the release as published after it has been created and everything's alright.
-11. If the release is not synchronized with a corresponding release of [tdsharp][], then it's recommended to [unlist][docs.unlist] it until the corresponding release of tdsharp is available. This will help the users to do a coordinated update and not update only a part of the libraries.
+9. Make sure the NuGet key you use for publishing is still active. If not, then rotate the key as explained in the corresponding section of this document.
+10. Push a version tag (`v1.x.x`) to this repository. CI servers will do their job and upload the artifacts to the [Releases][releases] page.
+11. Mark the release as published after it has been created and everything's alright.
+12. If the release is not synchronized with a corresponding release of [tdsharp][], then it's recommended to [unlist][docs.unlist] it until the corresponding release of tdsharp is available. This will help the users to do a coordinated update and not update only a part of the libraries.
 
 Rotate Keys
 -----------
