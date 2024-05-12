@@ -118,7 +118,7 @@ jobs:
         run: ./linux/install.ps1 -ForTests
 
       - name: Download Linux artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: tdlib.linux
           path: ./artifacts
@@ -159,7 +159,7 @@ jobs:
           submodules: true
 
       - name: Download macOS artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: tdlib.osx
           path: ./artifacts
@@ -200,7 +200,7 @@ jobs:
           submodules: true
 
       - name: Download Windows artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: tdlib.windows
           path: ./artifacts
@@ -256,7 +256,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Linux artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: tdlib.linux
           path: ./build/runtimes/linux-x64/native
@@ -265,7 +265,7 @@ jobs:
         run: Set-Location ./build/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.linux.zip *
 
       - name: Download macOS artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: tdlib.osx
           path: ./build/runtimes/osx-x64/native
@@ -274,7 +274,7 @@ jobs:
         run: Set-Location ./build/runtimes/osx-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.osx.zip *
 
       - name: Download Windows artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: tdlib.windows
           path: ./build/runtimes/win-x64/native
