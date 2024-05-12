@@ -1,6 +1,8 @@
 param (
     [string] $Source = "$PSScriptRoot/../artifacts/*",
-    [string] $Target = "$PSScriptRoot/../build/runtimes/osx-x64/native/"
+    [Parameter(Mandatory = $true)]
+    [string] $DotNetArch,
+    [string] $Target = "$PSScriptRoot/../build/runtimes/osx-$DotNetArch/native/"
 )
 
 $ErrorActionPreference = 'Stop'
