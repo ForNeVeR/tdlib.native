@@ -136,7 +136,7 @@ jobs:
         # TODO[#64]: Add ${{ github.run_id }} as a patch version
 
       - name: NuGet cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
@@ -177,7 +177,7 @@ jobs:
         # TODO[#64]: Add ${{ github.run_id }} as a patch version
 
       - name: NuGet cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
@@ -206,7 +206,7 @@ jobs:
           path: ./artifacts
 
       - name: Cache downloads for Windows
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: build/downloads
           key: ${{ hashFiles('windows/install.ps1') }}
@@ -232,7 +232,7 @@ jobs:
         # TODO[#64]: Add ${{ github.run_id }} as a patch version
 
       - name: NuGet cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
