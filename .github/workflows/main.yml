@@ -25,6 +25,12 @@ jobs:
         shell: pwsh
         run: ./common/verify-encoding.ps1
 
+      - name: Cache artifacts
+        uses: actions/cache@v4
+        with:
+          path: artifacts
+          key: linux.x86-64
+
       # Build:
       - name: Install
         shell: pwsh
@@ -55,6 +61,12 @@ jobs:
         shell: pwsh
         run: ./common/verify-encoding.ps1
 
+      - name: Cache artifacts
+        uses: actions/cache@v4
+        with:
+          path: artifacts
+          key: macos.x86-64
+
       # Build:
       - name: Install
         shell: pwsh
@@ -84,6 +96,12 @@ jobs:
       - name: Verify encoding
         shell: pwsh
         run: ./common/verify-encoding.ps1
+
+      - name: Cache artifacts
+        uses: actions/cache@v4
+        with:
+          path: artifacts
+          key: windows.x86-64
 
       # Build:
       - name: Build
