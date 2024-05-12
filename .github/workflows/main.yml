@@ -127,7 +127,7 @@ jobs:
         shell: pwsh
         run: ./linux/prepare-package.ps1
       - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '7.0.x'
       - name: Pack NuGet
@@ -168,7 +168,7 @@ jobs:
         shell: pwsh
         run: ./macos/prepare-package.ps1
       - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '7.0.x'
       - name: Pack NuGet
@@ -223,7 +223,7 @@ jobs:
         shell: pwsh
         run: ./windows/prepare-package.ps1
       - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '7.0.x'
       - name: Pack NuGet
@@ -283,7 +283,7 @@ jobs:
         run: Set-Location ./build/runtimes/win-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.windows.zip *
 
       - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '7.0.x'
 
