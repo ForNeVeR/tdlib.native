@@ -246,6 +246,12 @@ jobs:
         run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
         # TODO[#64]: Add ${{ github.run_id }} as a patch version
 
+      - name: '[Diagnostics] Upload the built files' # TODO: Remove this
+        uses: actions/upload-artifact@v2
+        with:
+          name: built-files
+          path: ./build
+
       - name: NuGet cache
         uses: actions/cache@v2
         with:
