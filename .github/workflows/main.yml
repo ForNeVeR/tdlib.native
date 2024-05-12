@@ -37,7 +37,7 @@ jobs:
         run: ./linux/prepare-artifacts.ps1 # produces artifacts/libtdjson.so
 
       - name: Upload build result
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: tdlib.linux
           path: artifacts/*
@@ -67,7 +67,7 @@ jobs:
         run: ./macos/prepare-artifacts.ps1 # produces artifacts/libtdjson.dylib
 
       - name: Upload build result
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: tdlib.osx
           path: artifacts/*
@@ -94,7 +94,7 @@ jobs:
         run: ./windows/prepare-artifacts.ps1 # produces artifacts/*.dll
 
       - name: Upload build result
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: tdlib.windows
           path: artifacts/*
@@ -314,7 +314,7 @@ jobs:
         run: dotnet pack -p:PackageVersion=${{ steps.version.outputs.version }} --output build
 
       - name: Upload NuGet package
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: tdlib.nuget
           path: ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg
