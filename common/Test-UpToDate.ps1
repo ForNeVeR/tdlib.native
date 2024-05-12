@@ -13,6 +13,10 @@ $inputs = [pscustomobject] @{
 }
 
 if ($GenerateCheckResult) {
+    if (!(Test-Path $ArtifactsDirectory)) {
+        New-Item -Type Directory $ArtifactsDirectory | Out-Null
+    }
+
     $inputs | ConvertTo-Json | Set-Content $resultFile
     Write-Host "Result cache file generated: `"$resultFile`"."
     return $true
