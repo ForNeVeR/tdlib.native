@@ -290,7 +290,8 @@ jobs:
       - name: Read version from ref
         id: version
         shell: pwsh
-        run: Write-Output "::set-output name=version::$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { "$env:PACKAGE_VERSION_BASE-preview" })"
+        run: >
+          "version=$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { "$env:PACKAGE_VERSION_BASE-preview" })" >> $env:GITHUB_OUTPUT
 
       - name: Prepare the release notes (text)
         uses: ForNeVeR/ChangelogAutomation.action@v1
