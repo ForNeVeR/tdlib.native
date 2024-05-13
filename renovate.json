@@ -3,6 +3,12 @@
     "extends": [
         "config:recommended"
     ],
+    "packageRules": [
+        {
+            "matchDatasources": ["github-runners"],
+            "enabled": false
+        }
+    ],
     "customManagers": [
         {
             "customType": "regex",
