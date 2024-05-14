@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: artifacts
-          key: linux.x86-64.${{ hashFiles('artifacts/cache-key.json') }}
+          key: linux.x86-64.${{ hashFiles('.github/cache-key.json') }}
 
       # Build:
       - name: Install
@@ -73,7 +73,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: artifacts
-          key: macos.x86-64.${{ hashFiles('artifacts/cache-key.json') }}
+          key: macos.x86-64.${{ hashFiles('.github/cache-key.json') }}
 
       # Build:
       - name: Install
@@ -113,7 +113,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: artifacts
-          key: windows.x86-64.${{ hashFiles('artifacts/cache-key.json') }}
+          key: windows.x86-64.${{ hashFiles('.github/cache-key.json') }}
 
       # Build:
       - name: Build

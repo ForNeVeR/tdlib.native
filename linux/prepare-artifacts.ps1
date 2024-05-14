@@ -14,4 +14,5 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
         New-Item -Type Directory $TargetLocation
     }
     Copy-Item "$InstallPrefix/lib/*" $TargetLocation
+    & $CheckUpToDateScript -GenerateResultKey
 }
