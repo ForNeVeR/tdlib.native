@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.Build.NoTargets/3.4.0">
+<Project Sdk="Microsoft.Build.NoTargets/3.7.56">
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework> <!-- this is a dummy value -->
         <NuspecFile>$(MSBuildThisFileDirectory)\tdlib.native.nuspec</NuspecFile>
