@@ -25,11 +25,15 @@ jobs:
         shell: pwsh
         run: ./common/verify-encoding.ps1
 
+      - name: Generate cache key
+        shell: pwsh
+        run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
+
       - name: Cache artifacts
         uses: actions/cache@v4
         with:
           path: artifacts
-          key: linux.x86-64
+          key: linux.x86-64.${{ hashFiles('artifacts/cache-key.json') }}
 
       # Build:
       - name: Install
@@ -61,11 +65,15 @@ jobs:
         shell: pwsh
         run: ./common/verify-encoding.ps1
 
+      - name: Generate cache key
+        shell: pwsh
+        run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
+
       - name: Cache artifacts
         uses: actions/cache@v4
         with:
           path: artifacts
-          key: macos.x86-64
+          key: macos.x86-64.${{ hashFiles('artifacts/cache-key.json') }}
 
       # Build:
       - name: Install
@@ -97,11 +105,15 @@ jobs:
         shell: pwsh
         run: ./common/verify-encoding.ps1
 
+      - name: Generate cache key
+        shell: pwsh
+        run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
+
       - name: Cache artifacts
         uses: actions/cache@v4
         with:
           path: artifacts
-          key: windows.x86-64
+          key: windows.x86-64.${{ hashFiles('artifacts/cache-key.json') }}
 
       # Build:
       - name: Build
