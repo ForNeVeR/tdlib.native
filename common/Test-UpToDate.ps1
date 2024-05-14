@@ -4,7 +4,8 @@ param (
     [switch] $GenerateCacheKey,
     [switch] $GenerateResultKey,
     [string] $CacheKeyFile = "$PSScriptRoot/../.github/cache-key.json",
-    [string] $ResultKeyFile = "$ArtifactsDirectory/cache-key.json"
+    [string] $ResultKeyFile = "$ArtifactsDirectory/cache-key.json",
+    [string] $CacheVersion = 'v1'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -12,6 +13,11 @@ Set-StrictMode -Version Latest
 
 $inputs = [pscustomobject] @{
     InputCommitHash = (git --git-dir=$RepoDirectory/.git rev-parse HEAD)
+    CacheVersion = $CacheVersion
+}
+
+function compareCacheObject($a, $b) {
+    $a.InputCommitHash -eq $b.InputCommitHash -and $a.CacheVersion -eq $b.CacheVersion
 }
 
 if ($GenerateCacheKey) {
@@ -32,8 +38,8 @@ if (!(Test-Path $ArtifactsDirectory)) {
     return $true
 } elseif (Test-Path $ResultKeyFile) {
     $result = Get-Content $ResultKeyFile | ConvertFrom-Json
-    $upToDate = $result.InputCommitHash -eq $inputs.InputCommitHash
-    Write-Host "Cache found: cached commit hash is $($result.InputCommitHash), current commit hash is $($inputs.InputCommitHash). Up to date: $upToDate."
+    $upToDate = compareCacheObject $result $inputs
+    Write-Host "Cache found: cache key is $result, current key is $inputs. Up to date: $upToDate."
     return $upToDate
 } else {
     Write-Host "Last result cache file not found: `"$ResultKeyFile`"."
