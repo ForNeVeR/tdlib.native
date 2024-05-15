@@ -12,11 +12,15 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
         New-Item -Type Directory $td/build
     }
 
-    Push-Location $td/build
-    try {
-        $cmakeArguments = @(
-            '-DCMAKE_BUILD_TYPE=Release'
-            '-DOPENSSL_ROOT_DIR=/usr/local/opt/openssl/'
+    $architecture = machine
+$isArm64 = $architecture -eq 'arm64e'
+$openSslDir = if ($isArm64) { '/opt/homebrew/opt/openssl' } else { '/usr/local/opt/openssl' }
+
+Push-Location $td/build
+try {
+    $cmakeArguments = @(
+        '-DCMAKE_BUILD_TYPE=Release'
+        "-DOPENSSL_ROOT_DIR=$openSslDir"
             '..'
         )
         $cmakeBuildArguments = @(
