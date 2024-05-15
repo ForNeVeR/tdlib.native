@@ -11,9 +11,11 @@ param (
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
+$date = Get-Date -AsUTC
 $inputs = [pscustomobject] @{
     InputCommitHash = (git --git-dir=$RepoDirectory/.git rev-parse HEAD)
     CacheVersion = $CacheVersion
+    TimePeriod = "$($date.Year).$([Globalization.ISOWeek]::GetWeekOfYear($date))"
 }
 
 function compareCacheObject($a, $b) {
