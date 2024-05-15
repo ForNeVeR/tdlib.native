@@ -32,7 +32,7 @@ if ($GenerateCacheKey) {
     Write-Host "Result cache file generated: `"$CacheKeyFile`"."
     return $true
 } elseif ($GenerateResultKey) {
-if (!(Test-Path $ArtifactsDirectory)) {
+    if (!(Test-Path $ArtifactsDirectory)) {
         New-Item -Type Directory $ArtifactsDirectory | Out-Null
     }
 
