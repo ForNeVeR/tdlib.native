@@ -1,9 +1,10 @@
 param (
-    [string] $RepoDirectory = "$PSScriptRoot/../td",
-    [string] $ArtifactsDirectory = "$PSScriptRoot/../artifacts",
+    [string] $RepoRoot = "$PSScriptRoot/..",
+    [string] $RepoDirectory = "$RepoRoot/td",
+    [string] $ArtifactsDirectory = "$RepoRoot/artifacts",
     [switch] $GenerateCacheKey,
     [switch] $GenerateResultKey,
-    [string] $CacheKeyFile = "$PSScriptRoot/../.github/cache-key.json",
+    [string] $CacheKeyFile = "$RepoRoot/.github/cache-key.json",
     [string] $ResultKeyFile = "$ArtifactsDirectory/cache-key.json",
     [string] $CacheVersion = 'v1'
 )
