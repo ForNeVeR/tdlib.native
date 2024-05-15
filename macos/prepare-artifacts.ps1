@@ -14,4 +14,6 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
     }
     Copy-Item "$BuildRoot/libtdjson.dylib" $TargetLocation
     & $CheckUpToDateScript -GenerateResultKey
+} else {
+    Write-Host 'The build result is up to date.'
 }

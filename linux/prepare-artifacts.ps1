@@ -15,4 +15,6 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
     }
     Copy-Item "$InstallPrefix/lib/*" $TargetLocation
     & $CheckUpToDateScript -GenerateResultKey
+} else {
+    Write-Host 'The build result is up to date.'
 }
