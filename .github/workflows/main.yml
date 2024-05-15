@@ -292,7 +292,7 @@ jobs:
           path: ./build/runtimes/linux-x64/native
       - name: Archive Linux artifact
         shell: pwsh
-        run: Set-Location ./build/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.linux.zip *
+        run: Set-Location ./build/runtimes/linux-x64/native && Remove-Item cache-key.json && zip -r $env:GITHUB_WORKSPACE/tdlib.linux.zip *
 
       - name: Download macOS artifact
         uses: actions/download-artifact@v4
@@ -301,7 +301,7 @@ jobs:
           path: ./build/runtimes/osx-x64/native
       - name: Archive macOS artifact
         shell: pwsh
-        run: Set-Location ./build/runtimes/osx-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.osx.zip *
+        run: Set-Location ./build/runtimes/osx-x64/native && Remove-Item cache-key.json && zip -r $env:GITHUB_WORKSPACE/tdlib.osx.zip *
 
       - name: Download Windows artifact
         uses: actions/download-artifact@v4
@@ -310,7 +310,7 @@ jobs:
           path: ./build/runtimes/win-x64/native
       - name: Archive Windows artifact
         shell: pwsh
-        run: Set-Location ./build/runtimes/win-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.windows.zip *
+        run: Set-Location ./build/runtimes/win-x64/native && Remove-Item cache-key.json && zip -r $env:GITHUB_WORKSPACE/tdlib.windows.zip *
 
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v4
