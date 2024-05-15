@@ -20,7 +20,7 @@ $inputs = [pscustomobject] @{
 }
 
 function compareCacheObject($a, $b) {
-    $a.InputCommitHash -eq $b.InputCommitHash -and $a.CacheVersion -eq $b.CacheVersion
+    $a.InputCommitHash -eq $b.InputCommitHash -and $a.CacheVersion -eq $b.CacheVersion -and $a.TimePeriod -eq $b.TimePeriod
 }
 
 if ($GenerateCacheKey) {
