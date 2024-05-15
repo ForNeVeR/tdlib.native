@@ -1,376 +1,338 @@
+# This file is auto-generated.
 name: Main
 on:
   push:
     branches:
-      - master
+    - master
     tags:
-      - 'v*'
+    - v*
   pull_request:
     branches:
-      - master
+    - master
   schedule:
-    - cron: '0 0 * * 0'
-
+  - cron: 0 0 * * 6
 jobs:
   build-linux:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      # Verify:
-      - name: Verify encoding
-        shell: pwsh
-        run: ./common/verify-encoding.ps1
-
-      # Build:
-      - name: Install
-        shell: pwsh
-        run: ./linux/install.ps1 -ForBuild
-      - name: Build
-        shell: pwsh
-        run: ./linux/build.ps1
-      - name: Prepare artifact
-        shell: pwsh
-        run: ./linux/prepare-artifacts.ps1 # produces artifacts/libtdjson.so
-
-      - name: Upload build result
-        uses: actions/upload-artifact@v4
-        with:
-          name: tdlib.linux
-          path: artifacts/*
-
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+    - name: Verify encoding
+      shell: pwsh
+      run: ./common/verify-encoding.ps1
+    - name: Install
+      shell: pwsh
+      run: ./linux/install.ps1 -ForBuild
+    - name: Build
+      shell: pwsh
+      run: ./linux/build.ps1
+    - name: Prepare artifact
+      shell: pwsh
+      run: ./linux/prepare-artifacts.ps1
+    - name: 'Prepare artifact: verify produced file'
+      shell: pwsh
+      run: if (!(Test-Path -LiteralPath 'artifacts/libtdjson.so')) { throw 'File not found' }
+    - name: Upload build result
+      uses: actions/upload-artifact@v2
+      with:
+        name: tdlib.linux
+        path: artifacts/*
   build-macos:
     runs-on: macos-11
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      # Verify:
-      - name: Verify encoding
-        shell: pwsh
-        run: ./common/verify-encoding.ps1
-
-      # Build:
-      - name: Install
-        shell: pwsh
-        run: ./macos/install.ps1
-      - name: Build
-        shell: pwsh
-        run: ./macos/build.ps1
-      - name: Prepare Artifact
-        shell: pwsh
-        run: ./macos/prepare-artifacts.ps1 # produces artifacts/libtdjson.dylib
-
-      - name: Upload build result
-        uses: actions/upload-artifact@v4
-        with:
-          name: tdlib.osx
-          path: artifacts/*
-
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+    - name: Verify encoding
+      shell: pwsh
+      run: ./common/verify-encoding.ps1
+    - name: Install
+      shell: pwsh
+      run: ./macos/install.ps1
+    - name: Build
+      shell: pwsh
+      run: ./macos/build.ps1
+    - name: Prepare artifact
+      shell: pwsh
+      run: ./macos/prepare-artifacts.ps1
+    - name: 'Prepare artifact: verify produced file'
+      shell: pwsh
+      run: if (!(Test-Path -LiteralPath 'artifacts/libtdjson.dylib')) { throw 'File not found' }
+    - name: Upload build result
+      uses: actions/upload-artifact@v2
+      with:
+        name: tdlib.osx
+        path: artifacts/*
   build-windows:
     runs-on: windows-2019
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      # Verify:
-      - name: Verify encoding
-        shell: pwsh
-        run: ./common/verify-encoding.ps1
-
-      # Build:
-      - name: Build
-        shell: pwsh
-        run: ./windows/build.ps1 -VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake
-      - name: Prepare Artifact
-        shell: pwsh
-        run: ./windows/prepare-artifacts.ps1 # produces artifacts/*.dll
-
-      - name: Upload build result
-        uses: actions/upload-artifact@v4
-        with:
-          name: tdlib.windows
-          path: artifacts/*
-
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+    - name: Verify encoding
+      shell: pwsh
+      run: ./common/verify-encoding.ps1
+    - name: Build
+      shell: pwsh
+      run: ./windows/build.ps1 -VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake
+    - name: Prepare artifact
+      shell: pwsh
+      run: ./windows/prepare-artifacts.ps1
+    - name: 'Prepare artifact: verify produced file'
+      shell: pwsh
+      run: if (!(Test-Path -LiteralPath 'artifacts/tdjson.dll')) { throw 'File not found' }
+    - name: Upload build result
+      uses: actions/upload-artifact@v2
+      with:
+        name: tdlib.windows
+        path: artifacts/*
   test-linux:
-    needs: build-linux
+    needs:
+    - build-linux
     runs-on: ubuntu-20.04
     env:
-      DOTNET_NOLOGO: 1
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.21
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: Install
-        shell: pwsh
-        run: ./linux/install.ps1 -ForTests
-
-      - name: Download Linux artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tdlib.linux
-          path: ./artifacts
-
-      - name: Prepare package for testing
-        shell: pwsh
-        run: ./linux/prepare-package.ps1
-      - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '7.0.x'
-      - name: Pack NuGet
-        shell: pwsh
-        run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
-        # TODO[#64]: Add ${{ github.run_id }} as a patch version
-
-      - name: NuGet cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
-      - name: Test
-        shell: pwsh
-        run: ./common/test.ps1 -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono
-
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+    - name: Install
+      shell: pwsh
+      run: ./linux/install.ps1 -ForTests
+    - name: Download Linux artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: tdlib.linux
+        path: ./artifacts
+    - name: Prepare package for testing
+      shell: pwsh
+      run: ./linux/prepare-package.ps1
+    - name: Set up .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 7.0.x
+    - name: Pack NuGet
+      shell: pwsh
+      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
+    - name: NuGet cache
+      uses: actions/cache@v4
+      with:
+        key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
+        path: ${{ env.NUGET_PACKAGES }}
+    - name: Test
+      shell: pwsh
+      run: ./common/test.ps1 -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono
   test-macos:
-    needs: build-macos
+    needs:
+    - build-macos
     runs-on: macos-11
     env:
-      DOTNET_NOLOGO: 1
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.21
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: Download macOS artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tdlib.osx
-          path: ./artifacts
-
-      - name: Prepare package for testing
-        shell: pwsh
-        run: ./macos/prepare-package.ps1
-      - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '7.0.x'
-      - name: Pack NuGet
-        shell: pwsh
-        run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
-        # TODO[#64]: Add ${{ github.run_id }} as a patch version
-
-      - name: NuGet cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
-      - name: Test
-        shell: pwsh
-        run: ./common/test.ps1 -NuGet nuget
-
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+    - name: Download macOS artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: tdlib.osx
+        path: ./artifacts
+    - name: Prepare package for testing
+      shell: pwsh
+      run: ./macos/prepare-package.ps1
+    - name: Set up .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 7.0.x
+    - name: Pack NuGet
+      shell: pwsh
+      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
+    - name: NuGet cache
+      uses: actions/cache@v4
+      with:
+        key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
+        path: ${{ env.NUGET_PACKAGES }}
+    - name: Test
+      shell: pwsh
+      run: ./common/test.ps1 -NuGet nuget
   test-windows:
-    needs: build-windows
+    needs:
+    - build-windows
     runs-on: windows-2019
     env:
-      DOTNET_NOLOGO: 1
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.21
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: Download Windows artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tdlib.windows
-          path: ./artifacts
-
-      - name: Cache downloads for Windows
-        uses: actions/cache@v4
-        with:
-          path: build/downloads
-          key: ${{ hashFiles('windows/install.ps1') }}
-
-      - name: Install dependencies
-        shell: pwsh
-        run: ./windows/install.ps1
-
-      - name: Windows-specific testing
-        shell: pwsh
-        run: ./windows/test.ps1
-
-      - name: Prepare package for testing
-        shell: pwsh
-        run: ./windows/prepare-package.ps1
-      - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '7.0.x'
-      - name: Pack NuGet
-        shell: pwsh
-        run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
-        # TODO[#64]: Add ${{ github.run_id }} as a patch version
-
-      - name: NuGet cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
-      - name: Test
-        shell: pwsh
-        run: ./common/test.ps1 -NuGet nuget
-
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+    - name: Download Windows artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: tdlib.windows
+        path: ./artifacts
+    - name: Cache downloads for Windows
+      uses: actions/cache@v4
+      with:
+        key: ${{ hashFiles('windows/install.ps1') }}
+        path: build/downloads
+    - name: Install dependencies
+      shell: pwsh
+      run: ./windows/install.ps1
+    - name: Windows-specific testing
+      shell: pwsh
+      run: ./windows/test.ps1
+    - name: Prepare package for testing
+      shell: pwsh
+      run: ./windows/prepare-package.ps1
+    - name: Set up .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 7.0.x
+    - name: Pack NuGet
+      shell: pwsh
+      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
+    - name: NuGet cache
+      uses: actions/cache@v4
+      with:
+        key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
+        path: ${{ env.NUGET_PACKAGES }}
+    - name: Test
+      shell: pwsh
+      run: ./common/test.ps1 -NuGet nuget
   release:
-    runs-on: ubuntu-20.04
     needs:
-      - build-linux
-      - build-macos
-      - build-windows
+    - build-linux
+    - build-macos
+    - build-windows
+    runs-on: ubuntu-20.04
     env:
-      DOTNET_NOLOGO: 1
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.21
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download Linux artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tdlib.linux
-          path: ./build/runtimes/linux-x64/native
-      - name: Archive Linux artifact
-        shell: pwsh
-        run: Set-Location ./build/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.linux.zip *
-
-      - name: Download macOS artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tdlib.osx
-          path: ./build/runtimes/osx-x64/native
-      - name: Archive macOS artifact
-        shell: pwsh
-        run: Set-Location ./build/runtimes/osx-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.osx.zip *
-
-      - name: Download Windows artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tdlib.windows
-          path: ./build/runtimes/win-x64/native
-      - name: Archive Windows artifact
-        shell: pwsh
-        run: Set-Location ./build/runtimes/win-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.windows.zip *
-
-      - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '7.0.x'
-
-      - name: Read version from ref
-        id: version
-        shell: pwsh
-        run: >
-          "version=$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { "$env:PACKAGE_VERSION_BASE-preview" })" >> $env:GITHUB_OUTPUT
-
-      - name: Prepare the release notes (text)
-        uses: ForNeVeR/ChangelogAutomation.action@v1
-        with:
-          input: ./CHANGELOG.md
-          output: ./releaseNotes.txt
-          format: PlainText
-      - name: Prepare the release notes (Markdown)
-        uses: ForNeVeR/ChangelogAutomation.action@v1
-        with:
-          input: ./CHANGELOG.md
-          output: ./release-notes.md
-          format: Markdown
-
-      - name: Update the release notes
-        shell: pwsh
-        run: ./common/update-release-notes.ps1 ./releaseNotes.txt
-
-      - name: Prepare NuGet package
-        shell: pwsh
-        run: dotnet pack -p:PackageVersion=${{ steps.version.outputs.version }} --output build
-
-      - name: Upload NuGet package
-        uses: actions/upload-artifact@v4
-        with:
-          name: tdlib.nuget
-          path: ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg
-
-      - name: Create release
-        if: startsWith(github.ref, 'refs/tags/v')
-        id: release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: v${{ steps.version.outputs.version }}
-          body_path: ./release-notes.md
-      - name: Release Linux artifact
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_name: tdlib.linux.zip
-          asset_path: ./tdlib.linux.zip
-          asset_content_type: application/zip
-      - name: Release macOS artifact
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_name: tdlib.osx.zip
-          asset_path: ./tdlib.osx.zip
-          asset_content_type: application/zip
-      - name: Release Windows artifact
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_name: tdlib.windows.zip
-          asset_path: ./tdlib.windows.zip
-          asset_content_type: application/zip
-      - name: Release NuGet package
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_name: tdlib.native.${{ steps.version.outputs.version }}.nupkg
-          asset_path: ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg
-          asset_content_type: application/zip
-
-      - name: Push the package to nuget.org
-        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
-        run: dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_KEY }} ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg
+    - uses: actions/checkout@v4
+    - name: Download Linux artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: tdlib.linux
+        path: ./build/runtimes/linux-x64/native
+    - name: Archive Linux artifact
+      shell: pwsh
+      run: Set-Location ./build/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.linux.zip *
+    - name: Download macOS artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: tdlib.osx
+        path: ./build/runtimes/osx-x64/native
+    - name: Archive macOS artifact
+      shell: pwsh
+      run: Set-Location ./build/runtimes/osx-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.osx.zip *
+    - name: Download Windows artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: tdlib.windows
+        path: ./build/runtimes/win-x64/native
+    - name: Archive Windows artifact
+      shell: pwsh
+      run: Set-Location ./build/runtimes/win-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.windows.zip *
+    - name: Set up .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 7.0.x
+    - id: version
+      name: Read version from ref
+      shell: pwsh
+      run: "\"version=$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { \"$env:PACKAGE_VERSION_BASE-preview\" })\" >> $env:GITHUB_OUTPUT"
+    - name: Prepare the release notes (text)
+      uses: ForNeVeR/ChangelogAutomation.action@v1
+      with:
+        format: PlainText
+        input: ./CHANGELOG.md
+        output: releaseNotes.txt
+    - name: Prepare the release notes (Markdown)
+      uses: ForNeVeR/ChangelogAutomation.action@v1
+      with:
+        format: Markdown
+        input: ./CHANGELOG.md
+        output: release-notes.md
+    - name: Update the release notes
+      shell: pwsh
+      run: ./common/update-release-notes.ps1 ./releaseNotes.txt
+    - name: Prepare NuGet package
+      shell: pwsh
+      run: dotnet pack -p:PackageVersion=${{ steps.version.outputs.version }} --output build
+    - name: Upload NuGet package
+      uses: actions/upload-artifact@v4
+      with:
+        name: tdlib.nuget
+        path: ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg
+    - if: startsWith(github.ref, 'refs/tags/v')
+      id: release
+      name: Create release
+      uses: actions/create-release@v1
+      with:
+        body_path: ./release-notes.md
+        release_name: v${{ steps.version.outputs.version }}
+        tag_name: ${{ github.ref }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - if: startsWith(github.ref, 'refs/tags/v')
+      name: Release Linux artifact
+      uses: actions/upload-release-asset@v1
+      with:
+        asset_content_type: application/zip
+        asset_name: tdlib.linux.zip
+        asset_path: ./tdlib.linux.zip
+        upload_url: ${{ steps.release.outputs.upload_url }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - if: startsWith(github.ref, 'refs/tags/v')
+      name: Release macOS artifact
+      uses: actions/upload-release-asset@v1
+      with:
+        asset_content_type: application/zip
+        asset_name: tdlib.osx.zip
+        asset_path: ./tdlib.osx.zip
+        upload_url: ${{ steps.release.outputs.upload_url }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - if: startsWith(github.ref, 'refs/tags/v')
+      name: Release Windows artifact
+      uses: actions/upload-release-asset@v1
+      with:
+        asset_content_type: application/zip
+        asset_name: tdlib.windows.zip
+        asset_path: ./tdlib.windows.zip
+        upload_url: ${{ steps.release.outputs.upload_url }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - if: startsWith(github.ref, 'refs/tags/v')
+      name: Release NuGet package
+      uses: actions/upload-release-asset@v1
+      with:
+        asset_content_type: application/zip
+        asset_name: tdlib.native.${{ steps.version.outputs.version }}.nupkg
+        asset_path: ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg
+        upload_url: ${{ steps.release.outputs.upload_url }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+      name: Push the package to nuget.org
+      run: dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_KEY }} ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg

@@ -1,4 +1,4 @@
-#r "nuget: Generaptor.Library, 1.3.0"
+#r "nuget: Generaptor.Library, 1.5.0"
 open System
 
 open Generaptor
@@ -30,9 +30,12 @@ let workflows = [
                 step(
                     name = $"{name}: verify produced file",
                     shell = "pwsh",
-                    run = $"Test-Path -LiteralPath \"{file}\""
+                    run = $"if (!(Test-Path -LiteralPath '{file}')) {{ throw 'File not found' }}"
                 )
         ]
+
+        let prepareArtifacts os resultFileName =
+            pwshWithResult "Prepare artifact" $"./{os}/prepare-artifacts.ps1" [resultFileName]
 
         let setUpDotNetSdk = step(name = "Set up .NET SDK", uses = "actions/setup-dotnet@v4", options = Map.ofList [
             "dotnet-version", "7.0.x"
@@ -47,7 +50,7 @@ let workflows = [
             pwsh "Verify encoding" "./common/verify-encoding.ps1"
             pwsh "Install" "./linux/install.ps1 -ForBuild"
             pwsh "Build" "./linux/build.ps1"
-            yield! pwshWithResult "Prepare artifact" "./linux/prepare-artifact.ps1" ["artifacts/libtdjson.so"]
+            yield! prepareArtifacts "linux" "artifacts/libtdjson.so"
             step(name = "Upload build result", uses = "actions/upload-artifact@v2", options = Map.ofList [
                 "name", "tdlib.linux"
                 "path", "artifacts/*"
@@ -63,7 +66,7 @@ let workflows = [
             pwsh "Verify encoding" "./common/verify-encoding.ps1"
             pwsh "Install" "./macos/install.ps1"
             pwsh "Build" "./macos/build.ps1"
-            yield! pwshWithResult "Prepare artifact" "./macos/prepare-artifact.ps1" ["artifacts/libtdjson.dylib"]
+            yield! prepareArtifacts "macos" "artifacts/libtdjson.dylib"
             step(name = "Upload build result", uses = "actions/upload-artifact@v2", options = Map.ofList [
                 "name", "tdlib.osx"
                 "path", "artifacts/*"
@@ -77,9 +80,8 @@ let workflows = [
                 "submodules", "true"
             ])
             pwsh "Verify encoding" "./common/verify-encoding.ps1"
-            pwsh "Install" "./windows/install.ps1"
             pwsh "Build" @"./windows/build.ps1 -VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake"
-            yield! pwshWithResult "Prepare artifact" "./windows/prepare-artifact.ps1" ["artifacts/tdjson.dll"]
+            yield! prepareArtifacts "windows" "artifacts/tdjson.dll"
             step(name = "Upload build result", uses = "actions/upload-artifact@v2", options = Map.ofList [
                 "name", "tdlib.windows"
                 "path", "artifacts/*"
@@ -113,7 +115,7 @@ let workflows = [
             // TODO[#64]: Add ${{ github.run_id }} as a patch version
             step(name = "NuGet cache", uses = "actions/cache@v4", options = Map.ofList [
                 "path", "${{ env.NUGET_PACKAGES }}"
-                "key", "${{ runner.os }}-nuget-${{ hashFiles('tdsharp/**/*.csproj') }}"
+                "key", "${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}"
             ])
             pwsh "Test" "./common/test.ps1 -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono"
         ]
@@ -130,13 +132,13 @@ let workflows = [
                 "name", "tdlib.osx"
                 "path", "./artifacts"
             ])
-            pwsh "Prepare package for testing" "./linux/prepare-package.ps1"
+            pwsh "Prepare package for testing" "./macos/prepare-package.ps1"
             setUpDotNetSdk
             pwsh "Pack NuGet" "dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build"
             // TODO[#64]: Add ${{ github.run_id }} as a patch version
             step(name = "NuGet cache", uses = "actions/cache@v4", options = Map.ofList [
                 "path", "${{ env.NUGET_PACKAGES }}"
-                "key", "${{ runner.os }}-nuget-${{ hashFiles('tdsharp/**/*.csproj') }}"
+                "key", "${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}"
             ])
             pwsh "Test" "./common/test.ps1 -NuGet nuget"
         ]
@@ -162,13 +164,13 @@ let workflows = [
 
             pwsh "Windows-specific testing" "./windows/test.ps1"
 
-            pwsh "Prepare package for testing" "./linux/prepare-package.ps1"
+            pwsh "Prepare package for testing" "./windows/prepare-package.ps1"
             setUpDotNetSdk
             pwsh "Pack NuGet" "dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build"
             // TODO[#64]: Add ${{ github.run_id }} as a patch version
             step(name = "NuGet cache", uses = "actions/cache@v4", options = Map.ofList [
                 "path", "${{ env.NUGET_PACKAGES }}"
-                "key", "${{ runner.os }}-nuget-${{ hashFiles('tdsharp/**/*.csproj') }}"
+                "key", "${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}"
             ])
             pwsh "Test" "./common/test.ps1 -NuGet nuget"
         ]
@@ -236,81 +238,78 @@ let workflows = [
                 "path", "./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg"
             ])
 
-            step(
-                name = "Create release",
-                ``if`` = "startsWith(github.ref, 'refs/tags/v')",
-                id = "release",
-                uses = "actions/create-release@v1",
-                env = Map.ofList [
-                    "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                ],
-                options = Map.ofList [
-                    "tag_name", "${{ github.ref }}"
-                    "release_name", "v${{ steps.version.outputs.version }}"
-                    "body_path", "./release-notes.md"
-                ]
-            )
-            step(
-                name = "Release Linux artifact",
-                ``if`` = "startsWith(github.ref, 'refs/tags/v')",
-                uses = "actions/upload-release-asset@v1",
-                env = Map.ofList [
-                    "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                ],
-                options = Map.ofList [
-                    "upload_url", "${{ steps.release.outputs.upload_url }}"
-                    "asset_name", "tdlib.linux.zip"
-                    "asset_path", "./tdlib.linux.zip"
-                    "asset_content_type", "application/zip"
-                ]
-            )
-            step(
-                name = "Release macOS artifact",
-                ``if`` = "startsWith(github.ref, 'refs/tags/v')",
-                uses = "actions/upload-release-asset@v1",
-                env = Map.ofList [
-                    "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                ],
-                options = Map.ofList [
-                    "upload_url", "${{ steps.release.outputs.upload_url }}"
-                    "asset_name", "tdlib.osx.zip"
-                    "asset_path", "./tdlib.osx.zip"
-                    "asset_content_type", "application/zip"
-                ]
-            )
-            step(
-                name = "Release Windows artifact",
-                ``if`` = "startsWith(github.ref, 'refs/tags/v')",
-                uses = "actions/upload-release-asset@v1",
-                env = Map.ofList [
-                    "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                ],
-                options = Map.ofList [
-                    "upload_url", "${{ steps.release.outputs.upload_url }}"
-                    "asset_name", "tdlib.windows.zip"
-                    "asset_path", "./tdlib.windows.zip"
-                    "asset_content_type", "application/zip"
-                ]
-            )
-            step(
-                name = "Release NuGet package",
-                ``if`` = "startsWith(github.ref, 'refs/tags/v')",
-                uses = "actions/upload-release-asset@v1",
-                env = Map.ofList [
-                    "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                ],
-                options = Map.ofList [
-                    "upload_url", "${{ steps.release.outputs.upload_url }}"
-                    "asset_name", "tdlib.native.${{ steps.version.outputs.version }}.nupkg"
-                    "asset_path", "./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg"
-                    "asset_content_type", "application/zip"
-                ]
-            )
+            yield! ifCalledOnTagPush [
+                step(
+                    name = "Create release",
+                    id = "release",
+                    uses = "actions/create-release@v1",
+                    env = Map.ofList [
+                        "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
+                    ],
+                    options = Map.ofList [
+                        "tag_name", "${{ github.ref }}"
+                        "release_name", "v${{ steps.version.outputs.version }}"
+                        "body_path", "./release-notes.md"
+                    ]
+                )
+                step(
+                    name = "Release Linux artifact",
+                    uses = "actions/upload-release-asset@v1",
+                    env = Map.ofList [
+                        "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
+                    ],
+                    options = Map.ofList [
+                        "upload_url", "${{ steps.release.outputs.upload_url }}"
+                        "asset_name", "tdlib.linux.zip"
+                        "asset_path", "./tdlib.linux.zip"
+                        "asset_content_type", "application/zip"
+                    ]
+                )
+                step(
+                    name = "Release macOS artifact",
+                    uses = "actions/upload-release-asset@v1",
+                    env = Map.ofList [
+                        "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
+                    ],
+                    options = Map.ofList [
+                        "upload_url", "${{ steps.release.outputs.upload_url }}"
+                        "asset_name", "tdlib.osx.zip"
+                        "asset_path", "./tdlib.osx.zip"
+                        "asset_content_type", "application/zip"
+                    ]
+                )
+                step(
+                    name = "Release Windows artifact",
+                    uses = "actions/upload-release-asset@v1",
+                    env = Map.ofList [
+                        "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
+                    ],
+                    options = Map.ofList [
+                        "upload_url", "${{ steps.release.outputs.upload_url }}"
+                        "asset_name", "tdlib.windows.zip"
+                        "asset_path", "./tdlib.windows.zip"
+                        "asset_content_type", "application/zip"
+                    ]
+                )
+                step(
+                    name = "Release NuGet package",
+                    uses = "actions/upload-release-asset@v1",
+                    env = Map.ofList [
+                        "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
+                    ],
+                    options = Map.ofList [
+                        "upload_url", "${{ steps.release.outputs.upload_url }}"
+                        "asset_name", "tdlib.native.${{ steps.version.outputs.version }}.nupkg"
+                        "asset_path", "./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg"
+                        "asset_content_type", "application/zip"
+                    ]
+                )
+            ]
 
             step(
                 name = "Push the package to nuget.org",
-                ``if`` = "github.event_name == 'push' && contains(github.ref, 'refs/tags/')",
-                run: "dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_KEY }} ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg"
+                condition = "github.event_name == 'push' && contains(github.ref, 'refs/tags/')",
+                run = "dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_KEY }} ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg"
             )
         ]
     ]
