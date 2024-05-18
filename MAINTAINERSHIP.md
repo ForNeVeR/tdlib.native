@@ -10,13 +10,13 @@ Publish a New Version
 4. Prepare a corresponding entry in the `CHANGELOG.md`.
 5. Update the license, if required.
 6. Update the copyright year in the `copyright` section of the `tdlib.native.nuspec` file.
-7. Update the version in the following places:
-    - `.github/workflows/main.yml`: `PACKAGE_VERSION_BASE` environment variable (5 occurrences)
-8. Create a pull request, verify that the tests are okay. Merge it afterward.
-9. Make sure the NuGet key you use for publishing is still active. If not, then rotate the key as explained in the corresponding section of this document.
-10. Push a version tag (`v1.x.x`) to this repository. CI servers will do their job and upload the artifacts to the [Releases][releases] page.
-11. Mark the release as published after it has been created and everything's alright.
-12. If the release is not synchronized with a corresponding release of [tdsharp][], then it's recommended to [unlist][docs.unlist] it until the corresponding release of tdsharp is available. This will help the users to do a coordinated update and not update only a part of the libraries.
+7. Update the `PACKAGE_VERSION_BASE` to the new library version in the `github-actions.fsx`.
+8. Regenerate the GitHub Actions workflow by running `dotnet fsi github-actions.fsx`.
+9. Create a pull request, verify that the tests are okay. Merge it afterward.
+10. Make sure the NuGet key you use for publishing is still active. If not, then rotate the key as explained in the corresponding section of this document.
+11. Push a version tag (`v1.x.x`) to this repository. CI servers will do their job and upload the artifacts to the [Releases][releases] page.
+12. Mark the release as published after it has been created and everything's alright.
+13. If the release is not synchronized with a corresponding release of [tdsharp][], then it's recommended to [unlist][docs.unlist] it until the corresponding release of tdsharp is available. This will help the users to do a coordinated update and not update only a part of the libraries.
 
 Rotate Keys
 -----------

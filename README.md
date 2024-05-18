@@ -30,10 +30,12 @@ Documentation
 
 - [Changelog][docs.changelog]
 - [License][docs.license]
+- [Contributing][docs.contributing]
 - [Maintainership][docs.maintainership]
 
 [cpp.redist]: https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160
 [docs.changelog]: ./CHANGELOG.md
+[docs.contributing]: ./CONTRIBUTING.md
 [docs.license]: ./LICENSE_1_0.txt
 [docs.maintainership]: ./MAINTAINERSHIP.md
 [nuget]: https://www.nuget.org/packages/tdlib.native/
