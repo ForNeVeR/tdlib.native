@@ -12,7 +12,7 @@ on:
   schedule:
   - cron: 0 0 * * 6
 jobs:
-  build-linux:
+  build-linux-x86-64:
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout
@@ -50,43 +50,38 @@ jobs:
   build-macos-aarch64:
     runs-on: macos-14
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: true
-
-      # Verify:
-      - name: Verify encoding
-        shell: pwsh
-        run: ./common/verify-encoding.ps1
-
-      - name: Generate cache key
-        shell: pwsh
-        run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
-
-      - name: Cache artifacts
-        uses: actions/cache@v4
-        with:
-          path: artifacts
-          key: macos.aarch64.${{ hashFiles('.github/cache-key.json') }}
-
-      # Build:
-      - name: Install
-        shell: pwsh
-        run: ./macos/install.ps1
-      - name: Build
-        shell: pwsh
-        run: ./macos/build.ps1
-      - name: Prepare Artifact
-        shell: pwsh
-        run: ./macos/prepare-artifacts.ps1 # produces artifacts/libtdjson.dylib
-
-      - name: Upload build result
-        uses: actions/upload-artifact@v2
-        with:
-          name: tdlib.osx-aarch64
-          path: artifacts/*
-
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+    - name: Verify encoding
+      shell: pwsh
+      run: ./common/verify-encoding.ps1
+    - name: Generate cache key
+      shell: pwsh
+      run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
+    - name: Cache artifacts
+      uses: actions/cache@v4
+      with:
+        key: macos.aarch64.${{ hashFiles('.github/cache-key.json') }}
+        path: artifacts
+    - name: Install
+      shell: pwsh
+      run: ./macos/install.ps1
+    - name: Build
+      shell: pwsh
+      run: ./macos/build.ps1
+    - name: Prepare artifact
+      shell: pwsh
+      run: ./macos/prepare-artifacts.ps1
+    - name: 'Prepare artifact: verify produced file'
+      shell: pwsh
+      run: if (!(Test-Path -LiteralPath 'artifacts/libtdjson.dylib')) { throw 'File not found' }
+    - name: Upload build result
+      uses: actions/upload-artifact@v4
+      with:
+        name: tdlib.macos.aarch64
+        path: artifacts/*
   build-macos-x86-64:
     runs-on: macos-11
     steps:
@@ -122,7 +117,7 @@ jobs:
       with:
         name: tdlib.macos.x86-64
         path: artifacts/*
-  build-windows:
+  build-windows-x86-64:
     runs-on: windows-2019
     steps:
     - name: Checkout
@@ -154,9 +149,9 @@ jobs:
       with:
         name: tdlib.windows.x86-64
         path: artifacts/*
-  test-linux:
+  test-linux-x86-64:
     needs:
-    - build-linux
+    - build-linux-x86-64
     runs-on: ubuntu-20.04
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -171,7 +166,7 @@ jobs:
     - name: Install
       shell: pwsh
       run: ./linux/install.ps1 -ForTests
-    - name: 'Download platform artifact: linux'
+    - name: 'Download artifact: linux.x86-64'
       uses: actions/download-artifact@v4
       with:
         name: tdlib.linux.x86-64
@@ -196,51 +191,38 @@ jobs:
     - build-macos-aarch64
     runs-on: macos-14
     env:
-      DOTNET_NOLOGO: 1
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.21
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: true
-
-      - name: Download macOS artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: tdlib.osx-aarch64
-          path: ./artifacts
-
-      - name: Prepare package for testing
-        shell: pwsh
-        run: ./macos/prepare-package.ps1 -DotNetArch arm64
-      - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '7.0.x'
-      - name: Pack NuGet
-        shell: pwsh
-        run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
-        # TODO[#64]: Add ${{ github.run_id }} as a patch version
-
-      - name: '[Diagnostics] Upload the built files' # TODO: Remove this
-        uses: actions/upload-artifact@v2
-        with:
-          name: built-files
-          path: ./build
-
-      - name: NuGet cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
-      - name: Test
-        shell: pwsh
-        run: ./common/test.ps1 -NuGet nuget
-
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+    - name: 'Download artifact: macos.aarch64'
+      uses: actions/download-artifact@v4
+      with:
+        name: tdlib.macos.aarch64
+        path: ./build/runtimes/osx-arm64/native
+    - name: Set up .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 7.0.x
+    - name: Pack NuGet
+      shell: pwsh
+      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
+    - name: NuGet cache
+      uses: actions/cache@v4
+      with:
+        key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
+        path: ${{ env.NUGET_PACKAGES }}
+    - name: Test
+      shell: pwsh
+      run: ./common/test.ps1 -NuGet nuget
   test-macos-x86-64:
-    needs: build-macos-x86-64
+    needs:
+    - build-macos-x86-64
     runs-on: macos-11
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -252,7 +234,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: true
-    - name: 'Download platform artifact: macos'
+    - name: 'Download artifact: macos.x86-64'
       uses: actions/download-artifact@v4
       with:
         name: tdlib.macos.x86-64
@@ -272,9 +254,9 @@ jobs:
     - name: Test
       shell: pwsh
       run: ./common/test.ps1 -NuGet nuget
-  test-windows:
+  test-windows-x86-64:
     needs:
-    - build-windows
+    - build-windows-x86-64
     runs-on: windows-2019
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -286,7 +268,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: true
-    - name: 'Download platform artifact: windows'
+    - name: 'Download artifact: windows.x86-64'
       uses: actions/download-artifact@v4
       with:
         name: tdlib.windows.x86-64
@@ -319,11 +301,11 @@ jobs:
       run: ./common/test.ps1 -NuGet nuget
   release:
     needs:
-    - build-linux
+    - build-linux-x86-64
     - build-macos-aarch64
-      - build-macos-x86-64
-    - build-windows
-    runs-on: ubuntu-20.04
+    - build-macos-x86-64
+    - build-windows-x86-64
+    runs-on: ubuntu-latest
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
@@ -331,7 +313,7 @@ jobs:
       PACKAGE_VERSION_BASE: 1.8.21
     steps:
     - uses: actions/checkout@v4
-    - name: 'Download platform artifact: linux'
+    - name: 'Download artifact: linux.x86-64'
       uses: actions/download-artifact@v4
       with:
         name: tdlib.linux.x86-64
@@ -339,7 +321,15 @@ jobs:
     - name: 'Archive artifact for platform: linux'
       shell: pwsh
       run: Set-Location ./build/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.linux.x86-64.zip *
-    - name: 'Download platform artifact: macos'
+    - name: 'Download artifact: macos.aarch64'
+      uses: actions/download-artifact@v4
+      with:
+        name: tdlib.macos.aarch64
+        path: ./build/runtimes/osx-arm64/native
+    - name: 'Archive artifact for platform: macos'
+      shell: pwsh
+      run: Set-Location ./build/runtimes/osx-arm64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.macos.aarch64.zip *
+    - name: 'Download artifact: macos.x86-64'
       uses: actions/download-artifact@v4
       with:
         name: tdlib.macos.x86-64
@@ -347,15 +337,7 @@ jobs:
     - name: 'Archive artifact for platform: macos'
       shell: pwsh
       run: Set-Location ./build/runtimes/osx-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.macos.x86-64.zip *
-    - name: Download macOS AArch64 artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: tdlib.osx-aarch64
-        path: ./build/runtimes/osx-arm64/native
-    - name: Archive macOS AArch64 artifact
-      shell: pwsh
-      run: Set-Location ./build/runtimes/osx-arm64/native && Remove-Item cache-key.json && zip -r $env:GITHUB_WORKSPACE/tdlib.osx-aarch64.zip *
-    - name: 'Download platform artifact: windows'
+    - name: 'Download artifact: windows.x86-64'
       uses: actions/download-artifact@v4
       with:
         name: tdlib.windows.x86-64
@@ -405,7 +387,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release platform artifact: linux'
+      name: 'Release artifact: linux.x86-64'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
@@ -414,18 +396,18 @@ jobs:
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Release macOS AArch64 artifact
-      if: startsWith(github.ref, 'refs/tags/v')
+    - if: startsWith(github.ref, 'refs/tags/v')
+      name: 'Release artifact: macos.aarch64'
       uses: actions/upload-release-asset@v1
+      with:
+        asset_content_type: application/zip
+        asset_name: tdlib.macos.aarch64.zip
+        asset_path: ./tdlib.macos.aarch64.zip
+        upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.release.outputs.upload_url }}
-        asset_name: tdlib.osx-aarch64.zip
-        asset_path: ./tdlib.osx-aarch64.zip
-        asset_content_type: application/zip
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release platform artifact: macos'
+      name: 'Release artifact: macos.x86-64'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
@@ -435,7 +417,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release platform artifact: windows'
+      name: 'Release artifact: windows.x86-64'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
