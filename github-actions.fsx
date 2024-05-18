@@ -119,6 +119,36 @@ let workflows = [
                 "PACKAGE_VERSION_BASE", "1.8.21"
             ] |> Seq.map(fun (k, v) -> setEnv k v)
 
+        let platformToDotNet = function
+            | "linux" -> "linux"
+            | "macos" -> "osx"
+            | "windows" -> "win"
+            | other -> failwith $"Unknown platform {other}"
+
+        let archToDotNet = function
+            | "x86-64" -> "x64"
+            | other -> failwith $"Unknown architecture {other}"
+
+        let platformBuildArtifactDirectory platform architecture =
+            $"./build/runtimes/{platformToDotNet platform}-{archToDotNet architecture}/native"
+
+        let downloadPlatformArtifact platform architecture =
+            step(
+                name = $"Download platform artifact: {platform}",
+                uses = "actions/download-artifact@v4",
+                options = Map.ofList [
+                    "name", $"tdlib.{platform}.{architecture}"
+                    "path", platformBuildArtifactDirectory platform architecture
+                ]
+            )
+        let downloadAndRepackArtifact platform architecture = [
+            downloadPlatformArtifact platform architecture
+            let dir = platformBuildArtifactDirectory platform architecture
+            pwsh
+                $"Archive artifact for platform: {platform}"
+                $"Set-Location {dir} && zip -r $env:GITHUB_WORKSPACE/tdlib.{platform}.{architecture}.zip *"
+        ]
+
         job "test-linux" [
             needs "build-linux"
             runsOn linuxImage
@@ -126,11 +156,7 @@ let workflows = [
 
             checkoutWithSubmodules
             pwsh "Install" "./linux/install.ps1 -ForTests"
-            step(name = "Download Linux artifact", uses = "actions/download-artifact@v4", options = Map.ofList [
-                "name", "tdlib.linux.x86-64"
-                "path", "./artifacts"
-            ])
-            pwsh "Prepare package for testing" "./linux/prepare-package.ps1"
+            downloadPlatformArtifact "linux" "x86-64"
             setUpDotNetSdk
             pwsh "Pack NuGet" "dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build"
             // TODO[#64]: Add ${{ github.run_id }} as a patch version
@@ -147,11 +173,7 @@ let workflows = [
             yield! testEnv
 
             checkoutWithSubmodules
-            step(name = "Download macOS artifact", uses = "actions/download-artifact@v4", options = Map.ofList [
-                "name", "tdlib.macos.x86-64"
-                "path", "./artifacts"
-            ])
-            pwsh "Prepare package for testing" "./macos/prepare-package.ps1"
+            downloadPlatformArtifact "macos" "x86-64"
             setUpDotNetSdk
             pwsh "Pack NuGet" "dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build"
             // TODO[#64]: Add ${{ github.run_id }} as a patch version
@@ -168,10 +190,7 @@ let workflows = [
             yield! testEnv
 
             checkoutWithSubmodules
-            step(name = "Download Windows artifact", uses = "actions/download-artifact@v4", options = Map.ofList [
-                "name", "tdlib.windows.x86-64"
-                "path", "./artifacts"
-            ])
+            downloadPlatformArtifact "windows" "x86-64"
             step(name = "Cache downloads for Windows", uses = "actions/cache@v4", options = Map.ofList [
                 "path", "build/downloads"
                 "key", "${{ hashFiles('windows/install.ps1') }}"
@@ -181,7 +200,6 @@ let workflows = [
 
             pwsh "Windows-specific testing" "./windows/test.ps1"
 
-            pwsh "Prepare package for testing" "./windows/prepare-package.ps1"
             setUpDotNetSdk
             pwsh "Pack NuGet" "dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build"
             // TODO[#64]: Add ${{ github.run_id }} as a patch version
@@ -199,30 +217,6 @@ let workflows = [
             needs "build-windows"
             yield! testEnv
             checkout
-
-            let platformToDotNet = function
-                | "linux" -> "linux"
-                | "macos" -> "osx"
-                | "windows" -> "win"
-                | other -> failwith $"Unknown platform {other}"
-
-            let archToDotNet = function
-                | "x86-64" -> "x64"
-                | other -> failwith $"Unknown architecture {other}"
-
-            let downloadAndRepackArtifact platform architecture = [
-                let dir = $"./build/runtimes/{platformToDotNet platform}-{archToDotNet architecture}/native"
-                step(
-                    name = $"Download platform artifact: {platform}",
-                    uses = "actions/download-artifact@v4",
-                    options = Map.ofList [
-                        "name", $"tdlib.{platform}.{architecture}"
-                        "path", dir
-                    ])
-                pwsh
-                    $"Archive artifact for platform: {platform}"
-                    $"Set-Location {dir} && zip -r $env:GITHUB_WORKSPACE/tdlib.{platform}.{architecture}.zip *"
-            ]
 
             yield! downloadAndRepackArtifact "linux" "x86-64"
             yield! downloadAndRepackArtifact "macos" "x86-64"
