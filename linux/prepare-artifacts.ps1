@@ -13,7 +13,7 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
     if (!(Test-Path -LiteralPath $TargetLocation -Type Container)) {
         New-Item -Type Directory $TargetLocation
     }
-    Copy-Item "$InstallPrefix/lib/*" $TargetLocation
+    Copy-Item "$InstallPrefix/lib/*" -Exclude '*.a' $TargetLocation
     & $CheckUpToDateScript -GenerateResultKey
 } else {
     Write-Host 'The build result is up to date.'
