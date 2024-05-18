@@ -13,14 +13,14 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
     }
 
     $architecture = machine
-$isArm64 = $architecture -eq 'arm64e'
-$openSslDir = if ($isArm64) { '/opt/homebrew/opt/openssl' } else { '/usr/local/opt/openssl' }
+    $isArm64 = $architecture -eq 'arm64e'
+    $openSslDir = if ($isArm64) { '/opt/homebrew/opt/openssl' } else { '/usr/local/opt/openssl' }
 
-Push-Location $td/build
-try {
-    $cmakeArguments = @(
-        '-DCMAKE_BUILD_TYPE=Release'
-        "-DOPENSSL_ROOT_DIR=$openSslDir"
+    Push-Location $td/build
+    try {
+        $cmakeArguments = @(
+            '-DCMAKE_BUILD_TYPE=Release'
+            "-DOPENSSL_ROOT_DIR=$openSslDir"
             '..'
         )
         $cmakeBuildArguments = @(
