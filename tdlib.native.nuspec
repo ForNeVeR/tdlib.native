@@ -14,7 +14,7 @@
         <tags>telegram</tags>
     </metadata>
     <files>
-        <file src="build\runtimes\**" target="runtimes" />
+        <file src="build\runtimes\**" target="runtimes" exclude="**\cache-key.json" />
         <file src="LICENSE_1_0.txt" />
     </files>
 </package>
