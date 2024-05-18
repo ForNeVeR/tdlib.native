@@ -143,7 +143,7 @@ type Workflows =
         yield! afterDownloadSteps |> Option.toList |> Seq.collect id
 
         setUpDotNetSdk
-        pwsh "Pack NuGet" "dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build"
+        pwsh "Pack NuGet" "dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }}-preview --output build"
         // TODO[#64]: Add ${{ github.run_id }} as a patch version
         step(name = "NuGet cache", uses = "actions/cache@v4", options = Map.ofList [
             "path", "${{ env.NUGET_PACKAGES }}"

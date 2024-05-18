@@ -36,8 +36,11 @@ try {
     if (!$?) { throw 'Cannot perform dotnet restore' }
 
     Write-Output "Adding a package $PackageName from the project $TdSharpTestProjectName"
-    & $dotnet add "$TdSharpTestProjectName.csproj" package $PackageName --source $PackageSource
+    & $dotnet add "$TdSharpTestProjectName.csproj" package $PackageName --prerelease --source $PackageSource
     if (!$?) { throw 'Cannot add package into the test project' }
+
+    Write-Output "Resulting content of `"$TdSharpTestProjectName.csproj`":"
+    Get-Content "$TdSharpTestProjectName.csproj"
 
     Write-Output "Running tests"
     & $dotnet test --verbosity normal

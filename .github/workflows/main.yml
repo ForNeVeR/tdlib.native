@@ -177,7 +177,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
+      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -211,7 +211,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
+      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -245,7 +245,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
+      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -290,7 +290,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }} --output build
+      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
