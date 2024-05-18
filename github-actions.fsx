@@ -13,6 +13,54 @@ let linuxImage = "ubuntu-20.04"
 let macOsImage = "macos-11"
 let windowsImage = "windows-2019"
 
+let pwsh name script =
+    step(name = name, shell = "pwsh", run = script)
+
+let pwshWithResult name script producedFiles = [
+    step(name = name, shell = "pwsh", run = script)
+    for file in producedFiles do
+        step(
+            name = $"{name}: verify produced file",
+            shell = "pwsh",
+            run = $"if (!(Test-Path -LiteralPath '{file}')) {{ throw 'File not found' }}"
+        )
+]
+
+let prepareArtifacts os resultFileName =
+    pwshWithResult "Prepare artifact" $"./{os}/prepare-artifacts.ps1" [resultFileName]
+
+type Workflows =
+    static member BuildArtifacts(
+        platform: string,
+        architecture: string,
+        artifactFileName: string,
+        ?installScript: string,
+        ?buildScriptArgs: string
+    ) = [
+        pwsh "Verify encoding" "./common/verify-encoding.ps1"
+        pwsh "Generate cache key" "./common/Test-UpToDate.ps1 -GenerateCacheKey"
+        step(
+             name = "Cache artifacts",
+             uses = "actions/cache@v4",
+             options = Map.ofList [
+                "path", "artifacts"
+                "key", $"{platform}.{architecture}." + "${{ hashFiles('.github/cache-key.json') }}"
+            ]
+        )
+        yield! installScript |> Option.toList |> Seq.map(pwsh "Install")
+        pwsh "Build" (
+            String.concat " " [
+                $"./{platform}/build.ps1"
+                yield! buildScriptArgs |> Option.toList
+            ]
+        )
+        yield! prepareArtifacts platform $"artifacts/{artifactFileName}"
+        step(name = "Upload build result", uses = "actions/upload-artifact@v4", options = Map.ofList [
+            "name", $"tdlib.{platform}.{architecture}"
+            "path", "artifacts/*"
+        ])
+    ]
+
 let workflows = [
     workflow "main" [
         name "Main"
@@ -21,21 +69,9 @@ let workflows = [
         onPullRequestTo mainBranch
         onSchedule(day = DayOfWeek.Saturday)
 
-        let pwsh name script =
-            step(name = name, shell = "pwsh", run = script)
-
-        let pwshWithResult name script producedFiles = [
-            step(name = name, shell = "pwsh", run = script)
-            for file in producedFiles do
-                step(
-                    name = $"{name}: verify produced file",
-                    shell = "pwsh",
-                    run = $"if (!(Test-Path -LiteralPath '{file}')) {{ throw 'File not found' }}"
-                )
-        ]
-
-        let prepareArtifacts os resultFileName =
-            pwshWithResult "Prepare artifact" $"./{os}/prepare-artifacts.ps1" [resultFileName]
+        let checkoutWithSubmodules = step(name = "Checkout", uses = "actions/checkout@v4", options = Map.ofList [
+            "submodules", "true"
+        ])
 
         let setUpDotNetSdk = step(name = "Set up .NET SDK", uses = "actions/setup-dotnet@v4", options = Map.ofList [
             "dotnet-version", "7.0.x"
@@ -43,49 +79,36 @@ let workflows = [
 
         job "build-linux" [
             runsOn linuxImage
-
-            step(name = "Checkout", uses = "actions/checkout@v4", options = Map.ofList [
-                "submodules", "true"
-            ])
-            pwsh "Verify encoding" "./common/verify-encoding.ps1"
-            pwsh "Install" "./linux/install.ps1 -ForBuild"
-            pwsh "Build" "./linux/build.ps1"
-            yield! prepareArtifacts "linux" "artifacts/libtdjson.so"
-            step(name = "Upload build result", uses = "actions/upload-artifact@v2", options = Map.ofList [
-                "name", "tdlib.linux"
-                "path", "artifacts/*"
-            ])
+            checkoutWithSubmodules
+            yield! Workflows.BuildArtifacts(
+                platform = "linux",
+                architecture = "x86-64",
+                installScript = "./linux/install.ps1 -ForBuild",
+                artifactFileName = "libtdjson.so"
+            )
         ]
 
         job "build-macos" [
             runsOn macOsImage
-
-            step(name = "Checkout", uses = "actions/checkout@v4", options = Map.ofList [
-                "submodules", "true"
-            ])
-            pwsh "Verify encoding" "./common/verify-encoding.ps1"
-            pwsh "Install" "./macos/install.ps1"
-            pwsh "Build" "./macos/build.ps1"
-            yield! prepareArtifacts "macos" "artifacts/libtdjson.dylib"
-            step(name = "Upload build result", uses = "actions/upload-artifact@v2", options = Map.ofList [
-                "name", "tdlib.osx"
-                "path", "artifacts/*"
-            ])
+            checkoutWithSubmodules
+            yield! Workflows.BuildArtifacts(
+                platform = "macos",
+                architecture = "x86-64",
+                installScript = "./macos/install.ps1",
+                artifactFileName = "libtdjson.dylib"
+            )
         ]
 
         job "build-windows" [
             runsOn windowsImage
+            checkoutWithSubmodules
 
-            step(name = "Checkout", uses = "actions/checkout@v4", options = Map.ofList [
-                "submodules", "true"
-            ])
-            pwsh "Verify encoding" "./common/verify-encoding.ps1"
-            pwsh "Build" @"./windows/build.ps1 -VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake"
-            yield! prepareArtifacts "windows" "artifacts/tdjson.dll"
-            step(name = "Upload build result", uses = "actions/upload-artifact@v2", options = Map.ofList [
-                "name", "tdlib.windows"
-                "path", "artifacts/*"
-            ])
+            yield! Workflows.BuildArtifacts(
+                platform = "windows",
+                architecture = "x86-64",
+                buildScriptArgs = @"-VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake",
+                artifactFileName = "tdjson.dll"
+            )
         ]
 
         let testEnv =
@@ -101,12 +124,10 @@ let workflows = [
             runsOn linuxImage
             yield! testEnv
 
-            step(name = "Checkout", uses = "actions/checkout@v4", options = Map.ofList [
-                "submodules", "true"
-            ])
+            checkoutWithSubmodules
             pwsh "Install" "./linux/install.ps1 -ForTests"
             step(name = "Download Linux artifact", uses = "actions/download-artifact@v4", options = Map.ofList [
-                "name", "tdlib.linux"
+                "name", "tdlib.linux.x86-64"
                 "path", "./artifacts"
             ])
             pwsh "Prepare package for testing" "./linux/prepare-package.ps1"
@@ -125,11 +146,9 @@ let workflows = [
             runsOn macOsImage
             yield! testEnv
 
-            step(name = "Checkout", uses = "actions/checkout@v4", options = Map.ofList [
-                "submodules", "true"
-            ])
+            checkoutWithSubmodules
             step(name = "Download macOS artifact", uses = "actions/download-artifact@v4", options = Map.ofList [
-                "name", "tdlib.osx"
+                "name", "tdlib.osx.x86-64"
                 "path", "./artifacts"
             ])
             pwsh "Prepare package for testing" "./macos/prepare-package.ps1"
@@ -148,11 +167,9 @@ let workflows = [
             runsOn windowsImage
             yield! testEnv
 
-            step(name = "Checkout", uses = "actions/checkout@v4", options = Map.ofList [
-                "submodules", "true"
-            ])
+            checkoutWithSubmodules
             step(name = "Download Windows artifact", uses = "actions/download-artifact@v4", options = Map.ofList [
-                "name", "tdlib.windows"
+                "name", "tdlib.windows.x86-64"
                 "path", "./artifacts"
             ])
             step(name = "Cache downloads for Windows", uses = "actions/cache@v4", options = Map.ofList [
@@ -183,23 +200,33 @@ let workflows = [
             yield! testEnv
             checkout
 
-            step(name = "Download Linux artifact", uses = "actions/download-artifact@v4", options = Map.ofList [
-                "name", "tdlib.linux"
-                "path", "./build/runtimes/linux-x64/native"
-            ])
-            pwsh "Archive Linux artifact" "Set-Location ./build/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.linux.zip *"
+            let platformToDotNet = function
+                | "linux" -> "linux"
+                | "macos" -> "osx"
+                | "windows" -> "win"
+                | other -> failwith $"Unknown platform {other}"
 
-            step(name = "Download macOS artifact", uses = "actions/download-artifact@v4", options = Map.ofList [
-                "name", "tdlib.osx"
-                "path", "./build/runtimes/osx-x64/native"
-            ])
-            pwsh "Archive macOS artifact" "Set-Location ./build/runtimes/osx-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.osx.zip *"
+            let archToDotNet = function
+                | "x86-64" -> "x64"
+                | other -> failwith $"Unknown architecture {other}"
 
-            step(name = "Download Windows artifact", uses = "actions/download-artifact@v4", options = Map.ofList [
-                "name", "tdlib.windows"
-                "path", "./build/runtimes/win-x64/native"
-            ])
-            pwsh "Archive Windows artifact" "Set-Location ./build/runtimes/win-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.windows.zip *"
+            let downloadAndRepackArtifact platform architecture = [
+                let dir = $"./build/runtimes/{platformToDotNet platform}-{archToDotNet architecture}/native"
+                step(
+                    name = $"Download platform artifact: {platform}",
+                    uses = "actions/download-artifact@v4",
+                    options = Map.ofList [
+                        "name", $"tdlib.{platform}.{architecture}"
+                        "path", dir
+                    ])
+                pwsh
+                    $"Archive artifact for platform: {platform}"
+                    $"Set-Location {dir} && zip -r $env:GITHUB_WORKSPACE/tdlib.{platform}.{architecture}.zip *"
+            ]
+
+            yield! downloadAndRepackArtifact "linux" "x86-64"
+            yield! downloadAndRepackArtifact "macos" "x86-64"
+            yield! downloadAndRepackArtifact "windows" "x86-64"
 
             setUpDotNetSdk
 
@@ -252,45 +279,25 @@ let workflows = [
                         "body_path", "./release-notes.md"
                     ]
                 )
-                step(
-                    name = "Release Linux artifact",
-                    uses = "actions/upload-release-asset@v1",
-                    env = Map.ofList [
-                        "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                    ],
-                    options = Map.ofList [
-                        "upload_url", "${{ steps.release.outputs.upload_url }}"
-                        "asset_name", "tdlib.linux.zip"
-                        "asset_path", "./tdlib.linux.zip"
-                        "asset_content_type", "application/zip"
-                    ]
-                )
-                step(
-                    name = "Release macOS artifact",
-                    uses = "actions/upload-release-asset@v1",
-                    env = Map.ofList [
-                        "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                    ],
-                    options = Map.ofList [
-                        "upload_url", "${{ steps.release.outputs.upload_url }}"
-                        "asset_name", "tdlib.osx.zip"
-                        "asset_path", "./tdlib.osx.zip"
-                        "asset_content_type", "application/zip"
-                    ]
-                )
-                step(
-                    name = "Release Windows artifact",
-                    uses = "actions/upload-release-asset@v1",
-                    env = Map.ofList [
-                        "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                    ],
-                    options = Map.ofList [
-                        "upload_url", "${{ steps.release.outputs.upload_url }}"
-                        "asset_name", "tdlib.windows.zip"
-                        "asset_path", "./tdlib.windows.zip"
-                        "asset_content_type", "application/zip"
-                    ]
-                )
+
+                let releasePlatformArtifact platform architecture =
+                    step(
+                        name = $"Release platform artifact: {platform}",
+                        uses = "actions/upload-release-asset@v1",
+                        env = Map.ofList [
+                            "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
+                        ],
+                        options = Map.ofList [
+                            "upload_url", "${{ steps.release.outputs.upload_url }}"
+                            "asset_name", $"tdlib.{platform}.{architecture}.zip"
+                            "asset_path", $"./tdlib.{platform}.{architecture}.zip"
+                            "asset_content_type", "application/zip"
+                        ]
+                    )
+
+                releasePlatformArtifact "linux" "x86-64"
+                releasePlatformArtifact "macos" "x86-64"
+                releasePlatformArtifact "windows" "x86-64"
                 step(
                     name = "Release NuGet package",
                     uses = "actions/upload-release-asset@v1",
