@@ -1,11 +1,20 @@
 param (
     [string] $BuildRoot = "$PSScriptRoot/../td/build",
     [string] $BinLocation = "$BuildRoot/Release",
-    [string] $TargetLocation = "./artifacts/"
+    [string] $TargetLocation = "./artifacts/",
+    [string] $CheckUpToDateScript = "$PSScriptRoot/../common/Test-UpToDate.ps1",
+    [switch] $SkipUpToDateCheck
 )
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-New-Item -Type Directory $TargetLocation
-Copy-Item "$BinLocation/*.dll" $TargetLocation
+if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
+    if (!(Test-Path -LiteralPath $TargetLocation -Type Container)) {
+        New-Item -Type Directory $TargetLocation
+    }
+    Copy-Item "$BinLocation/*.dll" $TargetLocation
+    & $CheckUpToDateScript -GenerateResultKey
+} else {
+    Write-Host 'The build result is up to date.'
+}
