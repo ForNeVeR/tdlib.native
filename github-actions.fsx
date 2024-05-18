@@ -81,7 +81,6 @@ type Workflows =
         ?installScript: string,
         ?buildScriptArgs: string
     ) = [
-        pwsh "Verify encoding" "./common/verify-encoding.ps1"
         pwsh "Generate cache key" "./common/Test-UpToDate.ps1 -GenerateCacheKey"
         step(
              name = "Cache artifacts",
@@ -356,6 +355,12 @@ let workflows = [
                 condition = "github.event_name == 'push' && contains(github.ref, 'refs/tags/')",
                 run = "dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_KEY }} ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg"
             )
+        ]
+
+        job "verify-encoding" [
+            runsOn ubuntuLatest
+            checkout
+            pwsh "Verify encoding" "./common/verify-encoding.ps1"
         ]
     ]
 ]
