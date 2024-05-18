@@ -11,6 +11,7 @@ on:
     - master
   schedule:
   - cron: 0 0 * * 6
+  workflow_dispatch: 
 jobs:
   build-linux-x86-64:
     runs-on: ubuntu-20.04

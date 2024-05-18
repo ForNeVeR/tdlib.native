@@ -168,6 +168,7 @@ let workflows = [
         onPushTags "v*"
         onPullRequestTo mainBranch
         onSchedule(day = DayOfWeek.Saturday)
+        onWorkflowDispatch
 
         Workflows.BuildJob(
             image = ubuntu20_04,
