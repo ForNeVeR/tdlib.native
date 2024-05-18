@@ -171,7 +171,7 @@ jobs:
     - name: Download macOS artifact
       uses: actions/download-artifact@v4
       with:
-        name: tdlib.osx.x86-64
+        name: tdlib.macos.x86-64
         path: ./artifacts
     - name: Prepare package for testing
       shell: pwsh

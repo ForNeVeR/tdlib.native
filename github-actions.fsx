@@ -148,7 +148,7 @@ let workflows = [
 
             checkoutWithSubmodules
             step(name = "Download macOS artifact", uses = "actions/download-artifact@v4", options = Map.ofList [
-                "name", "tdlib.osx.x86-64"
+                "name", "tdlib.macos.x86-64"
                 "path", "./artifacts"
             ])
             pwsh "Prepare package for testing" "./macos/prepare-package.ps1"
