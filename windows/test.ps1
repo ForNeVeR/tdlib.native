@@ -1,7 +1,7 @@
 param (
     [string] $Dependencies = "$PSScriptRoot/../build/tools/dependencies/Dependencies.exe",
 
-    [string] $Artifacts = "$PSScriptRoot/../artifacts",
+    [string] $Package = "$PSScriptRoot/../build/runtimes/win-x64/native",
     [string] $GoldFile = "$PSScriptRoot/../windows/libraries.gold.txt",
     [string] $ResultFile = "$PSScriptRoot/../windows/libraries.temp.txt",
     [switch] $GenerateGold
@@ -16,7 +16,7 @@ if (Test-Path $ResultFile) {
     Remove-Item $ResultFile
 }
 
-Get-ChildItem "$Artifacts/*.dll" | Sort-Object -Property Name | ForEach-Object {
+Get-ChildItem "$Package/*.dll" | Sort-Object -Property Name | ForEach-Object {
     $libraryPath = $_.FullName
 
     Write-Output "Checking file `"$libraryPath`"…"
