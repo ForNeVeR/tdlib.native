@@ -30,6 +30,8 @@ Write-Output "Contents of the packages directory:"
 Get-ChildItem $PackageDir
 
 Get-Item $PackageDir/*.nupkg | ForEach-Object {
+    $package = $_.FullName
+
     Write-Output "Adding a package $package into NuGet source $PackageSource"
     if ($UseMono) {
         & $Mono $NuGet add $package -Source $PackageSource
