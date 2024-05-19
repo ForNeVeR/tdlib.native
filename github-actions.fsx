@@ -291,7 +291,10 @@ let workflows = [
             let packPackageFor platform architecture =
                 pwsh
                     $"Pack NuGet package: {platform}.{architecture}"
-                    $"dotnet pack tdlib.native.{platformToDotNet platform}-{archToDotNet architecture} -Version ${{ steps.version.outputs.version }} --output build"
+                    (
+                        $"dotnet pack tdlib.native.{platformToDotNet platform}-{archToDotNet architecture}.proj" +
+                        " -p:Version=${{ steps.version.outputs.version }} --output build"
+                    )
 
             packPackageFor Platform.Linux Arch.X86_64
             packPackageFor Platform.MacOS Arch.AArch64

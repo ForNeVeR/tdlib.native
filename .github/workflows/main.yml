@@ -350,16 +350,16 @@ jobs:
         output: release-notes.md
     - name: 'Pack NuGet package: linux.x86-64'
       shell: pwsh
-      run: dotnet pack tdlib.native.linux-x64 -Version ${ steps.version.outputs.version } --output build
+      run: dotnet pack tdlib.native.linux-x64.proj -p:Version=${{ steps.version.outputs.version }} --output build
     - name: 'Pack NuGet package: macos.aarch64'
       shell: pwsh
-      run: dotnet pack tdlib.native.osx-arm64 -Version ${ steps.version.outputs.version } --output build
+      run: dotnet pack tdlib.native.osx-arm64.proj -p:Version=${{ steps.version.outputs.version }} --output build
     - name: 'Pack NuGet package: macos.x86-64'
       shell: pwsh
-      run: dotnet pack tdlib.native.osx-x64 -Version ${ steps.version.outputs.version } --output build
+      run: dotnet pack tdlib.native.osx-x64.proj -p:Version=${{ steps.version.outputs.version }} --output build
     - name: 'Pack NuGet package: windows.x86-64'
       shell: pwsh
-      run: dotnet pack tdlib.native.win-x64 -Version ${ steps.version.outputs.version } --output build
+      run: dotnet pack tdlib.native.win-x64.proj -p:Version=${{ steps.version.outputs.version }} --output build
     - name: Install dependencies
       shell: pwsh
       run: ./linux/install.ps1 -ForPack
