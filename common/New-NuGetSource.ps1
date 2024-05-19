@@ -18,7 +18,7 @@ New-Item -Type Directory $PackageSource -ErrorAction Ignore
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
     <packageSources>
-        <add key="build" value="$(Resolve-Path $PackageSource)"/>
+        <add key="local" value="$(Resolve-Path $PackageSource)"/>
     </packageSources>
 </configuration>
 "@ > $NuGetConfigTarget
@@ -39,3 +39,6 @@ Get-Item $PackageDir/*.nupkg | ForEach-Object {
         & $NuGet add $package -Source $PackageSource
     }
 }
+
+Write-Output "Content of the source ($(Resolve-Path $PackageSource)):"
+Get-ChildItem $PackageSource
