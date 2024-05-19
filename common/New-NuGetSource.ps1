@@ -26,6 +26,9 @@ New-Item -Type Directory $PackageSource -ErrorAction Ignore
 Write-Output "Contents of $($NuGetConfigTarget):"
 Get-Content $NuGetConfigTarget
 
+Write-Output "Contents of the packages directory:"
+Get-ChildItem $PackageDir
+
 Get-Item $PackageDir/*.nupkg | ForEach-Object {
     Write-Output "Adding a package $package into NuGet source $PackageSource"
     if ($UseMono) {
