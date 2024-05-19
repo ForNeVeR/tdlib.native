@@ -207,12 +207,12 @@ let workflows = [
             artifactFileName = "tdjson.dll"
         )
 
-        let downloadAndRepackArtifact platform architecture = [
-            downloadArtifact platform architecture
-            let dir = platformBuildArtifactDirectory platform architecture
+        let downloadAndRepackArtifact platform arch = [
+            downloadArtifact platform arch
+            let dir = platformBuildArtifactDirectory platform arch
             pwsh
-                $"Archive artifact for platform: {platform}"
-                $"Set-Location {dir} && zip -r $env:GITHUB_WORKSPACE/tdlib.{platform}.{architecture}.zip *"
+                $"Archive artifact for platform: {platform}.{arch}"
+                $"Set-Location {dir} && zip -r $env:GITHUB_WORKSPACE/tdlib.{platform}.{arch}.zip *"
         ]
 
         Workflows.TestJob(

@@ -307,7 +307,7 @@ jobs:
       with:
         name: tdlib.linux.x86-64
         path: ./build/runtimes/linux-x64/native
-    - name: 'Archive artifact for platform: linux'
+    - name: 'Archive artifact for platform: linux.x86-64'
       shell: pwsh
       run: Set-Location ./build/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.linux.x86-64.zip *
     - name: 'Download artifact: macos.aarch64'
@@ -315,7 +315,7 @@ jobs:
       with:
         name: tdlib.macos.aarch64
         path: ./build/runtimes/osx-arm64/native
-    - name: 'Archive artifact for platform: macos'
+    - name: 'Archive artifact for platform: macos.aarch64'
       shell: pwsh
       run: Set-Location ./build/runtimes/osx-arm64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.macos.aarch64.zip *
     - name: 'Download artifact: macos.x86-64'
@@ -323,7 +323,7 @@ jobs:
       with:
         name: tdlib.macos.x86-64
         path: ./build/runtimes/osx-x64/native
-    - name: 'Archive artifact for platform: macos'
+    - name: 'Archive artifact for platform: macos.x86-64'
       shell: pwsh
       run: Set-Location ./build/runtimes/osx-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.macos.x86-64.zip *
     - name: 'Download artifact: windows.x86-64'
@@ -331,7 +331,7 @@ jobs:
       with:
         name: tdlib.windows.x86-64
         path: ./build/runtimes/win-x64/native
-    - name: 'Archive artifact for platform: windows'
+    - name: 'Archive artifact for platform: windows.x86-64'
       shell: pwsh
       run: Set-Location ./build/runtimes/win-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.windows.x86-64.zip *
     - name: Set up .NET SDK
