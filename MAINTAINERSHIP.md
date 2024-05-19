@@ -9,7 +9,7 @@ Publish a New Version
 3. Optionally, also update the submodule containing the tdsharp sources.
 4. Prepare a corresponding entry in the `CHANGELOG.md`.
 5. Update the license, if required.
-6. Update the copyright year in the `copyright` section of the `tdlib.native.nuspec` file.
+6. Update the copyright information in the `Copyright` element of the `Directory.Build.props` file.
 7. Update the `PACKAGE_VERSION_BASE` to the new library version in the `github-actions.fsx`.
 8. Regenerate the GitHub Actions workflow by running `dotnet fsi github-actions.fsx`.
 9. Create a pull request, verify that the tests are okay. Merge it afterward.
