@@ -142,9 +142,11 @@ type Workflows =
 
         yield! afterDownloadSteps |> Option.toList |> Seq.collect id
 
+        let rid = $"{platformToDotNet platform}-{archToDotNet arch}"
+
         setUpDotNetSdk
         pwsh "Pack NuGet" (
-            $"dotnet pack tdlib.native.{platformToDotNet platform}-{archToDotNet arch}.proj" +
+            $"dotnet pack tdlib.native.{rid}.proj" +
             " -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build"
         )
         // TODO[#64]: Add ${{ github.run_id }} as a patch version
@@ -152,7 +154,7 @@ type Workflows =
             "path", "${{ env.NUGET_PACKAGES }}"
             "key", "${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}"
         ])
-        pwsh "Test" $"./common/test.ps1 {testArgs}"
+        pwsh "Test" $"./common/test.ps1 -PackageName tdlib.native.{rid} {testArgs}"
     ]
 
 module Platform =

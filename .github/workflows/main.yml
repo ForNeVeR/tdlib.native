@@ -174,7 +174,7 @@ jobs:
         path: ${{ env.NUGET_PACKAGES }}
     - name: Test
       shell: pwsh
-      run: ./common/test.ps1 -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono
+      run: ./common/test.ps1 -PackageName tdlib.native.linux-x64 -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono
   test-macos-aarch64:
     needs:
     - build-macos-aarch64
@@ -208,7 +208,7 @@ jobs:
         path: ${{ env.NUGET_PACKAGES }}
     - name: Test
       shell: pwsh
-      run: ./common/test.ps1 -NuGet nuget
+      run: ./common/test.ps1 -PackageName tdlib.native.osx-arm64 -NuGet nuget
   test-macos-x86-64:
     needs:
     - build-macos-x86-64
@@ -242,7 +242,7 @@ jobs:
         path: ${{ env.NUGET_PACKAGES }}
     - name: Test
       shell: pwsh
-      run: ./common/test.ps1 -NuGet nuget
+      run: ./common/test.ps1 -PackageName tdlib.native.osx-x64 -NuGet nuget
   test-windows-x86-64:
     needs:
     - build-windows-x86-64
@@ -287,7 +287,7 @@ jobs:
         path: ${{ env.NUGET_PACKAGES }}
     - name: Test
       shell: pwsh
-      run: ./common/test.ps1 -NuGet nuget
+      run: ./common/test.ps1 -PackageName tdlib.native.win-x64 -NuGet nuget
   release:
     needs:
     - build-linux-x86-64

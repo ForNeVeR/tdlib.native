@@ -3,7 +3,8 @@ param (
     [string] $PackageSource = "$BuildRoot/../build/nuget/",
     [string] $TdSharpRoot = "$PSScriptRoot/../tdsharp",
     [string] $TdSharpTestProjectName = 'TdLib.Tests',
-    [string] $PackageName = 'tdlib.native',
+    [Parameter(Mandatory = $true)]
+    [string] $PackageName,
 
     [string] $NuGet = 'NuGet.exe',
     [switch] $UseMono,
