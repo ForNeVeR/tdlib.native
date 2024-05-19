@@ -37,6 +37,9 @@ try {
     & $dotnet restore
     if (!$?) { throw 'Cannot perform dotnet restore' }
 
+    Write-Output 'Available files at the package source:'
+    Get-ChildItem $PackageSource
+
     Write-Output "Adding a package $PackageName from the project $TdSharpTestProjectName"
     & $dotnet add "$TdSharpTestProjectName.csproj" package $PackageName --prerelease --source $PackageSource
     if (!$?) { throw 'Cannot add package into the test project' }
