@@ -273,7 +273,7 @@ let workflows = [
             )
 
             step(
-                name = "Prepare the release notes (Markdown)",
+                name = "Prepare the release notes",
                 uses = "ForNeVeR/ChangelogAutomation.action@v1",
                 options = Map.ofList [
                     "input", "./CHANGELOG.md"
