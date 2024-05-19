@@ -1,4 +1,7 @@
 /.idea/
 /build/
 
+bin/
+obj/
+
 *.temp.txt

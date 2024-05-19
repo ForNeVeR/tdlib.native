@@ -1,7 +1,21 @@
 <Project Sdk="Microsoft.Build.NoTargets/3.7.56">
     <PropertyGroup>
+        <PackageId>tdlib.native</PackageId>
+        <PackageLicenseExpression>BSL-1.0</PackageLicenseExpression>
+        <Copyright>2024 tdlib.native contributors</Copyright>
+        <PackageProjectUrl>https://github.com/ForNeVeR/tdlib.native</PackageProjectUrl>
+        <Description>NuGet packaging for tdlib: Telegram client library.</Description>
+        <PackageTags>telegram</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ChangelogAutomation.MSBuild" Version="2.0.0" PrivateAssets="All" />
+        <Content Include="build\runtimes\**" Exclude="**\cache-key.json" PackagePath="runtimes" />
+        <Content Include="LICENSE_1_0.txt" PackagePath="/" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <ChangelogFilePath>CHANGELOG.md</ChangelogFilePath>
         <TargetFramework>net7.0</TargetFramework> <!-- this is a dummy value -->
-        <NuspecFile>$(MSBuildThisFileDirectory)\tdlib.native.nuspec</NuspecFile>
-        <NuspecProperties>version=$(PackageVersion)</NuspecProperties>
     </PropertyGroup>
 </Project>

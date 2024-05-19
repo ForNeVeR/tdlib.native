@@ -142,7 +142,7 @@ type Workflows =
         yield! afterDownloadSteps |> Option.toList |> Seq.collect id
 
         setUpDotNetSdk
-        pwsh "Pack NuGet" "dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }}-preview --output build"
+        pwsh "Pack NuGet" "dotnet pack -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build"
         // TODO[#64]: Add ${{ github.run_id }} as a patch version
         step(name = "NuGet cache", uses = "actions/cache@v4", options = Map.ofList [
             "path", "${{ env.NUGET_PACKAGES }}"
@@ -273,15 +273,6 @@ let workflows = [
             )
 
             step(
-                name = "Prepare the release notes (text)",
-                uses = "ForNeVeR/ChangelogAutomation.action@v1",
-                options = Map.ofList [
-                    "input", "./CHANGELOG.md"
-                    "output", "releaseNotes.txt"
-                    "format", "PlainText"
-                ]
-            )
-            step(
                 name = "Prepare the release notes (Markdown)",
                 uses = "ForNeVeR/ChangelogAutomation.action@v1",
                 options = Map.ofList [
@@ -290,8 +281,6 @@ let workflows = [
                     "format", "Markdown"
                 ]
             )
-
-            pwsh "Update the release notes" "./common/update-release-notes.ps1 ./releaseNotes.txt"
 
             pwsh "Prepare NuGet package" "dotnet pack -p:PackageVersion=${{ steps.version.outputs.version }} --output build"
 

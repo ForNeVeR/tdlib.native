@@ -9,6 +9,9 @@
             "enabled": false
         }
     ],
+    "nuget": {
+        "fileMatch": ["\\.proj$"]
+    },
     "customManagers": [
         {
             "customType": "regex",

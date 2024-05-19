@@ -166,7 +166,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
+      run: dotnet pack -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -200,7 +200,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
+      run: dotnet pack -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -234,7 +234,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
+      run: dotnet pack -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -279,7 +279,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack -p:PackageVersion=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
+      run: dotnet pack -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -342,21 +342,12 @@ jobs:
       name: Read version from ref
       shell: pwsh
       run: "\"version=$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { \"$env:PACKAGE_VERSION_BASE-preview\" })\" >> $env:GITHUB_OUTPUT"
-    - name: Prepare the release notes (text)
-      uses: ForNeVeR/ChangelogAutomation.action@v1
-      with:
-        format: PlainText
-        input: ./CHANGELOG.md
-        output: releaseNotes.txt
     - name: Prepare the release notes (Markdown)
       uses: ForNeVeR/ChangelogAutomation.action@v1
       with:
         format: Markdown
         input: ./CHANGELOG.md
         output: release-notes.md
-    - name: Update the release notes
-      shell: pwsh
-      run: ./common/update-release-notes.ps1 ./releaseNotes.txt
     - name: Prepare NuGet package
       shell: pwsh
       run: dotnet pack -p:PackageVersion=${{ steps.version.outputs.version }} --output build
