@@ -6,9 +6,9 @@
         </Description>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="tdlib-native.win-x64" Version="$(Version)"  />
         <PackageReference Include="tdlib-native.linux-x64" Version="$(Version)" />
-        <PackageReference Include="tdlib-native.osx-x64" Version="$(Version)" />
         <PackageReference Include="tdlib-native.osx-arm" Version="$(Version)" />
+        <PackageReference Include="tdlib-native.osx-x64" Version="$(Version)" />
+        <PackageReference Include="tdlib-native.win-x64" Version="$(Version)"  />
     </ItemGroup>
 </Project>
