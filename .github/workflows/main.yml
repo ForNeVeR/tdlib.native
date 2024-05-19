@@ -385,7 +385,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release artifact: linux.x86-64'
+      name: 'Upload archive: linux.x86-64'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
@@ -395,7 +395,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release artifact: macos.aarch64'
+      name: 'Upload archive: macos.aarch64'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
@@ -405,7 +405,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release artifact: macos.x86-64'
+      name: 'Upload archive: macos.x86-64'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
@@ -415,7 +415,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release artifact: windows.x86-64'
+      name: 'Upload archive: windows.x86-64'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
@@ -425,47 +425,47 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release NuGet package: tdlib.native.linux-x64.${ steps.version.outputs.version }.nupkg'
+      name: 'Upload NuGet package: tdlib.native.linux-x64.${{ steps.version.outputs.version }}.nupkg'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
-        asset_name: tdlib.native.linux-x64.${ steps.version.outputs.version }.nupkg
-        asset_path: ./build/tdlib.native.linux-x64.${ steps.version.outputs.version }.nupkg
+        asset_name: tdlib.native.linux-x64.${{ steps.version.outputs.version }}.nupkg
+        asset_path: ./build/tdlib.native.linux-x64.${{ steps.version.outputs.version }}.nupkg
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release NuGet package: tdlib.native.osx-arm64.${ steps.version.outputs.version }.nupkg'
+      name: 'Upload NuGet package: tdlib.native.osx-arm64.${{ steps.version.outputs.version }}.nupkg'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
-        asset_name: tdlib.native.osx-arm64.${ steps.version.outputs.version }.nupkg
-        asset_path: ./build/tdlib.native.osx-arm64.${ steps.version.outputs.version }.nupkg
+        asset_name: tdlib.native.osx-arm64.${{ steps.version.outputs.version }}.nupkg
+        asset_path: ./build/tdlib.native.osx-arm64.${{ steps.version.outputs.version }}.nupkg
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release NuGet package: tdlib.native.osx-x64.${ steps.version.outputs.version }.nupkg'
+      name: 'Upload NuGet package: tdlib.native.osx-x64.${{ steps.version.outputs.version }}.nupkg'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
-        asset_name: tdlib.native.osx-x64.${ steps.version.outputs.version }.nupkg
-        asset_path: ./build/tdlib.native.osx-x64.${ steps.version.outputs.version }.nupkg
+        asset_name: tdlib.native.osx-x64.${{ steps.version.outputs.version }}.nupkg
+        asset_path: ./build/tdlib.native.osx-x64.${{ steps.version.outputs.version }}.nupkg
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release NuGet package: tdlib.native.win-x64.${ steps.version.outputs.version }.nupkg'
+      name: 'Upload NuGet package: tdlib.native.win-x64.${{ steps.version.outputs.version }}.nupkg'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
-        asset_name: tdlib.native.win-x64.${ steps.version.outputs.version }.nupkg
-        asset_path: ./build/tdlib.native.win-x64.${ steps.version.outputs.version }.nupkg
+        asset_name: tdlib.native.win-x64.${{ steps.version.outputs.version }}.nupkg
+        asset_path: ./build/tdlib.native.win-x64.${{ steps.version.outputs.version }}.nupkg
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Release NuGet package: tdlib.native.${{ steps.version.outputs.version }}.nupkg'
+      name: 'Upload NuGet package: tdlib.native.${{ steps.version.outputs.version }}.nupkg'
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip

@@ -329,9 +329,9 @@ let workflows = [
                     ]
                 )
 
-                let releaseArtifact platform architecture =
+                let uploadArchive platform architecture =
                     step(
-                        name = $"Release artifact: {platform}.{architecture}",
+                        name = $"Upload archive: {platform}.{architecture}",
                         uses = "actions/upload-release-asset@v1",
                         env = Map.ofList [
                             "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
@@ -344,14 +344,14 @@ let workflows = [
                         ]
                     )
 
-                releaseArtifact Platform.Linux Arch.X86_64
-                releaseArtifact Platform.MacOS Arch.AArch64
-                releaseArtifact Platform.MacOS Arch.X86_64
-                releaseArtifact Platform.Windows Arch.X86_64
+                uploadArchive Platform.Linux Arch.X86_64
+                uploadArchive Platform.MacOS Arch.AArch64
+                uploadArchive Platform.MacOS Arch.X86_64
+                uploadArchive Platform.Windows Arch.X86_64
 
-                let releasePackage fileName =
+                let uploadPackage fileName =
                     step(
-                        name = $"Release NuGet package: {fileName}",
+                        name = $"Upload NuGet package: {fileName}",
                         uses = "actions/upload-release-asset@v1",
                         env = Map.ofList [
                             "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
@@ -364,17 +364,17 @@ let workflows = [
                         ]
                     )
 
-                let releasePlatformPackage platform architecture =
-                    releasePackage (
+                let uploadPlatformPackage platform architecture =
+                    uploadPackage (
                         $"tdlib.native.{platformToDotNet platform}-{archToDotNet architecture}." +
-                            "${ steps.version.outputs.version }.nupkg"
+                            "${{ steps.version.outputs.version }}.nupkg"
                     )
 
-                releasePlatformPackage Platform.Linux Arch.X86_64
-                releasePlatformPackage Platform.MacOS Arch.AArch64
-                releasePlatformPackage Platform.MacOS Arch.X86_64
-                releasePlatformPackage Platform.Windows Arch.X86_64
-                releasePackage "tdlib.native.${{ steps.version.outputs.version }}.nupkg"
+                uploadPlatformPackage Platform.Linux Arch.X86_64
+                uploadPlatformPackage Platform.MacOS Arch.AArch64
+                uploadPlatformPackage Platform.MacOS Arch.X86_64
+                uploadPlatformPackage Platform.Windows Arch.X86_64
+                uploadPackage "tdlib.native.${{ steps.version.outputs.version }}.nupkg"
             ]
 
             let pushPackage (fileName: string) =
