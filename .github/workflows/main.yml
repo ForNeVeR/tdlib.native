@@ -365,7 +365,7 @@ jobs:
       run: Copy-Item -LiteralPath common/NuGet.config .
     - name: 'Pack NuGet package: main'
       shell: pwsh
-      run: dotnet pack -p:Version=${{ steps.version.outputs.version }} --output build
+      run: dotnet pack tdlib.native.proj -p:Version=${{ steps.version.outputs.version }} --output build
     - name: Upload NuGet packages
       uses: actions/upload-artifact@v4
       with:

@@ -301,7 +301,7 @@ let workflows = [
             pwsh "Emit NuGet config" "Copy-Item -LiteralPath common/NuGet.config ."
             pwsh
                 "Pack NuGet package: main"
-                "dotnet pack -p:Version=${{ steps.version.outputs.version }} --output build"
+                "dotnet pack tdlib.native.proj -p:Version=${{ steps.version.outputs.version }} --output build"
 
             step(name = "Upload NuGet packages", uses = "actions/upload-artifact@v4", options = Map.ofList [
                 "name", "tdlib.nuget"
