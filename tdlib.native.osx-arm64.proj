@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.Build.NoTargets/3.7.56">
+    <PropertyGroup>
+        <PackageId>tdlib.native.win-x64</PackageId>
+        <Description>
+            NuGet packaging for tdlib: Telegram client library. macOS version for AArch64 architecture.
+        </Description>
+    </PropertyGroup>
+    <ItemGroup>
+        <Content Include="build\runtimes\osx-arm64\**" Exclude="**\cache-key.json" PackagePath="runtimes\osx-arm64" />
+    </ItemGroup>
+</Project>

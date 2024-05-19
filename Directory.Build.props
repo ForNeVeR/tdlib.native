@@ -9,7 +9,6 @@
 
     <ItemGroup>
         <PackageReference Include="ChangelogAutomation.MSBuild" Version="2.0.0" PrivateAssets="All" />
-        <Content Include="build\runtimes\**" Exclude="**\cache-key.json" PackagePath="runtimes" />
         <Content Include="LICENSE_1_0.txt" PackagePath="/" />
         <Content Include="README.md" PackagePath="/" />
         <Content Include="CHANGELOG.md" PackagePath="/" />

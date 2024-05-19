@@ -1,6 +1,7 @@
 #r "nuget: Generaptor.Library, 1.5.0"
 open System
 
+open System.IO
 open Generaptor
 open Generaptor.GitHubActions
 open type Generaptor.GitHubActions.Commands
@@ -282,11 +283,24 @@ let workflows = [
                 ]
             )
 
-            pwsh "Prepare NuGet package" "dotnet pack -p:PackageVersion=${{ steps.version.outputs.version }} --output build"
+            let packPackageFor platform architecture =
+                pwsh
+                    $"Pack NuGet package: {platform}.{architecture}"
+                    $"dotnet pack tdlib.native.{platformToDotNet platform}-{archToDotNet architecture} -Version ${{ steps.version.outputs.version }} --output build"
 
-            step(name = "Upload NuGet package", uses = "actions/upload-artifact@v4", options = Map.ofList [
+            packPackageFor Platform.Linux Arch.X86_64
+            packPackageFor Platform.MacOS Arch.AArch64
+            packPackageFor Platform.MacOS Arch.X86_64
+            packPackageFor Platform.Windows Arch.X86_64
+
+            pwsh "Emit NuGet config" "Copy-Item -LiteralPath common/NuGet.config ."
+            pwsh
+                "Pack NuGet package: main"
+                "dotnet pack -p:Version=${{ steps.version.outputs.version }} --output build"
+
+            step(name = "Upload NuGet packages", uses = "actions/upload-artifact@v4", options = Map.ofList [
                 "name", "tdlib.nuget"
-                "path", "./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg"
+                "path", "./build/*.nupkg"
             ])
 
             yield! ifCalledOnTagPush [
@@ -324,26 +338,54 @@ let workflows = [
                 releaseArtifact Platform.MacOS Arch.X86_64
                 releaseArtifact Platform.Windows Arch.X86_64
 
-                step(
-                    name = "Release NuGet package",
-                    uses = "actions/upload-release-asset@v1",
-                    env = Map.ofList [
-                        "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                    ],
-                    options = Map.ofList [
-                        "upload_url", "${{ steps.release.outputs.upload_url }}"
-                        "asset_name", "tdlib.native.${{ steps.version.outputs.version }}.nupkg"
-                        "asset_path", "./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg"
-                        "asset_content_type", "application/zip"
-                    ]
-                )
+                let releasePackage fileName =
+                    step(
+                        name = $"Release NuGet package: {fileName}",
+                        uses = "actions/upload-release-asset@v1",
+                        env = Map.ofList [
+                            "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
+                        ],
+                        options = Map.ofList [
+                            "upload_url", "${{ steps.release.outputs.upload_url }}"
+                            "asset_name", fileName
+                            "asset_path", $"./build/{fileName}"
+                            "asset_content_type", "application/zip"
+                        ]
+                    )
+
+                let releasePlatformPackage platform architecture =
+                    releasePackage (
+                        $"tdlib.native.{platformToDotNet platform}-{archToDotNet architecture}." +
+                            "${ steps.version.outputs.version }.nupkg"
+                    )
+
+                releasePlatformPackage Platform.Linux Arch.X86_64
+                releasePlatformPackage Platform.MacOS Arch.AArch64
+                releasePlatformPackage Platform.MacOS Arch.X86_64
+                releasePlatformPackage Platform.Windows Arch.X86_64
+                releasePackage "tdlib.native.${{ steps.version.outputs.version }}.nupkg"
             ]
 
-            step(
-                name = "Push the package to nuget.org",
-                condition = "github.event_name == 'push' && contains(github.ref, 'refs/tags/')",
-                run = "dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_KEY }} ./build/tdlib.native.${{ steps.version.outputs.version }}.nupkg"
-            )
+            let pushPackage (fileName: string) =
+                step(
+                    name = $"Push {Path.GetFileNameWithoutExtension fileName} to nuget.org",
+                    condition = "github.event_name == 'push' && contains(github.ref, 'refs/tags/')",
+                    run = "dotnet nuget push --source https://api.nuget.org/v3/index.json" +
+                        " --api-key ${{ secrets.NUGET_KEY }}" +
+                        $" ./build/{fileName}"
+                )
+
+            let pushPlatformPackage platform architecture =
+                pushPackage (
+                    $"tdlib.native.{platformToDotNet platform}-{archToDotNet architecture}." +
+                        "${{ steps.version.outputs.version }}.nupkg"
+                )
+
+            pushPlatformPackage Platform.Linux Arch.X86_64
+            pushPlatformPackage Platform.MacOS Arch.AArch64
+            pushPlatformPackage Platform.MacOS Arch.X86_64
+            pushPlatformPackage Platform.Windows Arch.X86_64
+            pushPackage "tdlib.native.${{ steps.version.outputs.version }}.nupkg"
         ]
 
         job "verify-encoding" [
