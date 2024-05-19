@@ -17,8 +17,9 @@
 
     <PropertyGroup>
         <ChangelogFilePath>CHANGELOG.md</ChangelogFilePath>
-        <NoWarn>NU5128</NoWarn>
-        <TargetFramework>native</TargetFramework>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+
+        <TargetFramework>native</TargetFramework>
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     </PropertyGroup>
 </Project>
