@@ -298,7 +298,10 @@ let workflows = [
             packPackageFor Platform.MacOS Arch.X86_64
             packPackageFor Platform.Windows Arch.X86_64
 
-            pwsh "Emit NuGet config" "Copy-Item -LiteralPath common/NuGet.config ."
+            pwsh "Install dependencies" "./linux/install.ps1 -ForPack"
+            pwsh
+                "Prepare NuGet source"
+                "common/New-NuGetSource.ps1 -UseMono -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe"
             pwsh
                 "Pack NuGet package: main"
                 "dotnet pack tdlib.native.proj -p:Version=${{ steps.version.outputs.version }} --output build"

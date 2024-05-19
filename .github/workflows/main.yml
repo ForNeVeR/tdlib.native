@@ -360,9 +360,12 @@ jobs:
     - name: 'Pack NuGet package: windows.x86-64'
       shell: pwsh
       run: dotnet pack tdlib.native.win-x64 -Version ${ steps.version.outputs.version } --output build
-    - name: Emit NuGet config
+    - name: Install dependencies
       shell: pwsh
-      run: Copy-Item -LiteralPath common/NuGet.config .
+      run: ./linux/install.ps1 -ForPack
+    - name: Prepare NuGet source
+      shell: pwsh
+      run: common/New-NuGetSource.ps1 -UseMono -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe
     - name: 'Pack NuGet package: main'
       shell: pwsh
       run: dotnet pack tdlib.native.proj -p:Version=${{ steps.version.outputs.version }} --output build

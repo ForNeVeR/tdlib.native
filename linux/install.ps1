@@ -2,7 +2,8 @@ param (
     [string] $NuGetDownloadUrl = 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe',
     [string] $NuGetPath = "$PSScriptRoot/../tools/nuget.exe",
     [switch] $ForBuild,
-    [switch] $ForTests
+    [switch] $ForTests,
+    [switch] $ForPack
 )
 
 $ErrorActionPreference = 'Stop'
@@ -46,7 +47,9 @@ if ($ForTests) {
     if (!$?) {
         throw 'Cannot install dependencies from apt-get'
     }
+}
 
+if ($ForTests -or $ForPack) {
     Write-Output 'Installing Mono.'
     sudo gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
     if (!$?) {
