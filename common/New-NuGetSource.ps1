@@ -41,4 +41,4 @@ Get-Item $PackageDir/*.nupkg | ForEach-Object {
 }
 
 Write-Output "Content of the source ($(Resolve-Path $PackageSource)):"
-Get-ChildItem $PackageSource
+Get-ChildItem -Recurse $PackageSource
