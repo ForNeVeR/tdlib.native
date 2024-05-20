@@ -6,6 +6,6 @@
         </Description>
     </PropertyGroup>
     <ItemGroup>
-        <Content Include="build\runtimes\win-x64\**" Exclude="**\cache-key.json" PackagePath="runtimes\win-x64" />
+        <Content Include="build\$(PackageId)\runtimes\win-x64\**" Exclude="**\cache-key.json" PackagePath="runtimes\win-x64" />
     </ItemGroup>
 </Project>

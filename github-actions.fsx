@@ -1,6 +1,6 @@
 #r "nuget: Generaptor.Library, 1.5.0"
-open System
 
+open System
 open System.IO
 open Generaptor
 open Generaptor.GitHubActions
@@ -13,6 +13,7 @@ let mainBranch = "master"
 let macOs11 = "macos-11"
 let macOs14 = "macos-14"
 let ubuntu20_04 = "ubuntu-20.04"
+let ubuntu22_04 = "ubuntu-22.04"
 let ubuntuLatest = "ubuntu-latest"
 let windows2019 = "windows-2019"
 
@@ -29,36 +30,65 @@ let pwshWithResult name script producedFiles = [
         )
 ]
 
-let prepareArtifacts os resultFileName =
-    pwshWithResult "Prepare artifact" $"./{os}/prepare-artifacts.ps1" [resultFileName]
-
-let buildJobName platform arch = $"build-{platform}-{arch}"
-
 let checkoutWithSubmodules = step(name = "Checkout", uses = "actions/checkout@v4", options = Map.ofList [
     "submodules", "true"
 ])
 
-let platformToDotNet = function
-    | "linux" -> "linux"
-    | "macos" -> "osx"
-    | "windows" -> "win"
+module Platform =
+    let [<Literal>] Ubuntu20_04 = "ubuntu-20.04"
+    let [<Literal>] Ubuntu22_04 = "ubuntu-22.04"
+    let [<Literal>] MacOS = "macos"
+    let [<Literal>] Windows = "windows"
+
+module Arch =
+    let [<Literal>] AArch64 = "aarch64"
+    let [<Literal>] X86_64 = "x86-64"
+
+module Names =
+    let private platformToDotNet = function
+    | Platform.Ubuntu20_04 -> "linux"
+    | Platform.Ubuntu22_04 -> "linux"
+    | Platform.MacOS -> "osx"
+    | Platform.Windows -> "win"
     | other -> failwith $"Unknown platform {other}"
 
-let archToDotNet = function
-    | "x86-64" -> "x64"
-    | "aarch64" -> "arm64"
+    let private archToDotNet = function
+    | Arch.AArch64 -> "arm64"
+    | Arch.X86_64 -> "x64"
     | other -> failwith $"Unknown architecture {other}"
 
-let platformBuildArtifactDirectory platform architecture =
-    $"./build/runtimes/{platformToDotNet platform}-{archToDotNet architecture}/native"
+    let package platform arch =
+        let platformPart =
+            match platform with
+            | Platform.Ubuntu20_04 -> "ubuntu-20.04"
+            | other -> platformToDotNet other
 
-let downloadArtifact platform architecture =
+        $"tdlib.native.{platformPart}-{archToDotNet arch}"
+
+    let ciArtifact platform arch = $"tdlib.native.{platform}.{arch}"
+    let packageInputDirectory platform arch =
+        $"build/{package platform arch}/runtimes/{platformToDotNet platform}-{archToDotNet arch}/native"
+
+    let buildJob (platform: string) arch = $"build-{platform.Replace('.', '-')}-{arch}"
+    let testJob (platform: string) arch = $"test-{platform.Replace('.', '-')}-{arch}"
+    let os = function
+    | Platform.Ubuntu20_04 -> "linux"
+    | Platform.Ubuntu22_04 -> "linux"
+    | Platform.MacOS -> "macos"
+    | Platform.Windows -> "windows"
+    | other -> failwith $"Unknown platform: {other}."
+
+let prepareArtifacts platform resultFileName =
+    let os = Names.os platform
+    pwshWithResult "Prepare artifact" $"./{os}/prepare-artifacts.ps1" [resultFileName]
+
+let downloadArtifact platform arch =
     step(
-        name = $"Download artifact: {platform}.{architecture}",
+        name = $"Download artifact: {platform}.{arch}",
         uses = "actions/download-artifact@v4",
         options = Map.ofList [
-            "name", $"tdlib.{platform}.{architecture}"
-            "path", platformBuildArtifactDirectory platform architecture
+            "name", Names.ciArtifact platform arch
+            "path", Names.packageInputDirectory platform arch
         ]
     )
 
@@ -94,7 +124,7 @@ type Workflows =
         yield! installScript |> Option.toList |> Seq.map(pwsh "Install")
         pwsh "Build" (
             String.concat " " [
-                $"./{platform}/build.ps1"
+                $"./{Names.os platform}/build.ps1"
                 yield! buildScriptArgs |> Option.toList
             ]
         )
@@ -112,7 +142,7 @@ type Workflows =
         artifactFileName: string,
         ?installScript: string,
         ?buildScriptArgs: string
-    ) = job (buildJobName platform arch) [
+    ) = job (Names.buildJob platform arch) [
         runsOn image
         checkoutWithSubmodules
         yield! Workflows.BuildArtifacts(
@@ -131,8 +161,8 @@ type Workflows =
         testArgs: string,
         ?installScript: string,
         ?afterDownloadSteps: JobCreationCommand seq
-    ) = job $"test-{platform}-{arch}" [
-        needs(buildJobName platform arch)
+    ) = job (Names.testJob platform arch) [
+        needs(Names.buildJob platform arch)
         runsOn image
         yield! testEnv
 
@@ -142,11 +172,9 @@ type Workflows =
 
         yield! afterDownloadSteps |> Option.toList |> Seq.collect id
 
-        let rid = $"{platformToDotNet platform}-{archToDotNet arch}"
-
         setUpDotNetSdk
         pwsh "Pack NuGet" (
-            $"dotnet pack tdlib.native.{rid}.proj" +
+            $"dotnet pack {Names.package platform arch}.proj" +
             " -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build"
         )
         // TODO[#64]: Add ${{ github.run_id }} as a patch version
@@ -154,17 +182,8 @@ type Workflows =
             "path", "${{ env.NUGET_PACKAGES }}"
             "key", "${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}"
         ])
-        pwsh "Test" $"./common/test.ps1 -PackageName tdlib.native.{rid} {testArgs}"
+        pwsh "Test" $"./common/test.ps1 -PackageName {Names.package platform arch} {testArgs}"
     ]
-
-module Platform =
-    let Linux = "linux"
-    let MacOS = "macos"
-    let Windows = "windows"
-
-module Arch =
-    let AArch64 = "aarch64"
-    let X86_64 = "x86-64"
 
 let workflows = [
     workflow "main" [
@@ -177,7 +196,15 @@ let workflows = [
 
         Workflows.BuildJob(
             image = ubuntu20_04,
-            platform = Platform.Linux,
+            platform = Platform.Ubuntu20_04,
+            arch = Arch.X86_64,
+            installScript = "./linux/install.ps1 -ForBuild",
+            artifactFileName = "libtdjson.so"
+        )
+
+        Workflows.BuildJob(
+            image = ubuntu22_04,
+            platform = Platform.Ubuntu22_04,
             arch = Arch.X86_64,
             installScript = "./linux/install.ps1 -ForBuild",
             artifactFileName = "libtdjson.so"
@@ -209,15 +236,23 @@ let workflows = [
 
         let downloadAndRepackArtifact platform arch = [
             downloadArtifact platform arch
-            let dir = platformBuildArtifactDirectory platform arch
+            let dir = Names.packageInputDirectory platform arch
             pwsh
                 $"Archive artifact for platform: {platform}.{arch}"
-                $"Set-Location {dir} && zip -r $env:GITHUB_WORKSPACE/tdlib.{platform}.{arch}.zip *"
+                $"Set-Location {dir} && zip -r $env:GITHUB_WORKSPACE/{Names.ciArtifact platform arch}.zip *"
         ]
 
         Workflows.TestJob(
             image = ubuntu20_04,
-            platform = Platform.Linux,
+            platform = Platform.Ubuntu20_04,
+            arch = Arch.X86_64,
+            installScript = "./linux/install.ps1 -ForTests",
+            testArgs = "-NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono"
+        )
+
+        Workflows.TestJob(
+            image = ubuntu22_04,
+            platform = Platform.Ubuntu22_04,
             arch = Arch.X86_64,
             installScript = "./linux/install.ps1 -ForTests",
             testArgs = "-NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono"
@@ -255,16 +290,18 @@ let workflows = [
         job "release" [
             runsOn ubuntuLatest
             yield! [
-                buildJobName Platform.Linux Arch.X86_64
-                buildJobName Platform.MacOS Arch.AArch64
-                buildJobName Platform.MacOS Arch.X86_64
-                buildJobName Platform.Windows Arch.X86_64
+                Names.buildJob Platform.Ubuntu20_04 Arch.X86_64
+                Names.buildJob Platform.Ubuntu22_04 Arch.X86_64
+                Names.buildJob Platform.MacOS Arch.AArch64
+                Names.buildJob Platform.MacOS Arch.X86_64
+                Names.buildJob Platform.Windows Arch.X86_64
             ] |> Seq.map needs
 
             yield! testEnv
             checkout
 
-            yield! downloadAndRepackArtifact Platform.Linux Arch.X86_64
+            yield! downloadAndRepackArtifact Platform.Ubuntu20_04 Arch.X86_64
+            yield! downloadAndRepackArtifact Platform.Ubuntu20_04 Arch.X86_64
             yield! downloadAndRepackArtifact Platform.MacOS Arch.AArch64
             yield! downloadAndRepackArtifact Platform.MacOS Arch.X86_64
             yield! downloadAndRepackArtifact Platform.Windows Arch.X86_64
@@ -288,15 +325,16 @@ let workflows = [
                 ]
             )
 
-            let packPackageFor platform architecture =
+            let packPackageFor platform arch =
                 pwsh
-                    $"Pack NuGet package: {platform}.{architecture}"
+                    $"Pack NuGet package: {platform}.{arch}"
                     (
-                        $"dotnet pack tdlib.native.{platformToDotNet platform}-{archToDotNet architecture}.proj" +
+                        $"dotnet pack {Names.package platform arch}.proj" +
                         " -p:Version=${{ steps.version.outputs.version }} --output build"
                     )
 
-            packPackageFor Platform.Linux Arch.X86_64
+            packPackageFor Platform.Ubuntu20_04 Arch.X86_64
+            packPackageFor Platform.Ubuntu22_04 Arch.X86_64
             packPackageFor Platform.MacOS Arch.AArch64
             packPackageFor Platform.MacOS Arch.X86_64
             packPackageFor Platform.Windows Arch.X86_64
@@ -344,7 +382,8 @@ let workflows = [
                         ]
                     )
 
-                uploadArchive Platform.Linux Arch.X86_64
+                uploadArchive Platform.Ubuntu20_04 Arch.X86_64
+                uploadArchive Platform.Ubuntu22_04 Arch.X86_64
                 uploadArchive Platform.MacOS Arch.AArch64
                 uploadArchive Platform.MacOS Arch.X86_64
                 uploadArchive Platform.Windows Arch.X86_64
@@ -364,13 +403,13 @@ let workflows = [
                         ]
                     )
 
-                let uploadPlatformPackage platform architecture =
+                let uploadPlatformPackage platform arch =
                     uploadPackage (
-                        $"tdlib.native.{platformToDotNet platform}-{archToDotNet architecture}." +
-                            "${{ steps.version.outputs.version }}.nupkg"
+                        $"{Names.package platform arch}." + "${{ steps.version.outputs.version }}.nupkg"
                     )
 
-                uploadPlatformPackage Platform.Linux Arch.X86_64
+                uploadPlatformPackage Platform.Ubuntu20_04 Arch.X86_64
+                uploadPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
                 uploadPlatformPackage Platform.MacOS Arch.AArch64
                 uploadPlatformPackage Platform.MacOS Arch.X86_64
                 uploadPlatformPackage Platform.Windows Arch.X86_64
@@ -386,13 +425,13 @@ let workflows = [
                         $" ./build/{fileName}"
                 )
 
-            let pushPlatformPackage platform architecture =
+            let pushPlatformPackage platform arch =
                 pushPackage (
-                    $"tdlib.native.{platformToDotNet platform}-{archToDotNet architecture}." +
-                        "${{ steps.version.outputs.version }}.nupkg"
+                    $"{Names.package platform arch}." + "${{ steps.version.outputs.version }}.nupkg"
                 )
 
-            pushPlatformPackage Platform.Linux Arch.X86_64
+            pushPlatformPackage Platform.Ubuntu20_04 Arch.X86_64
+            pushPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
             pushPlatformPackage Platform.MacOS Arch.AArch64
             pushPlatformPackage Platform.MacOS Arch.X86_64
             pushPlatformPackage Platform.Windows Arch.X86_64

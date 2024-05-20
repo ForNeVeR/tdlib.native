@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.Build.NoTargets/3.7.56">
     <PropertyGroup>
-        <PackageId>tdlib.native.linux-x64</PackageId>
+        <PackageId>tdlib.native.ubuntu-20.04-x64</PackageId>
         <Description>
-            NuGet packaging for tdlib: Telegram client library. Linux version for x86-64 architecture (compiled on Ubuntu 22.04, depends on OpenSSL v3).
+            NuGet packaging for tdlib: Telegram client library. Ubuntu 20.04 version for x86-64 architecture (depends on OpenSSL v1.1).
         </Description>
     </PropertyGroup>
     <ItemGroup>
