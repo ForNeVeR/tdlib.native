@@ -198,7 +198,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack tdlib.native.ubuntu-20.04-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
+      run: dotnet pack tdlib.native.ubuntu-20.04-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -235,7 +235,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack tdlib.native.linux-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
+      run: dotnet pack tdlib.native.linux-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -269,7 +269,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack tdlib.native.osx-arm64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
+      run: dotnet pack tdlib.native.osx-arm64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -303,7 +303,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack tdlib.native.osx-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
+      run: dotnet pack tdlib.native.osx-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -348,7 +348,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack tdlib.native.win-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build
+      run: dotnet pack tdlib.native.win-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -419,7 +419,7 @@ jobs:
     - id: version
       name: Read version from ref
       shell: pwsh
-      run: "\"version=$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { \"$env:PACKAGE_VERSION_BASE-preview\" })\" >> $env:GITHUB_OUTPUT"
+      run: "\"version=$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { \"$env:PACKAGE_VERSION_BASE-test\" })\" >> $env:GITHUB_OUTPUT"
     - name: Prepare the release notes
       uses: ForNeVeR/ChangelogAutomation.action@v1
       with:

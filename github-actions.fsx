@@ -175,9 +175,8 @@ type Workflows =
         setUpDotNetSdk
         pwsh "Pack NuGet" (
             $"dotnet pack {Names.package platform arch}.proj" +
-            " -p:Version=${{ env.PACKAGE_VERSION_BASE }}-preview --output build"
+            " -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build"
         )
-        // TODO[#64]: Add ${{ github.run_id }} as a patch version
         step(name = "NuGet cache", uses = "actions/cache@v4", options = Map.ofList [
             "path", "${{ env.NUGET_PACKAGES }}"
             "key", "${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}"
@@ -312,7 +311,7 @@ let workflows = [
                 name = "Read version from ref",
                 id = "version",
                 shell = "pwsh",
-                run = "\"version=$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { \"$env:PACKAGE_VERSION_BASE-preview\" })\" >> $env:GITHUB_OUTPUT"
+                run = "\"version=$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { \"$env:PACKAGE_VERSION_BASE-test\" })\" >> $env:GITHUB_OUTPUT"
             )
 
             step(
