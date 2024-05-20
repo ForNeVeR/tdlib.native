@@ -6,6 +6,6 @@
         </Description>
     </PropertyGroup>
     <ItemGroup>
-        <Content Include="build\runtimes\osx-arm64\**" Exclude="**\cache-key.json" PackagePath="runtimes\osx-arm64" />
+        <Content Include="build\$(PackageId)\runtimes\osx-arm64\**" Exclude="**\cache-key.json" PackagePath="runtimes\osx-arm64" />
     </ItemGroup>
 </Project>
