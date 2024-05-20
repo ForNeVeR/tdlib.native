@@ -172,7 +172,7 @@ let workflows = [
         onPushTo mainBranch
         onPushTags "v*"
         onPullRequestTo mainBranch
-        onSchedule(day = DayOfWeek.Saturday)
+        onSchedule(day = DayOfWeek.Monday)
         onWorkflowDispatch
 
         Workflows.BuildJob(
