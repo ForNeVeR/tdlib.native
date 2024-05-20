@@ -11,7 +11,7 @@ on:
     - master
   schedule:
   - cron: 0 0 * * 1
-  workflow_dispatch: 
+  workflow_dispatch:
 jobs:
   build-ubuntu-20-04-x86-64:
     runs-on: ubuntu-20.04
@@ -192,6 +192,9 @@ jobs:
       with:
         name: tdlib.native.ubuntu-20.04.x86-64
         path: build/tdlib.native.ubuntu-20.04-x64/runtimes/linux-x64/native
+    - name: Verify library dependencies
+      shell: pwsh
+      run: ./linux/Test-Dependencies.ps1
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v4
       with:
@@ -339,9 +342,9 @@ jobs:
     - name: Install dependencies
       shell: pwsh
       run: ./windows/install.ps1
-    - name: Windows-specific testing
+    - name: Verify library dependencies
       shell: pwsh
-      run: ./windows/test.ps1
+      run: ./windows/Test-Dependencies.ps1
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v4
       with:

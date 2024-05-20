@@ -254,7 +254,10 @@ let workflows = [
             platform = Platform.Ubuntu22_04,
             arch = Arch.X86_64,
             installScript = "./linux/install.ps1 -ForTests",
-            testArgs = "-NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono"
+            testArgs = "-NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono",
+            afterDownloadSteps = [
+                pwsh "Verify library dependencies" "./linux/Test-Dependencies.ps1"
+            ]
         )
 
         Workflows.TestJob(
@@ -282,7 +285,7 @@ let workflows = [
                     "key", "${{ hashFiles('windows/install.ps1') }}"
                 ])
                 pwsh "Install dependencies" "./windows/install.ps1"
-                pwsh "Windows-specific testing" "./windows/test.ps1"
+                pwsh "Verify library dependencies" "./windows/Test-Dependencies.ps1"
             ]
         )
 
