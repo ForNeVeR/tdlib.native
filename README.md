@@ -13,7 +13,18 @@ We aim to create a transparent process with no manual intervention, where every 
 Getting Started
 ---------------
 
-- Install the latest package (all binaries packed for .NET SDK) from NuGet: [![NuGet](https://img.shields.io/nuget/v/tdlib.native.svg)][nuget]
+- Install the latest package (all binaries packed for .NET SDK) from NuGet:
+
+  | Platform       | Package                                                                    |
+  |----------------|----------------------------------------------------------------------------|
+  | Linux x86-64   | [![NuGet][badge.tdlib.native.linux-x64]][nuget.tdlib.native.linux-x64]     |
+  | macOS x86-64   | [![NuGet][badge.tdlib.native.osx-x64]][nuget.tdlib.native.osx-x64]         |
+  | macOS AArch64  | [![NuGet][badge.tdlib.native.osx-arm64]][nuget.tdlib.native.osx-arm64]     |
+  | Windows x86-64 | [![NuGet][badge.tdlib.native.windows-x64]][nuget.tdlib.native.windows-x64] |
+  | **All**        | [![NuGet][badge.tdlib.native]][nuget.tdlib.native]                         |
+
+  **tdlib.native** package depends on all the others, so the resulting application will work on any supported platform.
+
 - Download the latest binaries from the [Releases][releases] section
 
 If using .NET, then you'll probably need to also install [tdsharp][], and then use the library through the provided API.
@@ -33,12 +44,21 @@ Documentation
 - [Contributing][docs.contributing]
 - [Maintainership][docs.maintainership]
 
+[badge.tdlib.native.linux-x64]: https://img.shields.io/nuget/v/tdlib.native.linux-x64?label=tdlib.native.linux-x64
+[badge.tdlib.native.osx-arm64]: https://img.shields.io/nuget/v/tdlib.native.osx-arm64?label=tdlib.native.osx-arm64
+[badge.tdlib.native.osx-x64]: https://img.shields.io/nuget/v/tdlib.native.osx-x64?label=tdlib.native.osx-x64
+[badge.tdlib.native.windows-x64]: https://img.shields.io/nuget/v/tdlib.native.windows-x64?label=tdlib.native.windows-x64
+[badge.tdlib.native]: https://img.shields.io/nuget/v/tdlib.native?label=tdlib.native
 [cpp.redist]: https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160
 [docs.changelog]: ./CHANGELOG.md
 [docs.contributing]: ./CONTRIBUTING.md
 [docs.license]: ./LICENSE_1_0.txt
 [docs.maintainership]: ./MAINTAINERSHIP.md
-[nuget]: https://www.nuget.org/packages/tdlib.native/
+[nuget.tdlib.native.linux-x64]: https://www.nuget.org/packages/tdlib.native.linux-x64/
+[nuget.tdlib.native.osx-arm64]: https://www.nuget.org/packages/tdlib.native.osx-arm64/
+[nuget.tdlib.native.osx-x64]: https://www.nuget.org/packages/tdlib.native.osx-x64/
+[nuget.tdlib.native.windows-x64]: https://www.nuget.org/packages/tdlib.native.windows-x64/
+[nuget.tdlib.native]: https://www.nuget.org/packages/tdlib.native/
 [releases]: https://github.com/ForNeVeR/tdlib.native/releases
 [spec.linux]: https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2004-Readme.md
 [spec.macos-11]: https://github.com/actions/runner-images/blob/main/images/macos/macos-11-Readme.md
