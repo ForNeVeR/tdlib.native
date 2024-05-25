@@ -1,7 +1,7 @@
 param (
     [string] $Dependencies = "$PSScriptRoot/../build/tools/dependencies/Dependencies.exe",
 
-    [string] $Package = "$PSScriptRoot/../build/runtimes/win-x64/native",
+    [string] $Package = "$PSScriptRoot/../build/tdlib.native.win-x64/runtimes/win-x64/native",
     [string] $GoldFile = "$PSScriptRoot/../windows/libraries.gold.txt",
     [string] $ResultFile = "$PSScriptRoot/../windows/libraries.temp.txt",
     [switch] $GenerateGold
