@@ -130,7 +130,7 @@ type Workflows =
         )
         yield! prepareArtifacts platform $"artifacts/{artifactFileName}"
         step(name = "Upload build result", uses = "actions/upload-artifact@v4", options = Map.ofList [
-            "name", $"tdlib.{platform}.{arch}"
+            "name", Names.ciArtifact platform arch
             "path", "artifacts/*"
         ])
     ]
