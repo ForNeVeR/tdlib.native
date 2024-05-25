@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased] (1.8.21.1)
+### Changed
+- Support for Ubuntu 22.04 (OpenSSL v3).
+- **(Breaking change!)** The main package is now built on Ubuntu 22.04 and requires OpenSSL v3. The package for Ubuntu 20.04 (the previous default) is now available separately as `tdlib.native.ubuntu-20.04-x64`.
+
+  Consult the package documentation to see the current versions and layout.
+### Added
+- All the platform-dependent packages are now available as separate packages:
+  - tdlib.native.linux-x64 (Ubuntu 22.04),
+  - tdlib.native.ubuntu-20.04-x64 (Ubuntu 20.04),
+  - tdlib.native.osx-arm64 (macOS AArch64),
+  - tdlib.native.osx-x64 (macOS x86-64),
+  - tdlib.native.windows-x64 (Windows x86-64).
+
 ## [1.8.21] - 2023-11-26
 ### Changed
 - Update to [TDLib v1.8.21](https://github.com/tdlib/td/tree/07c1d53a6d3cb1fad58d2822e55eef6d57363581).
