@@ -43,7 +43,7 @@ jobs:
     - name: Upload build result
       uses: actions/upload-artifact@v4
       with:
-        name: tdlib.ubuntu-20.04.x86-64
+        name: tdlib.native.ubuntu-20.04.x86-64
         path: artifacts/*
   build-ubuntu-22-04-x86-64:
     runs-on: ubuntu-22.04
@@ -75,7 +75,7 @@ jobs:
     - name: Upload build result
       uses: actions/upload-artifact@v4
       with:
-        name: tdlib.ubuntu-22.04.x86-64
+        name: tdlib.native.ubuntu-22.04.x86-64
         path: artifacts/*
   build-macos-aarch64:
     runs-on: macos-14
@@ -107,7 +107,7 @@ jobs:
     - name: Upload build result
       uses: actions/upload-artifact@v4
       with:
-        name: tdlib.macos.aarch64
+        name: tdlib.native.macos.aarch64
         path: artifacts/*
   build-macos-x86-64:
     runs-on: macos-11
@@ -139,7 +139,7 @@ jobs:
     - name: Upload build result
       uses: actions/upload-artifact@v4
       with:
-        name: tdlib.macos.x86-64
+        name: tdlib.native.macos.x86-64
         path: artifacts/*
   build-windows-x86-64:
     runs-on: windows-2019
@@ -168,7 +168,7 @@ jobs:
     - name: Upload build result
       uses: actions/upload-artifact@v4
       with:
-        name: tdlib.windows.x86-64
+        name: tdlib.native.windows.x86-64
         path: artifacts/*
   test-ubuntu-20-04-x86-64:
     needs:
