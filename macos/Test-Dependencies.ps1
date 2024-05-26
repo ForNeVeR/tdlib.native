@@ -32,6 +32,7 @@ Get-ChildItem "$Package/*.dylib" | Sort-Object -Property Name | ForEach-Object {
 
     $libraryNames = $output | ForEach-Object {
         $filePath = $_.Trim().Split(' ')[0]
+        $filePath
     } | Sort-Object
     $_.Name >> $ResultFile
     $libraryNames | ForEach-Object { "  $_" >> $ResultFile }
