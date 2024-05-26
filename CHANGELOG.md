@@ -5,19 +5,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] (1.8.21.1)
+## [1.8.21.1] - 2024-05-26
 ### Changed
-- Support for Ubuntu 22.04 (OpenSSL v3).
 - **(Breaking change!)** The main package is now built on Ubuntu 22.04 and requires OpenSSL v3. The package for Ubuntu 20.04 (the previous default) is now available separately as `tdlib.native.ubuntu-20.04-x64`.
 
   Consult the package documentation to see the current versions and layout.
-### Added
-- All the platform-dependent packages are now available as separate packages:
+- **(Breaking change!)** The platform-dependent artifacts have been extracted to separate packages. The main package no longer includes any executable files, and just depends on the latest versions of the platform-dependent packages. The new packages:
   - tdlib.native.linux-x64 (Ubuntu 22.04),
   - tdlib.native.ubuntu-20.04-x64 (Ubuntu 20.04),
   - tdlib.native.osx-arm64 (macOS AArch64),
   - tdlib.native.osx-x64 (macOS x86-64),
   - tdlib.native.windows-x64 (Windows x86-64).
+
+  You may directly depend on them as needed.
+- (Technically a _breaking change_, though it's not expected to actually break anything.) The Linux artifacts no longer include `.a` files.
+
+### Added
+- Support for AArch64 versions of macOS.
+- Support for Ubuntu 22.04 (OpenSSL v3).
 
 ## [1.8.21] - 2023-11-26
 ### Changed
@@ -79,4 +84,5 @@ Initial release supporting TDLib v1.2.0.
 [1.8.9]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.1...v1.8.9
 [1.8.12]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.9...v1.8.12
 [1.8.21]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.12...v1.8.21
-[Unreleased]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.21...HEAD
+[1.8.21.1]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.21...v1.8.21.1
+[Unreleased]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.21.1...HEAD
