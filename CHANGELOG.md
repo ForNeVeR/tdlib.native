@@ -11,11 +11,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
   Consult the package documentation to see the current versions and layout.
 - **(Breaking change!)** The platform-dependent artifacts have been extracted to separate packages. The main package no longer includes any executable files, and just depends on the latest versions of the platform-dependent packages. The new packages:
-  - tdlib.native.linux-x64 (Ubuntu 22.04),
-  - tdlib.native.ubuntu-20.04-x64 (Ubuntu 20.04),
-  - tdlib.native.osx-arm64 (macOS AArch64),
-  - tdlib.native.osx-x64 (macOS x86-64),
-  - tdlib.native.windows-x64 (Windows x86-64).
+  - **tdlib.native.linux-x64** (Ubuntu 22.04),
+  - **tdlib.native.ubuntu-20.04-x64** (Ubuntu 20.04),
+  - **tdlib.native.osx-arm64** (macOS AArch64),
+  - **tdlib.native.osx-x64** (macOS x86-64),
+  - **tdlib.native.win-x64** (Windows x86-64).
 
   You may directly depend on them as needed.
 - (Technically a _breaking change_, though it's not expected to actually break anything.) The Linux artifacts no longer include `.a` files.

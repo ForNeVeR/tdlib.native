@@ -22,7 +22,7 @@ Getting Started
   | Linux x86-64 (Ubuntu 22.04) | [![NuGet][badge.tdlib.native.ubuntu-20.04-x64]][nuget.tdlib.native.ubuntu-20.04-x64] |
   | macOS x86-64                | [![NuGet][badge.tdlib.native.osx-x64]][nuget.tdlib.native.osx-x64]                   |
   | macOS AArch64               | [![NuGet][badge.tdlib.native.osx-arm64]][nuget.tdlib.native.osx-arm64]               |
-  | Windows x86-64              | [![NuGet][badge.tdlib.native.windows-x64]][nuget.tdlib.native.windows-x64]           |
+  | Windows x86-64              | [![NuGet][badge.tdlib.native.win-x64]][nuget.tdlib.native.win-x64]                   |
   | **All**                     | [![NuGet][badge.tdlib.native]][nuget.tdlib.native]                                   |
 
   **tdlib.native** package depends on latest versions of each other platform (i.e. all except the obsolete **Ubuntu 20.04**), so the resulting application will work on any supported platform.
@@ -57,7 +57,7 @@ Documentation
 [badge.tdlib.native.ubuntu-20.04-x64]: https://img.shields.io/nuget/v/tdlib.native.ubuntu-20.04-x64?label=tdlib.native.ubuntu-20.04-x64
 [badge.tdlib.native.osx-arm64]: https://img.shields.io/nuget/v/tdlib.native.osx-arm64?label=tdlib.native.osx-arm64
 [badge.tdlib.native.osx-x64]: https://img.shields.io/nuget/v/tdlib.native.osx-x64?label=tdlib.native.osx-x64
-[badge.tdlib.native.windows-x64]: https://img.shields.io/nuget/v/tdlib.native.windows-x64?label=tdlib.native.windows-x64
+[badge.tdlib.native.win-x64]: https://img.shields.io/nuget/v/tdlib.native.windows-x64?label=tdlib.native.win-x64
 [badge.tdlib.native]: https://img.shields.io/nuget/v/tdlib.native?label=tdlib.native
 [cpp.redist]: https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160
 [docs.changelog]: ./CHANGELOG.md
@@ -68,7 +68,7 @@ Documentation
 [nuget.tdlib.native.ubuntu-20.04-x64]: https://www.nuget.org/packages/tdlib.native.ubuntu-20.04-x64/
 [nuget.tdlib.native.osx-arm64]: https://www.nuget.org/packages/tdlib.native.osx-arm64/
 [nuget.tdlib.native.osx-x64]: https://www.nuget.org/packages/tdlib.native.osx-x64/
-[nuget.tdlib.native.windows-x64]: https://www.nuget.org/packages/tdlib.native.windows-x64/
+[nuget.tdlib.native.win-x64]: https://www.nuget.org/packages/tdlib.native.win-x64/
 [nuget.tdlib.native]: https://www.nuget.org/packages/tdlib.native/
 [releases]: https://github.com/ForNeVeR/tdlib.native/releases
 [spec.ubuntu-20.04]: https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2004-Readme.md
