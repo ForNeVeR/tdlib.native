@@ -482,8 +482,8 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
-        asset_name: tdlib.ubuntu-20.04.x86-64.zip
-        asset_path: ./tdlib.ubuntu-20.04.x86-64.zip
+        asset_name: tdlib.native.ubuntu-20.04.x86-64.zip
+        asset_path: ./tdlib.native.ubuntu-20.04.x86-64.zip
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -492,8 +492,8 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
-        asset_name: tdlib.ubuntu-22.04.x86-64.zip
-        asset_path: ./tdlib.ubuntu-22.04.x86-64.zip
+        asset_name: tdlib.native.ubuntu-22.04.x86-64.zip
+        asset_path: ./tdlib.native.ubuntu-22.04.x86-64.zip
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -502,8 +502,8 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
-        asset_name: tdlib.macos.aarch64.zip
-        asset_path: ./tdlib.macos.aarch64.zip
+        asset_name: tdlib.native.macos.aarch64.zip
+        asset_path: ./tdlib.native.macos.aarch64.zip
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -512,8 +512,8 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
-        asset_name: tdlib.macos.x86-64.zip
-        asset_path: ./tdlib.macos.x86-64.zip
+        asset_name: tdlib.native.macos.x86-64.zip
+        asset_path: ./tdlib.native.macos.x86-64.zip
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -522,8 +522,8 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         asset_content_type: application/zip
-        asset_name: tdlib.windows.x86-64.zip
-        asset_path: ./tdlib.windows.x86-64.zip
+        asset_name: tdlib.native.windows.x86-64.zip
+        asset_path: ./tdlib.native.windows.x86-64.zip
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -392,17 +392,17 @@ let workflows = [
                     ]
                 )
 
-                let uploadArchive platform architecture =
+                let uploadArchive platform arch =
                     step(
-                        name = $"Upload archive: {platform}.{architecture}",
+                        name = $"Upload archive: {platform}.{arch}",
                         uses = "actions/upload-release-asset@v1",
                         env = Map.ofList [
                             "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
                         ],
                         options = Map.ofList [
                             "upload_url", "${{ steps.release.outputs.upload_url }}"
-                            "asset_name", $"tdlib.{platform}.{architecture}.zip"
-                            "asset_path", $"./tdlib.{platform}.{architecture}.zip"
+                            "asset_name", $"{Names.ciArtifact platform arch}.zip"
+                            "asset_path", $"./{Names.ciArtifact platform arch}.zip"
                             "asset_content_type", "application/zip"
                         ]
                     )
