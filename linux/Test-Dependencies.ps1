@@ -23,6 +23,9 @@ Get-ChildItem "$Package/*.so" | Sort-Object -Property Name | ForEach-Object {
         throw "ldd returned an exit code $LASTEXITCODE."
     }
 
+    Write-Output "Output from ldd $($libraryPath):"
+    Write-Output $output
+
     $libraryNames = $output | ForEach-Object {
         $filePath = $_.Trim().Split(' ')[0]
     } | Sort-Object
