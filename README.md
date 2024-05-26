@@ -57,7 +57,7 @@ Documentation
 [badge.tdlib.native.ubuntu-20.04-x64]: https://img.shields.io/nuget/v/tdlib.native.ubuntu-20.04-x64?label=tdlib.native.ubuntu-20.04-x64
 [badge.tdlib.native.osx-arm64]: https://img.shields.io/nuget/v/tdlib.native.osx-arm64?label=tdlib.native.osx-arm64
 [badge.tdlib.native.osx-x64]: https://img.shields.io/nuget/v/tdlib.native.osx-x64?label=tdlib.native.osx-x64
-[badge.tdlib.native.win-x64]: https://img.shields.io/nuget/v/tdlib.native.windows-x64?label=tdlib.native.win-x64
+[badge.tdlib.native.win-x64]: https://img.shields.io/nuget/v/tdlib.native.win-x64?label=tdlib.native.win-x64
 [badge.tdlib.native]: https://img.shields.io/nuget/v/tdlib.native?label=tdlib.native
 [cpp.redist]: https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160
 [docs.changelog]: ./CHANGELOG.md
