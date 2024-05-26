@@ -4,6 +4,9 @@
         <Description>
             NuGet packaging for tdlib: Telegram client library. Windows version for x86-64 architecture.
         </Description>
+        <PackageLicenseExpression>
+            $(PackageLicenseExpression) AND Apache-2.0 <!-- OpenSSL --> AND Zlib <!-- zlib -->
+        </PackageLicenseExpression>
     </PropertyGroup>
     <ItemGroup>
         <Content Include="build\$(PackageId)\runtimes\win-x64\**" Exclude="**\cache-key.json" PackagePath="runtimes\win-x64" />
