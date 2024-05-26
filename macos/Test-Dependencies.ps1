@@ -24,7 +24,7 @@ Get-ChildItem "$Package/*.dylib" | Sort-Object -Property Name | ForEach-Object {
     $libraryPath = $_.FullName
 
     Write-Output "Checking file `"$libraryPath`"…"
-    $output = & $LddApple $libraryPath
+    $output = & $LddApple $libraryPath *>&1
     if (!$?) {
         throw "ldd-apple returned an exit code $LASTEXITCODE."
     }
@@ -32,9 +32,15 @@ Get-ChildItem "$Package/*.dylib" | Sort-Object -Property Name | ForEach-Object {
     Write-Output "Output from ldd-apple $($libraryPath):"
     Write-Output $output
 
-    $libraryNames = $output | ForEach-Object {
-        $filePath = $_.Trim().Split(' ')[0]
-        $filePath
+    $libraryNames = $output | Where-Object { ([string]$_).Contains('dyld: loaded') } | ForEach-Object {
+        if (!($_ -match 'dyld: loaded: <.*?> (.*)')) {
+            throw "Failed to parse ldd-apple output: $_"
+        }
+
+        $filePath = $Matches[1]
+        if ($filePath -ne $libraryPath) {
+            $filePath
+        }
     } | Sort-Object
     $_.Name >> $ResultFile
     $libraryNames | ForEach-Object { "  $_" >> $ResultFile }
