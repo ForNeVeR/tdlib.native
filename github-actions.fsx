@@ -326,7 +326,7 @@ let workflows = [
             checkout
 
             yield! downloadAndRepackArtifact Platform.Ubuntu20_04 Arch.X86_64
-            yield! downloadAndRepackArtifact Platform.Ubuntu20_04 Arch.X86_64
+            yield! downloadAndRepackArtifact Platform.Ubuntu22_04 Arch.X86_64
             yield! downloadAndRepackArtifact Platform.MacOS Arch.AArch64
             yield! downloadAndRepackArtifact Platform.MacOS Arch.X86_64
             yield! downloadAndRepackArtifact Platform.Windows Arch.X86_64

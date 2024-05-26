@@ -392,14 +392,14 @@ jobs:
     - name: 'Archive artifact for platform: ubuntu-20.04.x86-64'
       shell: pwsh
       run: Set-Location build/tdlib.native.ubuntu-20.04-x64/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.native.ubuntu-20.04.x86-64.zip *
-    - name: 'Download artifact: ubuntu-20.04.x86-64'
+    - name: 'Download artifact: ubuntu-22.04.x86-64'
       uses: actions/download-artifact@v4
       with:
-        name: tdlib.native.ubuntu-20.04.x86-64
-        path: build/tdlib.native.ubuntu-20.04-x64/runtimes/linux-x64/native
-    - name: 'Archive artifact for platform: ubuntu-20.04.x86-64'
+        name: tdlib.native.ubuntu-22.04.x86-64
+        path: build/tdlib.native.linux-x64/runtimes/linux-x64/native
+    - name: 'Archive artifact for platform: ubuntu-22.04.x86-64'
       shell: pwsh
-      run: Set-Location build/tdlib.native.ubuntu-20.04-x64/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.native.ubuntu-20.04.x86-64.zip *
+      run: Set-Location build/tdlib.native.linux-x64/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.native.ubuntu-22.04.x86-64.zip *
     - name: 'Download artifact: macos.aarch64'
       uses: actions/download-artifact@v4
       with:
