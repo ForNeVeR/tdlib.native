@@ -248,7 +248,11 @@ let workflows = [
             installScript = "./linux/install.ps1 -ForTests",
             testArgs = "-NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono",
             afterDownloadSteps = [
-                pwsh "Verify library dependencies" $"./linux/Test-Dependencies.ps1 -Platform {Platform.Ubuntu20_04}"
+                pwsh "Verify library dependencies" (
+                    "./linux/Test-Dependencies.ps1" +
+                    $" -Platform {Platform.Ubuntu20_04}" +
+                    $" -PackageName {Names.package Platform.Ubuntu20_04 Arch.X86_64}"
+                )
             ]
         )
 
@@ -259,7 +263,11 @@ let workflows = [
             installScript = "./linux/install.ps1 -ForTests",
             testArgs = "-NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono",
             afterDownloadSteps = [
-                pwsh "Verify library dependencies" $"./linux/Test-Dependencies.ps1 -Platform {Platform.Ubuntu22_04}"
+                pwsh "Verify library dependencies" (
+                    "./linux/Test-Dependencies.ps1" +
+                    $" -Platform {Platform.Ubuntu22_04}" +
+                    $" -PackageName {Names.package Platform.Ubuntu22_04 Arch.X86_64}"
+                )
             ]
         )
 
