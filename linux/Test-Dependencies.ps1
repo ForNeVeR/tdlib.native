@@ -1,6 +1,8 @@
 param (
+    [Parameter(Mandatory = $true)]
+    [string] $Platform,
     [string] $Package = "$PSScriptRoot/../build/runtimes/linux-x64/native",
-    [string] $GoldFile = "$PSScriptRoot/../linux/libraries.gold.txt",
+    [string] $GoldFile = "$PSScriptRoot/../linux/libraries.$Platform.gold.txt",
     [string] $ResultFile = "$PSScriptRoot/../linux/libraries.temp.txt",
     [switch] $GenerateGold
 )
