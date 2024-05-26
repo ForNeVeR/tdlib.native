@@ -1,8 +1,10 @@
 param (
     [Parameter(Mandatory = $true)]
     [string] $DotNetArch,
+    [Parameter(Mandatory = $true)]
+    [string] $PackageName,
     [string] $RepoRoot = "$PSScriptRoot/..",
-    [string] $Package = "$RepoRoot/build/runtimes/macos-$DotNetArch/native",
+    [string] $Package = "$RepoRoot/build/$PackageName/runtimes/macos-$DotNetArch/native",
     [string] $GoldFile = "$RepoRoot/macos/libraries.$DotNetArch.gold.txt",
     [string] $ResultFile = "$RepoRoot/macos/libraries.temp.txt",
     [string] $LddApple = "$RepoRoot/ldd-apple/ldd-apple.sh",

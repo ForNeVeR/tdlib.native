@@ -241,6 +241,13 @@ let workflows = [
                 $"Set-Location {dir} && zip -r $env:GITHUB_WORKSPACE/{Names.ciArtifact platform arch}.zip *"
         ]
 
+        let testLinuxDependencies platform arch =
+            pwsh "Verify library dependencies" (
+                "./linux/Test-Dependencies.ps1" +
+                $" -Platform {platform}" +
+                $" -PackageName {Names.package platform arch}"
+            )
+
         Workflows.TestJob(
             image = ubuntu20_04,
             platform = Platform.Ubuntu20_04,
@@ -248,11 +255,7 @@ let workflows = [
             installScript = "./linux/install.ps1 -ForTests",
             testArgs = "-NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono",
             afterDownloadSteps = [
-                pwsh "Verify library dependencies" (
-                    "./linux/Test-Dependencies.ps1" +
-                    $" -Platform {Platform.Ubuntu20_04}" +
-                    $" -PackageName {Names.package Platform.Ubuntu20_04 Arch.X86_64}"
-                )
+                testLinuxDependencies Platform.Ubuntu20_04 Arch.X86_64
             ]
         )
 
@@ -263,13 +266,16 @@ let workflows = [
             installScript = "./linux/install.ps1 -ForTests",
             testArgs = "-NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono",
             afterDownloadSteps = [
-                pwsh "Verify library dependencies" (
-                    "./linux/Test-Dependencies.ps1" +
-                    $" -Platform {Platform.Ubuntu22_04}" +
-                    $" -PackageName {Names.package Platform.Ubuntu22_04 Arch.X86_64}"
-                )
+                testLinuxDependencies Platform.Ubuntu22_04 Arch.X86_64
             ]
         )
+
+        let testMacOsDependencies platform arch =
+            pwsh "Verify library dependencies" (
+                "./macos/Test-Dependencies.ps1" +
+                $" -DotNetArch {Names.archToDotNet arch}" +
+                $" -PackageName {Names.package platform arch}"
+            )
 
         Workflows.TestJob(
             image = macOs14,
@@ -277,7 +283,7 @@ let workflows = [
             arch = Arch.AArch64,
             testArgs = "-NuGet nuget",
             afterDownloadSteps = [
-                pwsh "Verify library dependencies" $"./macos/Test-Dependencies.ps1 -DotNetArch {Names.archToDotNet Arch.AArch64}"
+                testMacOsDependencies Platform.MacOS Arch.AArch64
             ]
         )
 
@@ -287,7 +293,7 @@ let workflows = [
             arch = Arch.X86_64,
             testArgs = "-NuGet nuget",
             afterDownloadSteps = [
-                pwsh "Verify library dependencies" $"./macos/Test-Dependencies.ps1 -DotNetArch {Names.archToDotNet Arch.X86_64}"
+                testMacOsDependencies Platform.MacOS Arch.X86_64
             ]
         )
 
