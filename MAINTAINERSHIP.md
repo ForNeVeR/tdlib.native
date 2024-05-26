@@ -29,7 +29,7 @@ To update the key:
 
 1. Sign in onto nuget.org.
 2. Go to the [API keys][nuget.api-keys] section.
-3. Create a new key with permission to **Push only new package versions** with the glob pattern of `github-actions.tdlib.native`.
+3. Create a new key with permission to **Push only new package versions** named `github-actions.tdlib.native` with a glob pattern of `tdlib.native*`.
 
    Alternately, if you have such key already and want to regenerate it, press the **Regenerate** button in its page section.
 
