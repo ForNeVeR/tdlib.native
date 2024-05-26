@@ -2,10 +2,24 @@
     <PropertyGroup>
         <PackageId>tdlib.native</PackageId>
         <Description>
-            NuGet packaging for tdlib: Telegram client library. Mata-package pulling x64 dependencies for Windows, Ubuntu 20.04 and macOS, and AArch64 dependency for macOS.
+            NuGet packaging for tdlib: Telegram client library. Meta-package pulling x64 dependencies for Windows, Ubuntu 22.04 and macOS, and AArch64 dependency for macOS.
         </Description>
-        <SuppressDependenciesWhenPacking>false</SuppressDependenciesWhenPacking>
+        <NuspecFile>tdlib.native.nuspec</NuspecFile>
+        <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);SetPackageProperties</GenerateNuspecDependsOn>
     </PropertyGroup>
+    <Target Name="SetPackageProperties" DependsOnTargets="SetPackageReleaseNotes" BeforeTargets="Pack">
+        <CreateProperty Value="
+            version=$(Version);
+            licenseExpression=$(PackageLicenseExpression);
+            projectUrl=$(PackageProjectUrl);
+            description=$(Description);
+            releaseNotes=$(PackageReleaseNotes);
+            copyright=$(Copyright);
+            tags=$(PackageTags);
+        ">
+            <Output TaskParameter="Value" PropertyName="NuspecProperties" />
+        </CreateProperty>
+    </Target>
     <ItemGroup>
         <PackageReference Include="tdlib.native.linux-x64" Version="$(Version)" />
         <PackageReference Include="tdlib.native.osx-arm64" Version="$(Version)" />
