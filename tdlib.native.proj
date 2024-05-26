@@ -20,10 +20,4 @@
             <Output TaskParameter="Value" PropertyName="NuspecProperties" />
         </CreateProperty>
     </Target>
-    <ItemGroup>
-        <PackageReference Include="tdlib.native.linux-x64" Version="$(Version)" />
-        <PackageReference Include="tdlib.native.osx-arm64" Version="$(Version)" />
-        <PackageReference Include="tdlib.native.osx-x64" Version="$(Version)" />
-        <PackageReference Include="tdlib.native.win-x64" Version="$(Version)"  />
-    </ItemGroup>
 </Project>
