@@ -32,13 +32,16 @@ Get-ChildItem "$Package/*.dylib" | Sort-Object -Property Name | ForEach-Object {
     Write-Output "Output from ldd-apple $($libraryPath):"
     Write-Output $output
 
-    $libraryNames = $output | Where-Object { ([string]$_).Contains('dyld: loaded') } | ForEach-Object {
-        if (!($_ -match 'dyld: loaded: <.*?> (.*)')) {
+    $libraryNames = $output | Where-Object {
+        [string]$line = $_
+        $line.StartsWith('dyld[') -or $line.StartsWith('dyld: loaded:')
+    } | ForEach-Object {
+        if (!($_ -match 'dyld(?:: loaded|\[\d+\]): <.*?> (.*)')) {
             throw "Failed to parse ldd-apple output: $_"
         }
 
         $filePath = $Matches[1]
-        if ($filePath -ne $libraryPath) {
+        if ($filePath -ne $libraryPath -and !$filePath.Contains('cpp.exec')) {
             $filePath
         }
     } | Sort-Object
