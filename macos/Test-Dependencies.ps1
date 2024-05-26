@@ -24,7 +24,7 @@ Get-ChildItem "$Package/*.dylib" | Sort-Object -Property Name | ForEach-Object {
     $libraryPath = $_.FullName
 
     Write-Output "Checking file `"$libraryPath`"…"
-    $output = ldd-apple $libraryPath
+    $output = & $LddApple $libraryPath
     if (!$?) {
         throw "ldd-apple returned an exit code $LASTEXITCODE."
     }
