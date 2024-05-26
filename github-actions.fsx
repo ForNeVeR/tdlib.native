@@ -52,7 +52,7 @@ module Names =
     | Platform.Windows -> "win"
     | other -> failwith $"Unknown platform {other}"
 
-    let private archToDotNet = function
+    let archToDotNet = function
     | Arch.AArch64 -> "arm64"
     | Arch.X86_64 -> "x64"
     | other -> failwith $"Unknown architecture {other}"
@@ -267,14 +267,20 @@ let workflows = [
             image = macOs14,
             platform = Platform.MacOS,
             arch = Arch.AArch64,
-            testArgs = "-NuGet nuget"
+            testArgs = "-NuGet nuget",
+            afterDownloadSteps = [
+                pwsh "Verify library dependencies" $"./macos/Test-Dependencies.ps1 -DotNetArch {Names.archToDotNet Arch.AArch64}"
+            ]
         )
 
         Workflows.TestJob(
             image = macOs11,
             platform = Platform.MacOS,
             arch = Arch.X86_64,
-            testArgs = "-NuGet nuget"
+            testArgs = "-NuGet nuget",
+            afterDownloadSteps = [
+                pwsh "Verify library dependencies" $"./macos/Test-Dependencies.ps1 -DotNetArch {Names.archToDotNet Arch.X86_64}"
+            ]
         )
 
         Workflows.TestJob(

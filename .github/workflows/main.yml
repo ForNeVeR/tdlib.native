@@ -269,6 +269,9 @@ jobs:
       with:
         name: tdlib.native.macos.aarch64
         path: build/tdlib.native.osx-arm64/runtimes/osx-arm64/native
+    - name: Verify library dependencies
+      shell: pwsh
+      run: ./macos/Test-Dependencies.ps1 -DotNetArch arm64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v4
       with:
@@ -303,6 +306,9 @@ jobs:
       with:
         name: tdlib.native.macos.x86-64
         path: build/tdlib.native.osx-x64/runtimes/osx-x64/native
+    - name: Verify library dependencies
+      shell: pwsh
+      run: ./macos/Test-Dependencies.ps1 -DotNetArch x64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v4
       with:

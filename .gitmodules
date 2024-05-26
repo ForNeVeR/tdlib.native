@@ -4,3 +4,6 @@
 [submodule "tdsharp"]
 	path = tdsharp
 	url = https://github.com/egramtel/tdsharp.git
+[submodule "ldd-apple"]
+	path = ldd-apple
+	url = https://github.com/tetractius/ldd-apple.git
