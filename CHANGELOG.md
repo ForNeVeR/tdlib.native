@@ -5,7 +5,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [1.8.21.1] - 2024-05-26
+## [1.8.21.1] - 2024-05-26 [YANKED]
+**Note** that this version has been unlisted from nuget.org because the main package **tdlib.native** was prepared incorrectly: its dependencies on the smaller packages weren't set.
+
 ### Changed
 - **(Breaking change!)** The main package is now built on Ubuntu 22.04 and requires OpenSSL v3. The package for Ubuntu 20.04 (the previous default) is now available separately as `tdlib.native.ubuntu-20.04-x64`.
 
