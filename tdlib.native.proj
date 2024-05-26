@@ -4,6 +4,7 @@
         <Description>
             NuGet packaging for tdlib: Telegram client library. Mata-package pulling x64 dependencies for Windows, Ubuntu 20.04 and macOS, and AArch64 dependency for macOS.
         </Description>
+        <SuppressDependenciesWhenPacking>false</SuppressDependenciesWhenPacking>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="tdlib.native.linux-x64" Version="$(Version)" />
