@@ -40,6 +40,8 @@ On **Ubuntu 20.04**, the TDLib version provided by tdlib.native is compiled agai
 
 On **Ubuntu 22.04**, the TDLib version provided by tdlib.native is compiled against OpenSSL 3.0.
 
+On **macOS**, the TDLib version provided by tdlib.native is compiled against OpenSSL 3.0.
+
 On **Windows**, [Microsoft Visual C++ Redistributable][cpp.redist] of version 2019 or higher is required by TDLib.
 
 Documentation
