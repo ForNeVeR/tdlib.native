@@ -5,7 +5,7 @@ Publish a New Version
 ---------------------
 
 1. Choose a new version. To avoid confusion, all the packages should follow the versioning of the upstream Telegram library, and should have the same version among them. Increment the fourth version number is a re-packaging of the same TDLib is performed.
-2. Update the Git submodule containing the TDLib sources.
+2. Update the Git submodule containing the TDLib sources, if this is a release with the new TDLib version.
 3. Optionally, also update the submodule containing the tdsharp sources.
 4. Prepare a corresponding entry in the `CHANGELOG.md`.
 5. Update the license, if required.

@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] (1.8.21.2)
+## [1.8.21.2] - 2024-05-27
 ### Fixed
 - The main package **tdlib.native** now depends on the following platform packages:
   - **tdlib.native.linux-x64** (Ubuntu 22.04),
@@ -95,4 +95,5 @@ Initial release supporting TDLib v1.2.0.
 [1.8.12]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.9...v1.8.12
 [1.8.21]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.12...v1.8.21
 [1.8.21.1]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.21...v1.8.21.1
-[Unreleased]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.21.1...HEAD
+[1.8.21.2]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.21.1...v1.8.21.2
+[Unreleased]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.21.2...HEAD

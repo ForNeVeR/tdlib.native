@@ -178,7 +178,7 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.21.1
+      PACKAGE_VERSION_BASE: 1.8.21.2
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -218,7 +218,7 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.21.1
+      PACKAGE_VERSION_BASE: 1.8.21.2
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -258,7 +258,7 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.21.1
+      PACKAGE_VERSION_BASE: 1.8.21.2
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -295,7 +295,7 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.21.1
+      PACKAGE_VERSION_BASE: 1.8.21.2
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -332,7 +332,7 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.21.1
+      PACKAGE_VERSION_BASE: 1.8.21.2
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -381,7 +381,7 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.21.1
+      PACKAGE_VERSION_BASE: 1.8.21.2
     steps:
     - uses: actions/checkout@v4
     - name: 'Download artifact: ubuntu-20.04.x86-64'
