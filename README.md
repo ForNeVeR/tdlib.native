@@ -35,6 +35,7 @@ For other technologies or if you don't want to use tdsharp in .NET, you can just
 
 Library Dependencies
 --------------------
+This package doesn't bundle certain dependencies, and they are expected to be provided by the user's environment.
 
 On **Ubuntu 20.04**, the TDLib version provided by tdlib.native is compiled against OpenSSL 1.1.
 
