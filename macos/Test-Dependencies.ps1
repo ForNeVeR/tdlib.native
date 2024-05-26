@@ -7,7 +7,6 @@ param (
     [string] $Package = "$RepoRoot/build/$PackageName/runtimes/osx-$DotNetArch/native",
     [string] $GoldFile = "$RepoRoot/macos/libraries.$DotNetArch.gold.txt",
     [string] $ResultFile = "$RepoRoot/macos/libraries.temp.txt",
-    [string] $LddApple = "$RepoRoot/ldd-apple/ldd-apple.sh",
     [switch] $GenerateGold
 )
 
@@ -24,25 +23,20 @@ Get-ChildItem "$Package/*.dylib" | Sort-Object -Property Name | ForEach-Object {
     $libraryPath = $_.FullName
 
     Write-Output "Checking file `"$libraryPath`"…"
-    $output = & $LddApple $libraryPath *>&1
+    $output = otool -L $libraryPath
     if (!$?) {
-        throw "ldd-apple returned an exit code $LASTEXITCODE."
+        throw "otool returned an exit code $LASTEXITCODE."
     }
 
-    Write-Output "Output from ldd-apple $($libraryPath):"
+    Write-Output "Output from otool -L $($libraryPath):"
     Write-Output $output
 
-    $libraryNames = $output | Where-Object {
-        [string]$line = $_
-        $line.StartsWith('dyld[') -or $line.StartsWith('dyld: loaded:')
-    } | ForEach-Object {
-        if (!($_ -match 'dyld(?:: loaded|\[\d+\]): <.*?> (.*)')) {
-            throw "Failed to parse ldd-apple output: $_"
-        }
-
-        $filePath = $Matches[1]
-        if ($filePath -ne $libraryPath -and !$filePath.Contains('cpp.exec')) {
-            $filePath
+    $libraryNames = $output | Where-Object { $_.StartsWith("`t") } | ForEach-Object {
+        $line = $_.Trim()
+        if ($line -match '(.*?) \(.*?\)') {
+            $Matches[1]
+        } else {
+            $line
         }
     } | Sort-Object
     $_.Name >> $ResultFile
