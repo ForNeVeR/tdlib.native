@@ -18,11 +18,11 @@ Getting Started
 
   | Platform                    | Package                                                                              |
   |-----------------------------|--------------------------------------------------------------------------------------|
-  | Linux x86-64 (Ubuntu 20.04) | [![NuGet][badge.tdlib.native.linux-x64]][nuget.tdlib.native.linux-x64]               |
-  | Linux x86-64 (Ubuntu 22.04) | [![NuGet][badge.tdlib.native.ubuntu-20.04-x64]][nuget.tdlib.native.ubuntu-20.04-x64] |
-  | macOS x86-64                | [![NuGet][badge.tdlib.native.osx-x64]][nuget.tdlib.native.osx-x64]                   |
-  | macOS AArch64               | [![NuGet][badge.tdlib.native.osx-arm64]][nuget.tdlib.native.osx-arm64]               |
+  | Linux x86-64 (Ubuntu 20.04) | [![NuGet][badge.tdlib.native.ubuntu-20.04-x64]][nuget.tdlib.native.ubuntu-20.04-x64] |
+  | Linux x86-64 (Ubuntu 22.04) | [![NuGet][badge.tdlib.native.linux-x64]][nuget.tdlib.native.linux-x64]               |
   | Windows x86-64              | [![NuGet][badge.tdlib.native.win-x64]][nuget.tdlib.native.win-x64]                   |
+  | macOS AArch64               | [![NuGet][badge.tdlib.native.osx-arm64]][nuget.tdlib.native.osx-arm64]               |
+  | macOS x86-64                | [![NuGet][badge.tdlib.native.osx-x64]][nuget.tdlib.native.osx-x64]                   |
   | **All**                     | [![NuGet][badge.tdlib.native]][nuget.tdlib.native]                                   |
 
   **tdlib.native** package depends on latest versions of each other platform (i.e. all except the obsolete **Ubuntu 20.04**), so the resulting application will work on any supported platform.
