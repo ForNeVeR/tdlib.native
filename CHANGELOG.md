@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased] (1.8.29)
+### Changed
+- Update to [TDLib v1.8.29](https://github.com/tdlib/td/tree/fd3154b28727df9e66423d64168fab1202d8c849).
+
 ## [1.8.21.2] - 2024-05-27
 ### Fixed
 - The main package **tdlib.native** now depends on the following platform packages:
