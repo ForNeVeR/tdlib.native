@@ -33,10 +33,16 @@ Get-ChildItem "$Package/*.dylib" | Sort-Object -Property Name | ForEach-Object {
 
     $libraryNames = $output | Where-Object { $_.StartsWith("`t") } | ForEach-Object {
         $line = $_.Trim()
-        if ($line -match '(.*?) \(.*?\)') {
+        $entryPath = if ($line -match '(.*?) \(.*?\)') {
             $Matches[1]
         } else {
             $line
+        }
+
+        if ($entryPath -match "@rpath/$([IO.Path]::GetFileNameWithoutExtension($libraryPath))\.([\d\.]+)\.dylib") {
+            $null
+        } else {
+            $entryPath
         }
     } | Sort-Object
     $_.Name >> $ResultFile

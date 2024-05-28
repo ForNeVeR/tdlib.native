@@ -1,5 +1,4 @@
 libtdjson.dylib
-  @rpath/libtdjson.1.8.21.dylib
   /opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib
   /opt/homebrew/opt/openssl@3/lib/libssl.3.dylib
   /usr/lib/libc++.1.dylib

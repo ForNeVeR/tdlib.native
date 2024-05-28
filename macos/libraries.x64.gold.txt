@@ -1,5 +1,4 @@
 libtdjson.dylib
-  @rpath/libtdjson.1.8.21.dylib
   /usr/lib/libc++.1.dylib
   /usr/lib/libSystem.B.dylib
   /usr/lib/libz.1.dylib
