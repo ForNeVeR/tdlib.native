@@ -110,7 +110,7 @@ jobs:
         name: tdlib.native.macos.aarch64
         path: artifacts/*
   build-macos-x86-64:
-    runs-on: macos-11
+    runs-on: macos-13
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -290,7 +290,7 @@ jobs:
   test-macos-x86-64:
     needs:
     - build-macos-x86-64
-    runs-on: macos-11
+    runs-on: macos-13
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1

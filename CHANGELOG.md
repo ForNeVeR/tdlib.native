@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+### Changed
+- We switched the builds for x86-64 macOS to macOS 13 image (from macOS 11).
+
 ## [1.8.29] - 2024-05-28
 ### Changed
 - Update to [TDLib v1.8.29](https://github.com/tdlib/td/tree/fd3154b28727df9e66423d64168fab1202d8c849).

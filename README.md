@@ -3,7 +3,7 @@ tdlib.native
 
 This is a project to pack [TDLib][tdlib] (the Telegram Database library) binaries built for several platforms:
 
-- [MacOS 11][spec.macos-11] (x86-64) _(GitHub Actions image: `macos-11`)_
+- [MacOS 13][spec.macos-13] (x86-64) _(GitHub Actions image: `macos-13`)_
 - [MacOS 14][spec.macos-14] (AArch64) _(GitHub Actions image: `macos-14`)_
 - [Ubuntu 20.04][spec.ubuntu-20.04] (x86-64) _(GitHub Actions image: `ubuntu-20.04`)_
 - [Ubuntu 22.04][spec.ubuntu-22.04] (x86-64) _(GitHub Actions image: `ubuntu-22.04`)_
@@ -73,7 +73,7 @@ Documentation
 [releases]: https://github.com/ForNeVeR/tdlib.native/releases
 [spec.ubuntu-20.04]: https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2004-Readme.md
 [spec.ubuntu-22.04]: https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md
-[spec.macos-11]: https://github.com/actions/runner-images/blob/main/images/macos/macos-11-Readme.md
+[spec.macos-13]: https://github.com/actions/runner-images/blob/main/images/macos/macos-13-Readme.md
 [spec.macos-14]: https://github.com/actions/runner-images/blob/main/images/macos/macos-14-Readme.md
 [spec.windows]: https://github.com/actions/runner-images/blob/main/images/win/Windows2019-Readme.md
 [tdlib]: https://github.com/tdlib/td
