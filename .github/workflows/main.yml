@@ -433,7 +433,7 @@ jobs:
       shell: pwsh
       run: "\"version=$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { \"$env:PACKAGE_VERSION_BASE-test\" })\" >> $env:GITHUB_OUTPUT"
     - name: Prepare the release notes
-      uses: ForNeVeR/ChangelogAutomation.action@v1
+      uses: ForNeVeR/ChangelogAutomation.action@v2
       with:
         format: Markdown
         input: ./CHANGELOG.md
