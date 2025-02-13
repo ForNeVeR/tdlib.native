@@ -41,13 +41,6 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
             throw 'Cannot execute cmake --build --target prepare_cross_compiling'
         }
 
-        Set-Location ..
-        # php SplitSource.php
-        # if (!$?) {
-        #     throw 'Cannot execute php SplitSource.php'
-        # }
-
-        Set-Location build
         cmake @cmakeBuildArguments
         if (!$?) {
             throw 'Cannot execute cmake --build --target install'
