@@ -42,10 +42,10 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
         }
 
         Set-Location ..
-        php SplitSource.php
-        if (!$?) {
-            throw 'Cannot execute php SplitSource.php'
-        }
+        # php SplitSource.php
+        # if (!$?) {
+        #     throw 'Cannot execute php SplitSource.php'
+        # }
 
         Set-Location build
         cmake @cmakeBuildArguments
