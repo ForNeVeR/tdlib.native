@@ -101,7 +101,7 @@ let testEnv =
         "DOTNET_NOLOGO", "1"
         "DOTNET_CLI_TELEMETRY_OPTOUT", "1"
         "NUGET_PACKAGES", "${{ github.workspace }}/.github/nuget-packages"
-        "PACKAGE_VERSION_BASE", "1.8.30"
+        "PACKAGE_VERSION_BASE", "1.8.45"
     ] |> Seq.map(fun (k, v) -> setEnv k v)
 
 type Workflows =
