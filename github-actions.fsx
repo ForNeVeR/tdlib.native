@@ -12,7 +12,6 @@ let mainBranch = "master"
 
 let macOs13 = "macos-13"
 let macOs14 = "macos-14"
-let ubuntu20_04 = "ubuntu-20.04"
 let ubuntu22_04 = "ubuntu-22.04"
 let ubuntuLatest = "ubuntu-latest"
 let windows2019 = "windows-2019"
@@ -35,7 +34,6 @@ let checkoutWithSubmodules = step(name = "Checkout", uses = "actions/checkout@v4
 ])
 
 module Platform =
-    let [<Literal>] Ubuntu20_04 = "ubuntu-20.04"
     let [<Literal>] Ubuntu22_04 = "ubuntu-22.04"
     let [<Literal>] MacOS = "macos"
     let [<Literal>] Windows = "windows"
@@ -46,7 +44,6 @@ module Arch =
 
 module Names =
     let private platformToDotNet = function
-    | Platform.Ubuntu20_04 -> "linux"
     | Platform.Ubuntu22_04 -> "linux"
     | Platform.MacOS -> "osx"
     | Platform.Windows -> "win"
@@ -58,12 +55,7 @@ module Names =
     | other -> failwith $"Unknown architecture {other}"
 
     let package platform arch =
-        let platformPart =
-            match platform with
-            | Platform.Ubuntu20_04 -> "ubuntu-20.04"
-            | other -> platformToDotNet other
-
-        $"tdlib.native.{platformPart}-{archToDotNet arch}"
+        $"tdlib.native.{platformToDotNet platform}-{archToDotNet arch}"
 
     let ciArtifact platform arch = $"tdlib.native.{platform}.{arch}"
     let packageInputDirectory platform arch =
@@ -72,7 +64,6 @@ module Names =
     let buildJob (platform: string) arch = $"build-{platform.Replace('.', '-')}-{arch}"
     let testJob (platform: string) arch = $"test-{platform.Replace('.', '-')}-{arch}"
     let os = function
-    | Platform.Ubuntu20_04 -> "linux"
     | Platform.Ubuntu22_04 -> "linux"
     | Platform.MacOS -> "macos"
     | Platform.Windows -> "windows"
@@ -194,14 +185,6 @@ let workflows = [
         onWorkflowDispatch
 
         Workflows.BuildJob(
-            image = ubuntu20_04,
-            platform = Platform.Ubuntu20_04,
-            arch = Arch.X86_64,
-            installScript = "./linux/install.ps1 -ForBuild",
-            artifactFileName = "libtdjson.so"
-        )
-
-        Workflows.BuildJob(
             image = ubuntu22_04,
             platform = Platform.Ubuntu22_04,
             arch = Arch.X86_64,
@@ -247,17 +230,6 @@ let workflows = [
                 $" -Platform {platform}" +
                 $" -PackageName {Names.package platform arch}"
             )
-
-        Workflows.TestJob(
-            image = ubuntu20_04,
-            platform = Platform.Ubuntu20_04,
-            arch = Arch.X86_64,
-            installScript = "./linux/install.ps1 -ForTests",
-            testArgs = "-NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono",
-            afterDownloadSteps = [
-                testLinuxDependencies Platform.Ubuntu20_04 Arch.X86_64
-            ]
-        )
 
         Workflows.TestJob(
             image = ubuntu22_04,
@@ -315,7 +287,6 @@ let workflows = [
         job "release" [
             runsOn ubuntuLatest
             yield! [
-                Names.buildJob Platform.Ubuntu20_04 Arch.X86_64
                 Names.buildJob Platform.Ubuntu22_04 Arch.X86_64
                 Names.buildJob Platform.MacOS Arch.AArch64
                 Names.buildJob Platform.MacOS Arch.X86_64
@@ -325,7 +296,6 @@ let workflows = [
             yield! testEnv
             checkout
 
-            yield! downloadAndRepackArtifact Platform.Ubuntu20_04 Arch.X86_64
             yield! downloadAndRepackArtifact Platform.Ubuntu22_04 Arch.X86_64
             yield! downloadAndRepackArtifact Platform.MacOS Arch.AArch64
             yield! downloadAndRepackArtifact Platform.MacOS Arch.X86_64
@@ -358,7 +328,6 @@ let workflows = [
                         " -p:Version=${{ steps.version.outputs.version }} --output build"
                     )
 
-            packPackageFor Platform.Ubuntu20_04 Arch.X86_64
             packPackageFor Platform.Ubuntu22_04 Arch.X86_64
             packPackageFor Platform.MacOS Arch.AArch64
             packPackageFor Platform.MacOS Arch.X86_64
@@ -407,7 +376,6 @@ let workflows = [
                         ]
                     )
 
-                uploadArchive Platform.Ubuntu20_04 Arch.X86_64
                 uploadArchive Platform.Ubuntu22_04 Arch.X86_64
                 uploadArchive Platform.MacOS Arch.AArch64
                 uploadArchive Platform.MacOS Arch.X86_64
@@ -433,7 +401,6 @@ let workflows = [
                         $"{Names.package platform arch}." + "${{ steps.version.outputs.version }}.nupkg"
                     )
 
-                uploadPlatformPackage Platform.Ubuntu20_04 Arch.X86_64
                 uploadPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
                 uploadPlatformPackage Platform.MacOS Arch.AArch64
                 uploadPlatformPackage Platform.MacOS Arch.X86_64
@@ -455,7 +422,6 @@ let workflows = [
                     $"{Names.package platform arch}." + "${{ steps.version.outputs.version }}.nupkg"
                 )
 
-            pushPlatformPackage Platform.Ubuntu20_04 Arch.X86_64
             pushPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
             pushPlatformPackage Platform.MacOS Arch.AArch64
             pushPlatformPackage Platform.MacOS Arch.X86_64

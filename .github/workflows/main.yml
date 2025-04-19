@@ -13,38 +13,6 @@ on:
   - cron: 0 0 * * 1
   workflow_dispatch: 
 jobs:
-  build-ubuntu-20-04-x86-64:
-    runs-on: ubuntu-20.04
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: true
-    - name: Generate cache key
-      shell: pwsh
-      run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
-    - name: Cache artifacts
-      uses: actions/cache@v4
-      with:
-        key: ubuntu-20.04.x86-64.${{ hashFiles('.github/cache-key.json') }}
-        path: artifacts
-    - name: Install
-      shell: pwsh
-      run: ./linux/install.ps1 -ForBuild
-    - name: Build
-      shell: pwsh
-      run: ./linux/build.ps1
-    - name: Prepare artifact
-      shell: pwsh
-      run: ./linux/prepare-artifacts.ps1
-    - name: 'Prepare artifact: verify produced file'
-      shell: pwsh
-      run: if (!(Test-Path -LiteralPath 'artifacts/libtdjson.so')) { throw 'File not found' }
-    - name: Upload build result
-      uses: actions/upload-artifact@v4
-      with:
-        name: tdlib.native.ubuntu-20.04.x86-64
-        path: artifacts/*
   build-ubuntu-22-04-x86-64:
     runs-on: ubuntu-22.04
     steps:
@@ -170,46 +138,6 @@ jobs:
       with:
         name: tdlib.native.windows.x86-64
         path: artifacts/*
-  test-ubuntu-20-04-x86-64:
-    needs:
-    - build-ubuntu-20-04-x86-64
-    runs-on: ubuntu-20.04
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      DOTNET_NOLOGO: 1
-      NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.45
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: true
-    - name: Install
-      shell: pwsh
-      run: ./linux/install.ps1 -ForTests
-    - name: 'Download artifact: ubuntu-20.04.x86-64'
-      uses: actions/download-artifact@v4
-      with:
-        name: tdlib.native.ubuntu-20.04.x86-64
-        path: build/tdlib.native.ubuntu-20.04-x64/runtimes/linux-x64/native
-    - name: Verify library dependencies
-      shell: pwsh
-      run: ./linux/Test-Dependencies.ps1 -Platform ubuntu-20.04 -PackageName tdlib.native.ubuntu-20.04-x64
-    - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 7.0.x
-    - name: Pack NuGet
-      shell: pwsh
-      run: dotnet pack tdlib.native.ubuntu-20.04-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build
-    - name: NuGet cache
-      uses: actions/cache@v4
-      with:
-        key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
-        path: ${{ env.NUGET_PACKAGES }}
-    - name: Test
-      shell: pwsh
-      run: ./common/test.ps1 -PackageName tdlib.native.ubuntu-20.04-x64 -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono
   test-ubuntu-22-04-x86-64:
     needs:
     - build-ubuntu-22-04-x86-64
@@ -371,7 +299,6 @@ jobs:
       run: ./common/test.ps1 -PackageName tdlib.native.win-x64 -NuGet nuget
   release:
     needs:
-    - build-ubuntu-20-04-x86-64
     - build-ubuntu-22-04-x86-64
     - build-macos-aarch64
     - build-macos-x86-64
@@ -384,14 +311,6 @@ jobs:
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - uses: actions/checkout@v4
-    - name: 'Download artifact: ubuntu-20.04.x86-64'
-      uses: actions/download-artifact@v4
-      with:
-        name: tdlib.native.ubuntu-20.04.x86-64
-        path: build/tdlib.native.ubuntu-20.04-x64/runtimes/linux-x64/native
-    - name: 'Archive artifact for platform: ubuntu-20.04.x86-64'
-      shell: pwsh
-      run: Set-Location build/tdlib.native.ubuntu-20.04-x64/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.native.ubuntu-20.04.x86-64.zip *
     - name: 'Download artifact: ubuntu-22.04.x86-64'
       uses: actions/download-artifact@v4
       with:
@@ -438,9 +357,6 @@ jobs:
         format: Markdown
         input: ./CHANGELOG.md
         output: release-notes.md
-    - name: 'Pack NuGet package: ubuntu-20.04.x86-64'
-      shell: pwsh
-      run: dotnet pack tdlib.native.ubuntu-20.04-x64.proj -p:Version=${{ steps.version.outputs.version }} --output build
     - name: 'Pack NuGet package: ubuntu-22.04.x86-64'
       shell: pwsh
       run: dotnet pack tdlib.native.linux-x64.proj -p:Version=${{ steps.version.outputs.version }} --output build
@@ -475,16 +391,6 @@ jobs:
         body_path: ./release-notes.md
         release_name: v${{ steps.version.outputs.version }}
         tag_name: ${{ github.ref }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Upload archive: ubuntu-20.04.x86-64'
-      uses: actions/upload-release-asset@v1
-      with:
-        asset_content_type: application/zip
-        asset_name: tdlib.native.ubuntu-20.04.x86-64.zip
-        asset_path: ./tdlib.native.ubuntu-20.04.x86-64.zip
-        upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: startsWith(github.ref, 'refs/tags/v')
@@ -524,16 +430,6 @@ jobs:
         asset_content_type: application/zip
         asset_name: tdlib.native.windows.x86-64.zip
         asset_path: ./tdlib.native.windows.x86-64.zip
-        upload_url: ${{ steps.release.outputs.upload_url }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - if: startsWith(github.ref, 'refs/tags/v')
-      name: 'Upload NuGet package: tdlib.native.ubuntu-20.04-x64.${{ steps.version.outputs.version }}.nupkg'
-      uses: actions/upload-release-asset@v1
-      with:
-        asset_content_type: application/zip
-        asset_name: tdlib.native.ubuntu-20.04-x64.${{ steps.version.outputs.version }}.nupkg
-        asset_path: ./build/tdlib.native.ubuntu-20.04-x64.${{ steps.version.outputs.version }}.nupkg
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -587,9 +483,6 @@ jobs:
         upload_url: ${{ steps.release.outputs.upload_url }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
-      name: Push tdlib.native.ubuntu-20.04-x64.${{ steps.version.outputs.version }} to nuget.org
-      run: dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_KEY }} ./build/tdlib.native.ubuntu-20.04-x64.${{ steps.version.outputs.version }}.nupkg
     - if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
       name: Push tdlib.native.linux-x64.${{ steps.version.outputs.version }} to nuget.org
       run: dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_KEY }} ./build/tdlib.native.linux-x64.${{ steps.version.outputs.version }}.nupkg

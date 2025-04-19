@@ -5,7 +5,6 @@ This is a project to pack [TDLib][tdlib] (the Telegram Database library) binarie
 
 - [MacOS 13][spec.macos-13] (x86-64) _(GitHub Actions image: `macos-13`)_
 - [MacOS 14][spec.macos-14] (AArch64) _(GitHub Actions image: `macos-14`)_
-- [Ubuntu 20.04][spec.ubuntu-20.04] (x86-64) _(GitHub Actions image: `ubuntu-20.04`)_
 - [Ubuntu 22.04][spec.ubuntu-22.04] (x86-64) _(GitHub Actions image: `ubuntu-22.04`)_
 - [Windows Server 2019][spec.windows] (x86-64) _(GitHub Actions image: `windows-2019`)_
 
@@ -18,14 +17,13 @@ Getting Started
 
   | Platform                    | Package                                                                              |
   |-----------------------------|--------------------------------------------------------------------------------------|
-  | Linux x86-64 (Ubuntu 20.04) | [![NuGet][badge.tdlib.native.ubuntu-20.04-x64]][nuget.tdlib.native.ubuntu-20.04-x64] |
   | Linux x86-64 (Ubuntu 22.04) | [![NuGet][badge.tdlib.native.linux-x64]][nuget.tdlib.native.linux-x64]               |
   | Windows x86-64              | [![NuGet][badge.tdlib.native.win-x64]][nuget.tdlib.native.win-x64]                   |
   | macOS AArch64               | [![NuGet][badge.tdlib.native.osx-arm64]][nuget.tdlib.native.osx-arm64]               |
   | macOS x86-64                | [![NuGet][badge.tdlib.native.osx-x64]][nuget.tdlib.native.osx-x64]                   |
   | **All**                     | [![NuGet][badge.tdlib.native]][nuget.tdlib.native]                                   |
 
-  **tdlib.native** package depends on latest versions of each other platform (i.e. all except the obsolete **Ubuntu 20.04**), so the resulting application will work on any supported platform.
+  The **tdlib.native** package depends on the latest versions of each platform, so the resulting application will work on any supported platform.
 
 - Download the latest binaries from the [Releases][releases] section
 
@@ -36,8 +34,6 @@ For other technologies or if you don't want to use tdsharp in .NET, you can just
 Library Dependencies
 --------------------
 This package doesn't bundle certain dependencies, and they are expected to be provided by the user's environment.
-
-On **Ubuntu 20.04**, the TDLib version provided by tdlib.native is compiled against OpenSSL 1.1.
 
 On **Ubuntu 22.04**, the TDLib version provided by tdlib.native is compiled against OpenSSL 3.0.
 
@@ -54,7 +50,6 @@ Documentation
 - [Maintainership][docs.maintainership]
 
 [badge.tdlib.native.linux-x64]: https://img.shields.io/nuget/v/tdlib.native.linux-x64?label=tdlib.native.linux-x64
-[badge.tdlib.native.ubuntu-20.04-x64]: https://img.shields.io/nuget/v/tdlib.native.ubuntu-20.04-x64?label=tdlib.native.ubuntu-20.04-x64
 [badge.tdlib.native.osx-arm64]: https://img.shields.io/nuget/v/tdlib.native.osx-arm64?label=tdlib.native.osx-arm64
 [badge.tdlib.native.osx-x64]: https://img.shields.io/nuget/v/tdlib.native.osx-x64?label=tdlib.native.osx-x64
 [badge.tdlib.native.win-x64]: https://img.shields.io/nuget/v/tdlib.native.win-x64?label=tdlib.native.win-x64
@@ -65,13 +60,11 @@ Documentation
 [docs.license]: ./LICENSE_1_0.txt
 [docs.maintainership]: ./MAINTAINERSHIP.md
 [nuget.tdlib.native.linux-x64]: https://www.nuget.org/packages/tdlib.native.linux-x64/
-[nuget.tdlib.native.ubuntu-20.04-x64]: https://www.nuget.org/packages/tdlib.native.ubuntu-20.04-x64/
 [nuget.tdlib.native.osx-arm64]: https://www.nuget.org/packages/tdlib.native.osx-arm64/
 [nuget.tdlib.native.osx-x64]: https://www.nuget.org/packages/tdlib.native.osx-x64/
 [nuget.tdlib.native.win-x64]: https://www.nuget.org/packages/tdlib.native.win-x64/
 [nuget.tdlib.native]: https://www.nuget.org/packages/tdlib.native/
 [releases]: https://github.com/ForNeVeR/tdlib.native/releases
-[spec.ubuntu-20.04]: https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2004-Readme.md
 [spec.ubuntu-22.04]: https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md
 [spec.macos-13]: https://github.com/actions/runner-images/blob/main/images/macos/macos-13-Readme.md
 [spec.macos-14]: https://github.com/actions/runner-images/blob/main/images/macos/macos-14-Readme.md
