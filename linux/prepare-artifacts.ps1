@@ -14,6 +14,7 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
         New-Item -Type Directory $TargetLocation
     }
     Copy-Item "$InstallPrefix/lib/*" -Exclude '*.a' $TargetLocation
+    Remove-Item "$TargetLocation/libtdjson.so.*" -ErrorAction SilentlyContinue
     & $CheckUpToDateScript -GenerateResultKey
 } else {
     Write-Host 'The build result is up to date.'
