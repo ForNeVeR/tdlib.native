@@ -110,7 +110,7 @@ jobs:
         name: tdlib.native.macos.x86-64
         path: artifacts/*
   build-windows-x86-64:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -255,7 +255,7 @@ jobs:
   test-windows-x86-64:
     needs:
     - build-windows-x86-64
-    runs-on: windows-2019
+    runs-on: windows-2022
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1

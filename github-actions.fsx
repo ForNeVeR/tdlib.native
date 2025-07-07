@@ -14,7 +14,7 @@ let macOs13 = "macos-13"
 let macOs14 = "macos-14"
 let ubuntu22_04 = "ubuntu-22.04"
 let ubuntuLatest = "ubuntu-latest"
-let windows2019 = "windows-2019"
+let windows2022 = "windows-2022"
 
 let pwsh name script =
     step(name = name, shell = "pwsh", run = script)
@@ -209,7 +209,7 @@ let workflows = [
         )
 
         Workflows.BuildJob(
-            image = windows2019,
+            image = windows2022,
             platform = Platform.Windows,
             arch = Arch.X86_64,
             buildScriptArgs = @"-VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake",
@@ -270,7 +270,7 @@ let workflows = [
         )
 
         Workflows.TestJob(
-            image = windows2019,
+            image = windows2022,
             platform = Platform.Windows,
             arch = Arch.X86_64,
             testArgs = "-NuGet nuget",
