@@ -50,5 +50,6 @@ zlib1.dll
   api-ms-win-crt-heap-l1-1-0.dll
   api-ms-win-crt-runtime-l1-1-0.dll
   api-ms-win-crt-stdio-l1-1-0.dll
+  api-ms-win-crt-string-l1-1-0.dll
   KERNEL32.dll
   VCRUNTIME140.dll
