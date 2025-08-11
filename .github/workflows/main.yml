@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: Generate cache key
@@ -49,7 +49,7 @@ jobs:
     runs-on: macos-14
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: Generate cache key
@@ -81,7 +81,7 @@ jobs:
     runs-on: macos-13
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: Generate cache key
@@ -113,7 +113,7 @@ jobs:
     runs-on: windows-2022
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: Generate cache key
@@ -149,7 +149,7 @@ jobs:
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: Install
@@ -189,7 +189,7 @@ jobs:
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: 'Download artifact: macos.aarch64'
@@ -226,7 +226,7 @@ jobs:
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: 'Download artifact: macos.x86-64'
@@ -263,7 +263,7 @@ jobs:
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: 'Download artifact: windows.x86-64'
@@ -310,7 +310,7 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: 'Download artifact: ubuntu-22.04.x86-64'
       uses: actions/download-artifact@v5
       with:
@@ -501,7 +501,7 @@ jobs:
   verify-encoding:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Verify encoding
       shell: pwsh
       run: ./common/verify-encoding.ps1
