@@ -19,6 +19,7 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
     Push-Location $td/build
     try {
         $cmakeArguments = @(
+            '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
             '-DCMAKE_BUILD_TYPE=Release'
             "-DOPENSSL_ROOT_DIR=$openSslDir"
             '..'
