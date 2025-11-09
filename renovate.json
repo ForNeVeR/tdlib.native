@@ -11,6 +11,17 @@
     ],
     "customManagers": [
         {
+            "description": "Update the packages in F# scripts.",
+            "customType": "regex",
+            "managerFilePatterns": [
+                "*.fsx"
+            ],
+            "matchStrings": [
+                "#r \"nuget: (?<depName>.+), (?<currentValue>\\S+)\""
+            ],
+            "datasourceTemplate": "nuget"
+        },
+        {
             "customType": "regex",
             "datasourceTemplate": "nuget",
             "fileMatch": "\\.proj$",
