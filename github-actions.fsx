@@ -1,4 +1,4 @@
-#r "nuget: Generaptor.Library, 1.5.0"
+#r "nuget: Generaptor.Library, 1.9.0"
 
 open System
 open System.IO
