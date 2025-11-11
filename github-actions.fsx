@@ -86,11 +86,15 @@ let setUpDotNetSdk = step(name = "Set up .NET SDK", uses = "actions/setup-dotnet
     "dotnet-version", "7.0.x"
 ])
 
+let dotNetEnv = [
+    "DOTNET_NOLOGO", "1"
+    "DOTNET_CLI_TELEMETRY_OPTOUT", "1"
+    "NUGET_PACKAGES", "${{ github.workspace }}/.github/nuget-packages"
+]
+
 let testEnv =
     [
-        "DOTNET_NOLOGO", "1"
-        "DOTNET_CLI_TELEMETRY_OPTOUT", "1"
-        "NUGET_PACKAGES", "${{ github.workspace }}/.github/nuget-packages"
+        yield! dotNetEnv
         "PACKAGE_VERSION_BASE", "1.8.45"
     ] |> Seq.map(fun (k, v) -> setEnv k v)
 
@@ -182,6 +186,21 @@ let workflows = [
         onPullRequestTo mainBranch
         onSchedule(day = DayOfWeek.Monday)
         onWorkflowDispatch
+
+        job "verify-workflows" [
+            runsOn ubuntuLatest
+            yield! dotNetEnv |> Seq.map(fun (x, y) -> setEnv x y)
+
+            step(
+                usesSpec = Auto "actions/checkout"
+            )
+            step(
+                usesSpec = Auto "actions/setup-dotnet"
+            )
+            step(
+                run = "dotnet fsi ./github-actions.fsx verify"
+            )
+        ]
 
         Workflows.BuildJob(
             image = ubuntu22_04,
@@ -411,4 +430,4 @@ let workflows = [
     ]
 ]
 
-EntryPoint.Process fsi.CommandLineArgs workflows
+exit <| EntryPoint.Process fsi.CommandLineArgs workflows

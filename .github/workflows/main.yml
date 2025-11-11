@@ -13,6 +13,16 @@ on:
   - cron: 0 0 * * 1
   workflow_dispatch: 
 jobs:
+  verify-workflows:
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
+      NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
+    steps:
+    - uses: actions/checkout@v5
+    - uses: actions/setup-dotnet@v5
+    - run: dotnet fsi ./github-actions.fsx verify
   build-ubuntu-22-04-x86-64:
     runs-on: ubuntu-22.04
     steps:
