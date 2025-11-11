@@ -1,11 +1,9 @@
 param (
     [Parameter(Mandatory = $true)]
-    [string] $DotNetArch,
-    [Parameter(Mandatory = $true)]
     [string] $PackageName,
     [string] $RepoRoot = "$PSScriptRoot/..",
-    [string] $Package = "$RepoRoot/build/$PackageName/runtimes/osx-$DotNetArch/native",
-    [string] $GoldFile = "$RepoRoot/macos/libraries.$DotNetArch.gold.txt",
+    [string] $Package = "$RepoRoot/build/$PackageName/runtimes/osx-arm64/native",
+    [string] $GoldFile = "$RepoRoot/macos/libraries.arm64.gold.txt",
     [string] $ResultFile = "$RepoRoot/macos/libraries.temp.txt",
     [switch] $GenerateGold
 )

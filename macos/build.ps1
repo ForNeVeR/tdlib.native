@@ -12,9 +12,7 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
         New-Item -Type Directory $td/build
     }
 
-    $architecture = machine
-    $isArm64 = $architecture -eq 'arm64e'
-    $openSslDir = if ($isArm64) { '/opt/homebrew/opt/openssl' } else { '/usr/local/opt/openssl' }
+    $openSslDir = '/opt/homebrew/opt/openssl'
 
     Push-Location $td/build
     try {

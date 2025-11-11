@@ -2,7 +2,7 @@
     <PropertyGroup>
         <PackageId>tdlib.native</PackageId>
         <Description>
-            NuGet packaging for tdlib: Telegram client library. Meta-package pulling x64 dependencies for Windows, Ubuntu 22.04 and macOS, and AArch64 dependency for macOS.
+            NuGet packaging for tdlib: Telegram client library. Meta-package pulling x64 dependencies for Windows and Ubuntu 22.04, and AArch64 dependency for macOS.
         </Description>
         <NuspecFile>tdlib.native.nuspec</NuspecFile>
         <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);SetPackageProperties</GenerateNuspecDependsOn>

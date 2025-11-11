@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Removed
 - **(Breaking change!)** The package for Ubuntu 20.04 (OpenSSL v1.1) is no longer maintained nor updated (because [the corresponding GitHub runner is no longer available](https://github.com/actions/runner-images/issues/11101)).
+- **(Breaking change!)** The package for macOS x86-64 is no longer maintained nor updated (because the corresponding GitHub runner is deprecated).
 
 ## [1.8.45] - 2025-02-14
 ### Changed
