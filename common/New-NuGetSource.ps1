@@ -2,12 +2,7 @@ param (
     $SourceRoot = "$PSScriptRoot/..",
     $PackageDir = "$SourceRoot/build",
     $PackageSource = "$SourceRoot/nuget",
-    $NuGetConfigTarget = "$SourceRoot/nuget.config",
-
-    [Parameter(Mandatory = $true)]
-    [string] $NuGet,
-    [switch] $UseMono,
-    $Mono = 'mono'
+    $NuGetConfigTarget = "$SourceRoot/nuget.config"
 )
 
 $ErrorActionPreference = 'Stop'
@@ -33,11 +28,7 @@ Get-Item $PackageDir/*.nupkg | ForEach-Object {
     $package = $_.FullName
 
     Write-Output "Adding a package $package into NuGet source $PackageSource"
-    if ($UseMono) {
-        & $Mono $NuGet add $package -Source $PackageSource
-    } else {
-        & $NuGet add $package -Source $PackageSource
-    }
+    Copy-Item $package $PackageSource
 }
 
 Write-Output "Content of the source ($(Resolve-Path $PackageSource)):"

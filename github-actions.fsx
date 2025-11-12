@@ -153,7 +153,6 @@ type Workflows =
         image: string,
         platform: string,
         arch: string,
-        testArgs: string,
         ?installScript: string,
         ?afterDownloadSteps: JobCreationCommand seq
     ) = job (Names.testJob platform arch) [
@@ -176,7 +175,7 @@ type Workflows =
             "path", "${{ env.NUGET_PACKAGES }}"
             "key", "${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}"
         ])
-        pwsh "Test" $"./common/test.ps1 -PackageName {Names.package platform arch} {testArgs}"
+        pwsh "Test" $"./common/test.ps1 -PackageName {Names.package platform arch}"
     ]
 
 let workflows = [
@@ -255,7 +254,6 @@ let workflows = [
             platform = Platform.Ubuntu22_04,
             arch = Arch.X86_64,
             installScript = "./linux/install.ps1 -ForTests",
-            testArgs = "-NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono",
             afterDownloadSteps = [
                 testLinuxDependencies Platform.Ubuntu22_04 Arch.X86_64
             ]
@@ -272,7 +270,6 @@ let workflows = [
             image = macOs14,
             platform = Platform.MacOS,
             arch = Arch.AArch64,
-            testArgs = "-NuGet nuget",
             afterDownloadSteps = [
                 testMacOsDependencies Platform.MacOS Arch.AArch64
             ]
@@ -282,7 +279,6 @@ let workflows = [
             image = macOs15,
             platform = Platform.MacOS,
             arch = Arch.X86_64,
-            testArgs = "-NuGet nuget",
             afterDownloadSteps = [
                 testMacOsDependencies Platform.MacOS Arch.X86_64
             ]
@@ -292,7 +288,6 @@ let workflows = [
             image = windows2022,
             platform = Platform.Windows,
             arch = Arch.X86_64,
-            testArgs = "-NuGet nuget",
             afterDownloadSteps = [
                 step(name = "Cache downloads for Windows", uses = "actions/cache@v4", options = Map.ofList [
                     "path", "build/downloads"
@@ -352,10 +347,9 @@ let workflows = [
             packPackageFor Platform.MacOS Arch.X86_64
             packPackageFor Platform.Windows Arch.X86_64
 
-            pwsh "Install dependencies" "./linux/install.ps1 -ForPack"
             pwsh
                 "Prepare NuGet source"
-                "common/New-NuGetSource.ps1 -UseMono -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe"
+                "common/New-NuGetSource.ps1"
             pwsh
                 "Pack NuGet package: main"
                 "dotnet pack tdlib.native.proj -p:Version=${{ steps.version.outputs.version }} --output build"

@@ -187,7 +187,7 @@ jobs:
         path: ${{ env.NUGET_PACKAGES }}
     - name: Test
       shell: pwsh
-      run: ./common/test.ps1 -PackageName tdlib.native.linux-x64 -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe -UseMono
+      run: ./common/test.ps1 -PackageName tdlib.native.linux-x64
   test-macos-aarch64:
     needs:
     - build-macos-aarch64
@@ -224,7 +224,7 @@ jobs:
         path: ${{ env.NUGET_PACKAGES }}
     - name: Test
       shell: pwsh
-      run: ./common/test.ps1 -PackageName tdlib.native.osx-arm64 -NuGet nuget
+      run: ./common/test.ps1 -PackageName tdlib.native.osx-arm64
   test-macos-x86-64:
     needs:
     - build-macos-x86-64
@@ -261,7 +261,7 @@ jobs:
         path: ${{ env.NUGET_PACKAGES }}
     - name: Test
       shell: pwsh
-      run: ./common/test.ps1 -PackageName tdlib.native.osx-x64 -NuGet nuget
+      run: ./common/test.ps1 -PackageName tdlib.native.osx-x64
   test-windows-x86-64:
     needs:
     - build-windows-x86-64
@@ -306,7 +306,7 @@ jobs:
         path: ${{ env.NUGET_PACKAGES }}
     - name: Test
       shell: pwsh
-      run: ./common/test.ps1 -PackageName tdlib.native.win-x64 -NuGet nuget
+      run: ./common/test.ps1 -PackageName tdlib.native.win-x64
   release:
     needs:
     - build-ubuntu-22-04-x86-64
@@ -379,12 +379,9 @@ jobs:
     - name: 'Pack NuGet package: windows.x86-64'
       shell: pwsh
       run: dotnet pack tdlib.native.win-x64.proj -p:Version=${{ steps.version.outputs.version }} --output build
-    - name: Install dependencies
-      shell: pwsh
-      run: ./linux/install.ps1 -ForPack
     - name: Prepare NuGet source
       shell: pwsh
-      run: common/New-NuGetSource.ps1 -UseMono -NuGet $env:GITHUB_WORKSPACE/tools/nuget.exe
+      run: common/New-NuGetSource.ps1
     - name: 'Pack NuGet package: main'
       shell: pwsh
       run: dotnet pack tdlib.native.proj -p:Version=${{ steps.version.outputs.version }} --output build
