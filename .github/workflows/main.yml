@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: Generate cache key
@@ -70,7 +70,7 @@ jobs:
     runs-on: macos-14
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: Generate cache key
@@ -102,7 +102,7 @@ jobs:
     runs-on: macos-15-intel
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: Generate cache key
@@ -134,7 +134,7 @@ jobs:
     runs-on: windows-2022
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: Generate cache key
@@ -170,7 +170,7 @@ jobs:
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: Install
@@ -210,7 +210,7 @@ jobs:
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: 'Download artifact: macos.aarch64'
@@ -247,7 +247,7 @@ jobs:
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: 'Download artifact: macos.x86-64'
@@ -284,7 +284,7 @@ jobs:
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
     - name: 'Download artifact: windows.x86-64'
