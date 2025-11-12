@@ -19,13 +19,8 @@ Set-StrictMode -Version Latest
 New-Item -Type Directory $PackageSource -ErrorAction Ignore
 $package = Get-Item $BuildRoot/*.nupkg
 
-Write-Output "Adding a package $package into NuGet source $PackageSource"
-if ($UseMono) {
-    & $Mono $NuGet add $package -Source $PackageSource
-} else {
-    & $NuGet add $package -Source $PackageSource
-}
-if (!$?) { throw 'Cannot add a NuGet package into source' }
+Write-Output "Copying the package $package into NuGet source $PackageSource"
+Copy-Item $package $PackageSource
 
 Push-Location "$TdSharpRoot/$TdSharpTestProjectName"
 try {
