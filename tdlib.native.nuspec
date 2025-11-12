@@ -22,6 +22,6 @@
     <files>
         <file src="README.md" />
         <file src="CHANGELOG.md" />
-        <file src="LICENSE_1_0.txt" />
+        <file src="LICENSE.txt" />
     </files>
 </package>
