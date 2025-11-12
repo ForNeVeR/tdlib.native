@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2018-2025 tdlib.native contributors <https://github.com/ForNeVeR/tdlib.native>
+#
+# SPDX-License-Identifier: BSL-1.0
+
 param (
     [string] $td = "$PSScriptRoot/../td",
     [string] $InstallPrefix = "$PSScriptRoot/../build/install",
