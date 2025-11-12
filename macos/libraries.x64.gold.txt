@@ -1,0 +1,6 @@
+libtdjson.dylib
+  /usr/lib/libc++.1.dylib
+  /usr/lib/libSystem.B.dylib
+  /usr/lib/libz.1.dylib
+  /usr/local/opt/openssl@3/lib/libcrypto.3.dylib
+  /usr/local/opt/openssl@3/lib/libssl.3.dylib
