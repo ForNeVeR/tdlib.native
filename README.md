@@ -57,7 +57,7 @@ Documentation
 [cpp.redist]: https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160
 [docs.changelog]: ./CHANGELOG.md
 [docs.contributing]: ./CONTRIBUTING.md
-[docs.license]: ./LICENSE_1_0.txt
+[docs.license]: ./LICENSE.txt
 [docs.maintainership]: ./MAINTAINERSHIP.md
 [nuget.tdlib.native.linux-x64]: https://www.nuget.org/packages/tdlib.native.linux-x64/
 [nuget.tdlib.native.osx-arm64]: https://www.nuget.org/packages/tdlib.native.osx-arm64/
