@@ -10,6 +10,7 @@ open type Generaptor.Library.Patterns
 
 let mainBranch = "master"
 
+let macOs13 = "macos-13"
 let macOs14 = "macos-14"
 let ubuntu22_04 = "ubuntu-22.04"
 let ubuntuLatest = "ubuntu-latest"
@@ -200,6 +201,14 @@ let workflows = [
         )
 
         Workflows.BuildJob(
+            image = macOs13,
+            platform = Platform.MacOS,
+            arch = Arch.X86_64,
+            installScript = "./macos/install.ps1",
+            artifactFileName = "libtdjson.dylib"
+        )
+
+        Workflows.BuildJob(
             image = windows2022,
             platform = Platform.Windows,
             arch = Arch.X86_64,
@@ -236,6 +245,7 @@ let workflows = [
         let testMacOsDependencies platform arch =
             pwsh "Verify library dependencies" (
                 "./macos/Test-Dependencies.ps1" +
+                $" -DotNetArch {Names.archToDotNet arch}" +
                 $" -PackageName {Names.package platform arch}"
             )
 
@@ -246,6 +256,16 @@ let workflows = [
             testArgs = "-NuGet nuget",
             afterDownloadSteps = [
                 testMacOsDependencies Platform.MacOS Arch.AArch64
+            ]
+        )
+
+        Workflows.TestJob(
+            image = macOs13,
+            platform = Platform.MacOS,
+            arch = Arch.X86_64,
+            testArgs = "-NuGet nuget",
+            afterDownloadSteps = [
+                testMacOsDependencies Platform.MacOS Arch.X86_64
             ]
         )
 
@@ -269,6 +289,7 @@ let workflows = [
             yield! [
                 Names.buildJob Platform.Ubuntu22_04 Arch.X86_64
                 Names.buildJob Platform.MacOS Arch.AArch64
+                Names.buildJob Platform.MacOS Arch.X86_64
                 Names.buildJob Platform.Windows Arch.X86_64
             ] |> Seq.map needs
 
@@ -277,6 +298,7 @@ let workflows = [
 
             yield! downloadAndRepackArtifact Platform.Ubuntu22_04 Arch.X86_64
             yield! downloadAndRepackArtifact Platform.MacOS Arch.AArch64
+            yield! downloadAndRepackArtifact Platform.MacOS Arch.X86_64
             yield! downloadAndRepackArtifact Platform.Windows Arch.X86_64
 
             setUpDotNetSdk
@@ -308,6 +330,7 @@ let workflows = [
 
             packPackageFor Platform.Ubuntu22_04 Arch.X86_64
             packPackageFor Platform.MacOS Arch.AArch64
+            packPackageFor Platform.MacOS Arch.X86_64
             packPackageFor Platform.Windows Arch.X86_64
 
             pwsh "Install dependencies" "./linux/install.ps1 -ForPack"
@@ -355,6 +378,7 @@ let workflows = [
 
                 uploadArchive Platform.Ubuntu22_04 Arch.X86_64
                 uploadArchive Platform.MacOS Arch.AArch64
+                uploadArchive Platform.MacOS Arch.X86_64
                 uploadArchive Platform.Windows Arch.X86_64
 
                 let uploadPackage fileName =
@@ -379,6 +403,7 @@ let workflows = [
 
                 uploadPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
                 uploadPlatformPackage Platform.MacOS Arch.AArch64
+                uploadPlatformPackage Platform.MacOS Arch.X86_64
                 uploadPlatformPackage Platform.Windows Arch.X86_64
                 uploadPackage "tdlib.native.${{ steps.version.outputs.version }}.nupkg"
             ]
@@ -399,6 +424,7 @@ let workflows = [
 
             pushPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
             pushPlatformPackage Platform.MacOS Arch.AArch64
+            pushPlatformPackage Platform.MacOS Arch.X86_64
             pushPlatformPackage Platform.Windows Arch.X86_64
             pushPackage "tdlib.native.${{ steps.version.outputs.version }}.nupkg"
         ]

@@ -3,6 +3,7 @@ tdlib.native
 
 This is a project to pack [TDLib][tdlib] (the Telegram Database library) binaries built for several platforms:
 
+- [MacOS 13][spec.macos-13] (x86-64) _(GitHub Actions image: `macos-13`)_
 - [MacOS 14][spec.macos-14] (AArch64) _(GitHub Actions image: `macos-14`)_
 - [Ubuntu 22.04][spec.ubuntu-22.04] (x86-64) _(GitHub Actions image: `ubuntu-22.04`)_
 - [Windows Server 2022][spec.windows] (x86-64) _(GitHub Actions image: `windows-2022`)_
@@ -19,6 +20,7 @@ Getting Started
   | Linux x86-64 (Ubuntu 22.04) | [![NuGet][badge.tdlib.native.linux-x64]][nuget.tdlib.native.linux-x64]               |
   | Windows x86-64              | [![NuGet][badge.tdlib.native.win-x64]][nuget.tdlib.native.win-x64]                   |
   | macOS AArch64               | [![NuGet][badge.tdlib.native.osx-arm64]][nuget.tdlib.native.osx-arm64]               |
+  | macOS x86-64                | [![NuGet][badge.tdlib.native.osx-x64]][nuget.tdlib.native.osx-x64]                   |
   | **All**                     | [![NuGet][badge.tdlib.native]][nuget.tdlib.native]                                   |
 
   The **tdlib.native** package depends on the latest versions of each platform, so the resulting application will work on any supported platform.
@@ -59,10 +61,12 @@ Documentation
 [docs.maintainership]: ./MAINTAINERSHIP.md
 [nuget.tdlib.native.linux-x64]: https://www.nuget.org/packages/tdlib.native.linux-x64/
 [nuget.tdlib.native.osx-arm64]: https://www.nuget.org/packages/tdlib.native.osx-arm64/
+[nuget.tdlib.native.osx-x64]: https://www.nuget.org/packages/tdlib.native.osx-x64/
 [nuget.tdlib.native.win-x64]: https://www.nuget.org/packages/tdlib.native.win-x64/
 [nuget.tdlib.native]: https://www.nuget.org/packages/tdlib.native/
 [releases]: https://github.com/ForNeVeR/tdlib.native/releases
 [spec.ubuntu-22.04]: https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md
+[spec.macos-13]: https://github.com/actions/runner-images/blob/main/images/macos/macos-13-Readme.md
 [spec.macos-14]: https://github.com/actions/runner-images/blob/main/images/macos/macos-14-Readme.md
 [spec.windows]: https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
 [tdlib]: https://github.com/tdlib/td
