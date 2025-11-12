@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2018-2025 Friedrich von Never <friedrich@fornever.me>
+#
+# SPDX-License-Identifier: BSL-1.0
+
 param (
     [string] $td = "$PSScriptRoot/../td",
     [string] $CheckUpToDateScript = "$PSScriptRoot/../common/Test-UpToDate.ps1",

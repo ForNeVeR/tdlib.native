@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021-2025 Friedrich von Never <friedrich@fornever.me>
+#
+# SPDX-License-Identifier: BSL-1.0
+
 param (
     [string] $BuildRoot = "$PSScriptRoot/../td/build",
     [string] $BinLocation = "$BuildRoot/Release",
