@@ -7,9 +7,6 @@ param (
     [Parameter(Mandatory = $true)]
     [string] $PackageName,
 
-    [string] $NuGet = 'NuGet.exe',
-    [switch] $UseMono,
-    [string] $Mono = 'mono',
     [string] $dotnet = 'dotnet'
 )
 
