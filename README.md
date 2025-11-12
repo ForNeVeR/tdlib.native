@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2018-2025 Friedrich von Never <friedrich@fornever.me>
+
+SPDX-License-Identifier: BSL-1.0
+-->
+
 tdlib.native
 ============
 
@@ -45,9 +51,14 @@ Documentation
 -------------
 
 - [Changelog][docs.changelog]
-- [License][docs.license]
 - [Contributing][docs.contributing]
 - [Maintainership][docs.maintainership]
+
+License
+-------
+The project is distributed under the terms of [the BSL-1.0 license][docs.license], the same as TDLib itself.
+
+The license indication in the project's sources is compliant with the [REUSE specification v3.3][reuse.spec]. Note this statement doesn't affect TDLib itself: TDLib and related projects don't have to follow this specification.
 
 [badge.tdlib.native.linux-x64]: https://img.shields.io/nuget/v/tdlib.native.linux-x64?label=tdlib.native.linux-x64
 [badge.tdlib.native.osx-arm64]: https://img.shields.io/nuget/v/tdlib.native.osx-arm64?label=tdlib.native.osx-arm64
@@ -65,6 +76,8 @@ Documentation
 [nuget.tdlib.native.win-x64]: https://www.nuget.org/packages/tdlib.native.win-x64/
 [nuget.tdlib.native]: https://www.nuget.org/packages/tdlib.native/
 [releases]: https://github.com/ForNeVeR/tdlib.native/releases
+[reuse.spec]: https://reuse.software/spec-3.3/
+[reuse]: https://reuse.software/
 [spec.macos-14]: https://github.com/actions/runner-images/blob/main/images/macos/macos-14-Readme.md
 [spec.macos-15]: https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md
 [spec.ubuntu-22.04]: https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md
