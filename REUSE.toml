@@ -1,0 +1,10 @@
+version = 1
+SPDX-PackageName = "tdlib.native"
+SPDX-PackageSupplier = "tdlib.native contributors <https://github.com/ForNeVeR/tdlib.native>"
+SPDX-PackageDownloadLocation = "https://github.com/ForNeVeR/tdlib.native"
+
+[[annotations]]
+path = ".idea/**/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021-2025 Friedrich von Never <friedrich@fornever.me>"
+SPDX-License-Identifier = "BSL-1.0"

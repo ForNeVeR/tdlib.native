@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2019-2025 tdlib.native contributors <https://github.com/ForNeVeR/tdlib.native>
+#
+# SPDX-License-Identifier: BSL-1.0
+
 param (
     [string] $BuildRoot = "$PSScriptRoot/../build",
     [string] $PackageSource = "$BuildRoot/../build/nuget/",

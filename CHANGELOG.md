@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2022-2025 tdlib.native contributors <https://github.com/ForNeVeR/tdlib.native>
+
+SPDX-License-Identifier: BSL-1.0
+-->
+
 Changelog
 =========
 
