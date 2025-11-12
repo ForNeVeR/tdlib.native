@@ -1,3 +1,10 @@
+let licenseHeader = """
+# SPDX-FileCopyrightText: 2018-2025 tdlib.native contributors <https://github.com/ForNeVeR/tdlib.native>
+#
+# SPDX-License-Identifier: BSL-1.0
+
+# This file is auto-generated.""".Trim()
+
 #r "nuget: Generaptor.Library, 1.9.0"
 
 open System
@@ -180,6 +187,7 @@ type Workflows =
 
 let workflows = [
     workflow "main" [
+        header licenseHeader
         name "Main"
         onPushTo mainBranch
         onPushTags "v*"
@@ -444,8 +452,15 @@ let workflows = [
 
         job "verify-encoding" [
             runsOn ubuntuLatest
-            checkout
-            pwsh "Verify encoding" "./common/verify-encoding.ps1"
+            step(
+                name = "Check out the sources",
+                usesSpec = Auto "actions/checkout"
+            )
+            step(
+                name = "Verify encoding",
+                shell = "pwsh",
+                run = "Install-Module VerifyEncoding -Repository PSGallery -RequiredVersion 2.2.1 -Force && Test-Encoding"
+            )
         ]
     ]
 ]
