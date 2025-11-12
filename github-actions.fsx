@@ -10,8 +10,8 @@ open type Generaptor.Library.Patterns
 
 let mainBranch = "master"
 
-let macOs13 = "macos-13"
 let macOs14 = "macos-14"
+let macOs15 = "macos-15-intel"
 let ubuntu22_04 = "ubuntu-22.04"
 let ubuntuLatest = "ubuntu-latest"
 let windows2022 = "windows-2022"
@@ -201,7 +201,7 @@ let workflows = [
         )
 
         Workflows.BuildJob(
-            image = macOs13,
+            image = macOs15,
             platform = Platform.MacOS,
             arch = Arch.X86_64,
             installScript = "./macos/install.ps1",
@@ -260,7 +260,7 @@ let workflows = [
         )
 
         Workflows.TestJob(
-            image = macOs13,
+            image = macOs15,
             platform = Platform.MacOS,
             arch = Arch.X86_64,
             testArgs = "-NuGet nuget",

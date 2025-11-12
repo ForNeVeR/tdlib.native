@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - **(Breaking change!)** The package for Ubuntu 20.04 (OpenSSL v1.1) is no longer maintained nor updated (because [the corresponding GitHub runner is no longer available](https://github.com/actions/runner-images/issues/11101)).
 
+### Changed
+- x86-64 builds for macOS are now built against macOS 15, not macOS 13.
+
 ## [1.8.45] - 2025-02-14
 ### Changed
 - We switched the builds for x86-64 macOS to macOS 13 image (from macOS 11).
