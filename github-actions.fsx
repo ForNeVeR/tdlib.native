@@ -195,6 +195,18 @@ let workflows = [
         onSchedule(day = DayOfWeek.Monday)
         onWorkflowDispatch
 
+        job "licenses" [
+            runsOn ubuntuLatest
+            step(
+                name = "Check out the sources",
+                usesSpec = Auto "actions/checkout"
+            )
+            step(
+                name = "REUSE license check",
+                usesSpec = Auto "fsfe/reuse-action"
+            )
+        ]
+
         job "verify-workflows" [
             runsOn ubuntuLatest
             yield! dotNetEnv |> Seq.map(fun (x, y) -> setEnv x y)

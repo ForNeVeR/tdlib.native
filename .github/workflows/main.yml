@@ -17,6 +17,13 @@ on:
   - cron: 0 0 * * 1
   workflow_dispatch: 
 jobs:
+  licenses:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the sources
+      uses: actions/checkout@v5
+    - name: REUSE license check
+      uses: fsfe/reuse-action@v6
   verify-workflows:
     runs-on: ubuntu-latest
     env:
