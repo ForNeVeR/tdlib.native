@@ -3,12 +3,12 @@ tdlib.native
 
 This is a project to pack [TDLib][tdlib] (the Telegram Database library) binaries built for several platforms:
 
-- [MacOS 13][spec.macos-13] (x86-64) _(GitHub Actions image: `macos-13`)_
-- [MacOS 14][spec.macos-14] (AArch64) _(GitHub Actions image: `macos-14`)_
+- [macOS 14][spec.macos-14] (AArch64) _(GitHub Actions image: `macos-14`)_
+- [macOS 15][spec.macos-15] (x86-64) _(GitHub Actions image: `macos-15`)_
 - [Ubuntu 22.04][spec.ubuntu-22.04] (x86-64) _(GitHub Actions image: `ubuntu-22.04`)_
 - [Windows Server 2022][spec.windows] (x86-64) _(GitHub Actions image: `windows-2022`)_
 
-We aim to create a transparent process with no manual intervention, where every artifact is produced in a clean CI environment, and uploaded automatically.
+We aim to create a transparent process with no manual intervention, where every artifact is produced in a clean CI environment and uploaded automatically.
 
 Getting Started
 ---------------
@@ -65,9 +65,9 @@ Documentation
 [nuget.tdlib.native.win-x64]: https://www.nuget.org/packages/tdlib.native.win-x64/
 [nuget.tdlib.native]: https://www.nuget.org/packages/tdlib.native/
 [releases]: https://github.com/ForNeVeR/tdlib.native/releases
-[spec.ubuntu-22.04]: https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md
-[spec.macos-13]: https://github.com/actions/runner-images/blob/main/images/macos/macos-13-Readme.md
 [spec.macos-14]: https://github.com/actions/runner-images/blob/main/images/macos/macos-14-Readme.md
+[spec.macos-15]: https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md
+[spec.ubuntu-22.04]: https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md
 [spec.windows]: https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
 [tdlib]: https://github.com/tdlib/td
 [tdsharp]: https://github.com/egramtel/tdsharp
