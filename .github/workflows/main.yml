@@ -194,8 +194,8 @@ jobs:
     - name: NuGet cache
       uses: actions/cache@v4
       with:
-        key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
-        path: ${{ env.NUGET_PACKAGES }}
+        key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
+        path: ${{ github.workspace }}/.github/nuget-packages
     - name: Test
       shell: pwsh
       run: ./common/test.ps1 -PackageName tdlib.native.linux-x64
@@ -231,8 +231,8 @@ jobs:
     - name: NuGet cache
       uses: actions/cache@v4
       with:
-        key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
-        path: ${{ env.NUGET_PACKAGES }}
+        key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
+        path: ${{ github.workspace }}/.github/nuget-packages
     - name: Test
       shell: pwsh
       run: ./common/test.ps1 -PackageName tdlib.native.osx-arm64
@@ -268,8 +268,8 @@ jobs:
     - name: NuGet cache
       uses: actions/cache@v4
       with:
-        key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
-        path: ${{ env.NUGET_PACKAGES }}
+        key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
+        path: ${{ github.workspace }}/.github/nuget-packages
     - name: Test
       shell: pwsh
       run: ./common/test.ps1 -PackageName tdlib.native.osx-x64
@@ -313,8 +313,8 @@ jobs:
     - name: NuGet cache
       uses: actions/cache@v4
       with:
-        key: ${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}
-        path: ${{ env.NUGET_PACKAGES }}
+        key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
+        path: ${{ github.workspace }}/.github/nuget-packages
     - name: Test
       shell: pwsh
       run: ./common/test.ps1 -PackageName tdlib.native.win-x64

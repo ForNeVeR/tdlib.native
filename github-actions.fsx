@@ -102,11 +102,21 @@ let setUpDotNetSdk = step(
     ]
 )
 
+let nuGetPackagePath = "${{ github.workspace }}/.github/nuget-packages"
 let dotNetEnv = [
     "DOTNET_NOLOGO", "1"
     "DOTNET_CLI_TELEMETRY_OPTOUT", "1"
-    "NUGET_PACKAGES", "${{ github.workspace }}/.github/nuget-packages"
+    "NUGET_PACKAGES", nuGetPackagePath
 ]
+
+let nuGetCache = step(
+    name = "NuGet cache",
+    usesSpec = Auto "actions/cache",
+    options = Map.ofList [
+        "path", nuGetPackagePath
+        "key", "${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}"
+    ]
+)
 
 let testEnv =
     [
@@ -190,10 +200,7 @@ type Workflows =
             $"dotnet pack {Names.package platform arch}.proj" +
             " -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build"
         )
-        step(name = "NuGet cache", usesSpec = Auto "actions/cache", options = Map.ofList [
-            "path", "${{ env.NUGET_PACKAGES }}"
-            "key", "${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}"
-        ])
+        nuGetCache
         pwsh "Test" $"./common/test.ps1 -PackageName {Names.package platform arch}"
     ]
 
@@ -484,6 +491,51 @@ let workflows = [
                 name = "Verify encoding",
                 shell = "pwsh",
                 run = "Install-Module VerifyEncoding -Repository PSGallery -RequiredVersion 2.2.1 -Force && Test-Encoding"
+            )
+        ]
+    ]
+
+    workflow "maintenance" [
+        header licenseHeader
+        name "Maintenance"
+        onPushTo mainBranch
+        onPullRequestTo mainBranch
+        onSchedule(cron = "0 0 * * *")
+        onWorkflowDispatch
+
+        job "update-tdlib" [
+            jobPermission(PermissionKind.Contents, AccessKind.Write)
+            jobPermission(PermissionKind.PullRequests, AccessKind.Write)
+
+            runsOn ubuntuLatest
+
+            yield! dotNetEnv |> Seq.map(fun (x, y) -> setEnv x y)
+
+            checkoutWithSubmodules
+            nuGetCache
+            setUpDotNetSdk
+
+            step(
+                id = "update-tdlib",
+                name = "Update TDLib",
+                shell = "pwsh",
+                run = "dotnet fsi ./update-tdlib.fsx",
+                env = Map.ofList [
+                    "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
+                ]
+            )
+
+            step(
+                condition = "(github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.update-tdlib.outputs.has-changes == 'true'",
+                name = "Create a pull request",
+                usesSpec = Auto "peter-evans/create-pull-request",
+                options = Map.ofList [
+                    "author", "TDLib automation <friedrich@fornever.me>"
+                    "body", "${{ steps.update-tdlib.outputs.body }}"
+                    "branch", "${{ steps.update-tdlib.outputs.branch-name }}"
+                    "commit-message", "${{ steps.update-tdlib.outputs.commit-message }}"
+                    "title", "${{ steps.update-tdlib.outputs.title }}"
+                ]
             )
         ]
     ]

@@ -4,7 +4,10 @@ SPDX-PackageSupplier = "tdlib.native contributors <https://github.com/ForNeVeR/t
 SPDX-PackageDownloadLocation = "https://github.com/ForNeVeR/tdlib.native"
 
 [[annotations]]
-path = ".idea/**/**"
+path = [
+    ".idea/**/**",
+    "Folder.DotSettings"
+]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2021-2025 Friedrich von Never <friedrich@fornever.me>"
 SPDX-License-Identifier = "BSL-1.0"

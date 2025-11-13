@@ -10,20 +10,26 @@ tdlib.native Maintainership
 Publish a New Version
 ---------------------
 
-1. Choose a new version. To avoid confusion, all the packages should follow the versioning of the upstream Telegram library, and should have the same version among them. Increment the fourth version number is a re-packaging of the same TDLib is performed.
-2. Update the Git submodule containing the TDLib sources, if this is a release with the new TDLib version.
-3. Optionally, also update the submodule containing the tdsharp sources.
-4. Prepare a corresponding entry in the `CHANGELOG.md`.
-5. Update the license, if required.
+1. Choose a new version. To avoid confusion, all the packages should follow the versioning of the upstream Telegram library and should have the same version among them. Increment the fourth version number if re-packaging of the same TDLib is performed.
+2. Optionally, also update the submodule containing the tdsharp sources.
+3. Prepare a corresponding entry in the `CHANGELOG.md`.
+4. Update the license, if required.
 
-   Note that Windows package bundles dependencies, so their licenses have to be checked as well.
-6. Update the copyright information in the `Copyright` element of the `Directory.Build.props` file.
-7. Update the `PACKAGE_VERSION_BASE` to the new library version in the `github-actions.fsx`.
-8. Regenerate the GitHub Actions workflow by running `dotnet fsi github-actions.fsx`.
-9. Create a pull request, verify that the tests are okay. Merge it afterward.
-10. Make sure the NuGet key you use for publishing is still active. If not, then rotate the key as explained in the corresponding section of this document.
-11. Push a version tag (`v1.x.x`) to this repository. CI servers will do their job and upload the artifacts to the [Releases][releases] page.
-12. If the release is not synchronized with a corresponding release of [tdsharp][], then it's recommended to [unlist][docs.unlist] it until the corresponding release of tdsharp is available. This will help the users to do a coordinated update and not update only a part of the libraries.
+   Note that the Windows package bundles its dependencies, so their licenses have to be checked as well.
+5. Update the copyright information in the `Copyright` element of the `Directory.Build.props` file.
+6. Create a pull request, verify that the tests are okay. Merge it afterward.
+7. Make sure the NuGet key you use for publishing is still active. If not, then rotate the key as explained in the corresponding section of this document.
+8. Push a version tag (`v1.x.x`) to this repository. CI servers will do their job and upload the artifacts to the [Releases][releases] page.
+9. If the release is not synchronized with a corresponding release of [tdsharp][], then it's recommended to [unlist][docs.unlist] it until the corresponding release of tdsharp is available. This will help the users to do a coordinated update and not update only a part of the libraries.
+
+Update TDLib
+------------
+Note that there's a script `update-tdlib.fsx` that follows these steps automatically.
+
+1. Update the Git submodule containing the TDLib sources.
+2. Prepare a corresponding entry in the `CHANGELOG.md`.
+3. Update the `PACKAGE_VERSION_BASE` to the new library version in the `github-actions.fsx`.
+4. Regenerate the GitHub Actions workflow by running `dotnet fsi github-actions.fsx`.
 
 Rotate Keys
 -----------

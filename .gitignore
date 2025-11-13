@@ -9,3 +9,6 @@ bin/
 obj/
 
 *.temp.txt
+
+# NuGet package cache used on CI:
+/.github/nuget-packages/
