@@ -511,7 +511,10 @@ let workflows = [
 
             yield! dotNetEnv |> Seq.map(fun (x, y) -> setEnv x y)
 
-            checkoutWithSubmodules
+            step(
+                name = "Check out the sources",
+                usesSpec = Auto "actions/checkout"
+            )
             nuGetCache
             setUpDotNetSdk
 
