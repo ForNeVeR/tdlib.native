@@ -2,13 +2,16 @@
 #
 # SPDX-License-Identifier: BSL-1.0
 
-/.idea/
 /build/
 
 bin/
 obj/
 
 *.temp.txt
+
+# Rider stuff:
+/.idea/
+*.user
 
 # NuGet package cache used on CI:
 /.github/nuget-packages/
