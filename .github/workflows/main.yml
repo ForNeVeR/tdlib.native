@@ -26,7 +26,7 @@ jobs:
   build-ubuntu-22-04-x86-64:
     runs-on: ubuntu-22.04
     steps:
-    - name: Checkout
+    - name: Check out the sources
       uses: actions/checkout@v5
       with:
         submodules: true
@@ -58,7 +58,7 @@ jobs:
   build-macos-aarch64:
     runs-on: macos-14
     steps:
-    - name: Checkout
+    - name: Check out the sources
       uses: actions/checkout@v5
       with:
         submodules: true
@@ -90,7 +90,7 @@ jobs:
   build-macos-x86-64:
     runs-on: macos-15-intel
     steps:
-    - name: Checkout
+    - name: Check out the sources
       uses: actions/checkout@v5
       with:
         submodules: true
@@ -122,7 +122,7 @@ jobs:
   build-windows-x86-64:
     runs-on: windows-2022
     steps:
-    - name: Checkout
+    - name: Check out the sources
       uses: actions/checkout@v5
       with:
         submodules: true
@@ -158,7 +158,7 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
-    - name: Checkout
+    - name: Check out the sources
       uses: actions/checkout@v5
       with:
         submodules: true
@@ -174,7 +174,7 @@ jobs:
       shell: pwsh
       run: ./linux/Test-Dependencies.ps1 -Platform ubuntu-22.04 -PackageName tdlib.native.linux-x64
     - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 7.0.x
     - name: Pack NuGet
@@ -198,7 +198,7 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
-    - name: Checkout
+    - name: Check out the sources
       uses: actions/checkout@v5
       with:
         submodules: true
@@ -211,7 +211,7 @@ jobs:
       shell: pwsh
       run: ./macos/Test-Dependencies.ps1 -DotNetArch arm64 -PackageName tdlib.native.osx-arm64
     - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 7.0.x
     - name: Pack NuGet
@@ -235,7 +235,7 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
-    - name: Checkout
+    - name: Check out the sources
       uses: actions/checkout@v5
       with:
         submodules: true
@@ -248,7 +248,7 @@ jobs:
       shell: pwsh
       run: ./macos/Test-Dependencies.ps1 -DotNetArch x64 -PackageName tdlib.native.osx-x64
     - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 7.0.x
     - name: Pack NuGet
@@ -272,7 +272,7 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
       PACKAGE_VERSION_BASE: 1.8.45
     steps:
-    - name: Checkout
+    - name: Check out the sources
       uses: actions/checkout@v5
       with:
         submodules: true
@@ -293,7 +293,7 @@ jobs:
       shell: pwsh
       run: ./windows/Test-Dependencies.ps1
     - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 7.0.x
     - name: Pack NuGet
@@ -354,7 +354,7 @@ jobs:
       shell: pwsh
       run: Set-Location build/tdlib.native.win-x64/runtimes/win-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.native.windows.x86-64.zip *
     - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 7.0.x
     - id: version

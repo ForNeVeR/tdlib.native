@@ -29,9 +29,13 @@ let pwshWithResult name script producedFiles = [
         )
 ]
 
-let checkoutWithSubmodules = step(name = "Checkout", uses = "actions/checkout@v4", options = Map.ofList [
-    "submodules", "true"
-])
+let checkoutWithSubmodules = step(
+    name = "Check out the sources",
+    usesSpec = Auto "actions/checkout",
+    options = Map.ofList [
+        "submodules", "true"
+    ]
+)
 
 module Platform =
     let [<Literal>] Ubuntu22_04 = "ubuntu-22.04"
@@ -76,16 +80,20 @@ let prepareArtifacts platform resultFileName =
 let downloadArtifact platform arch =
     step(
         name = $"Download artifact: {platform}.{arch}",
-        uses = "actions/download-artifact@v4",
+        usesSpec = Auto "actions/download-artifact",
         options = Map.ofList [
             "name", Names.ciArtifact platform arch
             "path", Names.packageInputDirectory platform arch
         ]
     )
 
-let setUpDotNetSdk = step(name = "Set up .NET SDK", uses = "actions/setup-dotnet@v4", options = Map.ofList [
-    "dotnet-version", "7.0.x"
-])
+let setUpDotNetSdk = step(
+    name = "Set up .NET SDK",
+    usesSpec = Auto "actions/setup-dotnet",
+    options = Map.ofList [
+        "dotnet-version", "7.0.x"
+    ]
+)
 
 let dotNetEnv = [
     "DOTNET_NOLOGO", "1"
@@ -110,7 +118,7 @@ type Workflows =
         pwsh "Generate cache key" "./common/Test-UpToDate.ps1 -GenerateCacheKey"
         step(
              name = "Cache artifacts",
-             uses = "actions/cache@v4",
+             usesSpec = Auto "actions/cache",
              options = Map.ofList [
                 "path", "artifacts"
                 "key", $"{platform}.{arch}." + "${{ hashFiles('.github/cache-key.json') }}"
@@ -124,10 +132,14 @@ type Workflows =
             ]
         )
         yield! prepareArtifacts platform $"artifacts/{artifactFileName}"
-        step(name = "Upload build result", uses = "actions/upload-artifact@v4", options = Map.ofList [
-            "name", Names.ciArtifact platform arch
-            "path", "artifacts/*"
-        ])
+        step(
+            name = "Upload build result",
+            usesSpec = Auto "actions/upload-artifact",
+            options = Map.ofList [
+                "name", Names.ciArtifact platform arch
+                "path", "artifacts/*"
+            ]
+        )
     ]
 
     static member BuildJob(
@@ -171,7 +183,7 @@ type Workflows =
             $"dotnet pack {Names.package platform arch}.proj" +
             " -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build"
         )
-        step(name = "NuGet cache", uses = "actions/cache@v4", options = Map.ofList [
+        step(name = "NuGet cache", usesSpec = Auto "actions/cache", options = Map.ofList [
             "path", "${{ env.NUGET_PACKAGES }}"
             "key", "${{ runner.os }}.nuget.${{ hashFiles('tdsharp/**/*.csproj') }}"
         ])
@@ -289,7 +301,7 @@ let workflows = [
             platform = Platform.Windows,
             arch = Arch.X86_64,
             afterDownloadSteps = [
-                step(name = "Cache downloads for Windows", uses = "actions/cache@v4", options = Map.ofList [
+                step(name = "Cache downloads for Windows", usesSpec = Auto "actions/cache", options = Map.ofList [
                     "path", "build/downloads"
                     "key", "${{ hashFiles('windows/install.ps1') }}"
                 ])
@@ -326,7 +338,7 @@ let workflows = [
 
             step(
                 name = "Prepare the release notes",
-                uses = "ForNeVeR/ChangelogAutomation.action@v2",
+                usesSpec = Auto "ForNeVeR/ChangelogAutomation.action",
                 options = Map.ofList [
                     "input", "./CHANGELOG.md"
                     "output", "release-notes.md"
@@ -354,7 +366,7 @@ let workflows = [
                 "Pack NuGet package: main"
                 "dotnet pack tdlib.native.proj -p:Version=${{ steps.version.outputs.version }} --output build"
 
-            step(name = "Upload NuGet packages", uses = "actions/upload-artifact@v4", options = Map.ofList [
+            step(name = "Upload NuGet packages", usesSpec = Auto "actions/upload-artifact", options = Map.ofList [
                 "name", "tdlib.nuget"
                 "path", "./build/*.nupkg"
             ])
@@ -363,7 +375,7 @@ let workflows = [
                 step(
                     name = "Create release",
                     id = "release",
-                    uses = "actions/create-release@v1",
+                    usesSpec = Auto "actions/create-release",
                     env = Map.ofList [
                         "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
                     ],
@@ -377,7 +389,7 @@ let workflows = [
                 let uploadArchive platform arch =
                     step(
                         name = $"Upload archive: {platform}.{arch}",
-                        uses = "actions/upload-release-asset@v1",
+                        usesSpec = Auto "actions/upload-release-asset",
                         env = Map.ofList [
                             "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
                         ],
@@ -397,7 +409,7 @@ let workflows = [
                 let uploadPackage fileName =
                     step(
                         name = $"Upload NuGet package: {fileName}",
-                        uses = "actions/upload-release-asset@v1",
+                        usesSpec = Auto "actions/upload-release-asset",
                         env = Map.ofList [
                             "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
                         ],
