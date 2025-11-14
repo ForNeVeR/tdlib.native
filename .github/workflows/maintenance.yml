@@ -39,7 +39,43 @@ jobs:
     - id: update-tdlib
       name: Update TDLib
       shell: pwsh
-      run: dotnet fsi ./update-tdlib.fsx
+      run: dotnet fsi "./update-tdlib.fsx"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.update-tdlib.outputs.has-changes == 'true'
+      name: Create a pull request
+      uses: peter-evans/create-pull-request@v7
+      with:
+        author: TDLib automation <friedrich@fornever.me>
+        body: ${{ steps.update-tdlib.outputs.body }}
+        branch: ${{ steps.update-tdlib.outputs.branch-name }}
+        commit-message: ${{ steps.update-tdlib.outputs.commit-message }}
+        title: ${{ steps.update-tdlib.outputs.title }}
+  update-tdsharp:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
+      NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
+    steps:
+    - name: Check out the sources
+      uses: actions/checkout@v5
+    - name: NuGet cache
+      uses: actions/cache@v4
+      with:
+        key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
+        path: ${{ github.workspace }}/.github/nuget-packages
+    - name: Set up .NET SDK
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: 7.0.x
+    - id: update-tdlib
+      name: Update TDLib
+      shell: pwsh
+      run: dotnet fsi "./update-tdsharp.fsx"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.update-tdlib.outputs.has-changes == 'true'

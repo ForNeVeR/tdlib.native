@@ -505,7 +505,7 @@ let workflows = [
         onSchedule(cron = "0 0 * * *")
         onWorkflowDispatch
 
-        job "update-tdlib" [
+        let updateJob name script = job name [
             jobPermission(PermissionKind.Contents, AccessKind.Write)
             jobPermission(PermissionKind.PullRequests, AccessKind.Write)
 
@@ -524,7 +524,7 @@ let workflows = [
                 id = "update-tdlib",
                 name = "Update TDLib",
                 shell = "pwsh",
-                run = "dotnet fsi ./update-tdlib.fsx",
+                run = $"dotnet fsi \"{script}\"",
                 env = Map.ofList [
                     "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
                 ]
@@ -543,6 +543,9 @@ let workflows = [
                 ]
             )
         ]
+
+        updateJob "update-tdlib" "./update-tdlib.fsx"
+        updateJob "update-tdsharp" "./update-tdsharp.fsx"
     ]
 ]
 
