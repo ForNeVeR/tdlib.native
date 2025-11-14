@@ -105,7 +105,7 @@ let updateGitSubmodule(commitHash: string) =
     printfn "Fetching the Git sources…"
     Command.Run(
         "git",
-        "submodule", "update", "--init", "--remote"
+        "submodule", "update", "--init", "--remote", "--", tdSources.Value
     ).Result |> processCommandResult
     Command.Run(
         "git",
