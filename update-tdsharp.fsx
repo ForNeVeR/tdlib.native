@@ -3,36 +3,58 @@
 // SPDX-License-Identifier: BSL-1.0
 
 #r "nuget: TruePath, 1.10.0"
-#r "nuget: TruePath.SystemIo, 1.10.0"
 #r "nuget: Octokit, 14.0.0"
 #r "nuget: MedallionShell, 1.6.2"
 
 open System
 open System.IO
-open System.Xml.Linq
 open Medallion.Shell
 open Octokit
 open TruePath
-open TruePath.SystemIo
 
 let repoRoot = AbsolutePath __SOURCE_DIRECTORY__
+let tdSharpSources = repoRoot / "tdsharp"
 
-let directoryBuildProps = repoRoot / "Directory.Build.props"
+let readCurrentCommit() =
+    let commandResult =
+        Command.Run(
+            "git",
+            arguments = [| "rev-parse"; "HEAD" |],
+            options = fun opts -> opts.WorkingDirectory tdSharpSources.Value |> ignore
+        ).Result
 
-let readCurrentVersion() =
-    if not <| directoryBuildProps.Exists() then
-        failwithf $"Directory.Build.props not found at expected path: \"{directoryBuildProps.Value}\"."
+    if not commandResult.Success then
+        if commandResult.StandardOutput.Length > 0 then printfn $"%s{commandResult.StandardOutput}"
+        if commandResult.StandardError.Length > 0 then printfn $"Standard error: %s{commandResult.StandardError}"
+        failwithf $"git rev-parse failed with exit code {commandResult.ExitCode}."
 
-    let doc = XDocument.Load directoryBuildProps.Value
-    let versionString =
-        doc.Descendants(XName.Get "VersionPrefix")
-        |> Seq.tryExactlyOne
-        |> Option.map _.Value.Trim()
-        |> Option.map Version.Parse
+    commandResult.StandardOutput.Trim()
 
-    match versionString with
-    | Some v -> v
-    | None -> failwith "Directory.Build.props does not contain a valid <Version> element."
+let processCommandResult(result: CommandResult, assertSuccess: bool) =
+    if result.StandardOutput.Length > 0 then printfn $"%s{result.StandardOutput}"
+    if result.StandardError.Length > 0 then printfn $"Standard error: %s{result.StandardError}"
+    if assertSuccess && not result.Success then failwithf $"Command failed with exit code {result.ExitCode}."
+
+let assertCommandResult result = processCommandResult(result, true)
+
+let isDescendant potentialDescendant potentialAscendant =
+    if potentialDescendant = potentialAscendant then false
+    else
+
+    let commandResult =
+        Command.Run(
+            "git",
+            arguments = [|
+                "merge-base";
+                "--is-ancestor"; potentialAscendant; potentialDescendant
+            |],
+            options = fun opts -> opts.WorkingDirectory tdSharpSources.Value |> ignore
+        ).Result
+    processCommandResult(commandResult, false)
+    match commandResult.ExitCode with
+    | 0 -> true
+    | 1 -> false
+    | o -> failwithf $"git merge-base returned unexpected exit code {o}."
 
 let tagNameToVersion(name: string) =
     if not <| name.StartsWith "v" then failwithf $"Version number is expected to start with 'v', actual: {name}."
@@ -53,31 +75,26 @@ let readLatestVersion() = task {
         |> Seq.maxBy (fun t -> tagNameToVersion t.Name)
 }
 
-let processCommandResult(result: CommandResult) =
-    if result.StandardOutput.Length > 0 then printfn $"%s{result.StandardOutput}"
-    if result.StandardError.Length > 0 then printfn $"Standard error: %s{result.StandardError}"
-    if not result.Success then failwithf $"Command failed with exit code {result.ExitCode}."
-
-let tdSharpSources = repoRoot / "tdsharp"
-let updateGitSubmodule(commitHash: string) =
+let fetchGitSubmodule() =
     printfn "Fetching the Git sources…"
     Command.Run(
         "git",
         "submodule", "update", "--init", "--remote", "--", tdSharpSources.Value
-    ).Result |> processCommandResult
+    ).Result |> assertCommandResult
     Command.Run(
         "git",
         arguments = [| "fetch"; "--all" |],
         options = fun opts -> opts.WorkingDirectory tdSharpSources.Value |> ignore
-    ).Result |> processCommandResult
+    ).Result |> assertCommandResult
     printfn "Git sources fetched."
 
+let updateGitSubmodule(commitHash: string) =
     printfn $"Checking out the Git submodule at commit {commitHash}…"
     Command.Run(
         "git",
         arguments = [| "checkout"; commitHash |],
         options = fun opts -> opts.WorkingDirectory tdSharpSources.Value |> ignore
-    ).Result |> processCommandResult
+    ).Result |> assertCommandResult
     printfn "Git submodule checked out."
 
 let updateTo(tag: RepositoryTag) =
@@ -93,14 +110,16 @@ let updateTo(tag: RepositoryTag) =
         PullRequestTitle = $"tdsharp {version}"
     |}
 
-let currentVersion = readCurrentVersion()
+fetchGitSubmodule()
+
+let currentCommit = readCurrentCommit()
 let latestTag = readLatestVersion().Result
-let latestVersion = tagNameToVersion latestTag.Name
+let latestCommit = latestTag.Commit.Sha
 
 let result =
-    printfn $"Current version: {currentVersion}, latest version: {latestVersion}."
-    if currentVersion < latestVersion then
-        printfn $"Updating to {latestVersion}…"
+    printfn $"Current commit: {currentCommit}, latest commit: {latestCommit}."
+    if isDescendant currentCommit latestCommit then
+        printfn $"Updating to {latestTag.Name} ({latestCommit})…"
         Some <| updateTo latestTag
     else
         printfn "Nothing to do."
