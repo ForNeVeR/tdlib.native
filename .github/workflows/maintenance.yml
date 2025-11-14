@@ -36,7 +36,7 @@ jobs:
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 7.0.x
-    - id: update-tdlib
+    - id: update-dependency
       name: Update TDLib
       shell: pwsh
       run: dotnet fsi "./update-tdlib.fsx"
@@ -46,11 +46,11 @@ jobs:
       name: Create a pull request
       uses: peter-evans/create-pull-request@v7
       with:
-        author: TDLib automation <friedrich@fornever.me>
-        body: ${{ steps.update-tdlib.outputs.body }}
-        branch: ${{ steps.update-tdlib.outputs.branch-name }}
-        commit-message: ${{ steps.update-tdlib.outputs.commit-message }}
-        title: ${{ steps.update-tdlib.outputs.title }}
+        author: tdlib-native automation <friedrich@fornever.me>
+        body: ${{ steps.update-dependency.outputs.body }}
+        branch: ${{ steps.update-dependency.outputs.branch-name }}
+        commit-message: ${{ steps.update-dependency.outputs.commit-message }}
+        title: ${{ steps.update-dependency.outputs.title }}
   update-tdsharp:
     permissions:
       contents: write
@@ -72,8 +72,8 @@ jobs:
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 7.0.x
-    - id: update-tdlib
-      name: Update TDLib
+    - id: update-dependency
+      name: Update tdsharp
       shell: pwsh
       run: dotnet fsi "./update-tdsharp.fsx"
       env:
@@ -82,8 +82,8 @@ jobs:
       name: Create a pull request
       uses: peter-evans/create-pull-request@v7
       with:
-        author: TDLib automation <friedrich@fornever.me>
-        body: ${{ steps.update-tdlib.outputs.body }}
-        branch: ${{ steps.update-tdlib.outputs.branch-name }}
-        commit-message: ${{ steps.update-tdlib.outputs.commit-message }}
-        title: ${{ steps.update-tdlib.outputs.title }}
+        author: tdlib-native automation <friedrich@fornever.me>
+        body: ${{ steps.update-dependency.outputs.body }}
+        branch: ${{ steps.update-dependency.outputs.branch-name }}
+        commit-message: ${{ steps.update-dependency.outputs.commit-message }}
+        title: ${{ steps.update-dependency.outputs.title }}

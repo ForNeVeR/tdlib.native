@@ -505,7 +505,7 @@ let workflows = [
         onSchedule(cron = "0 0 * * *")
         onWorkflowDispatch
 
-        let updateJob name script = job name [
+        let updateJob stepName dependencyName script = job stepName [
             jobPermission(PermissionKind.Contents, AccessKind.Write)
             jobPermission(PermissionKind.PullRequests, AccessKind.Write)
 
@@ -521,8 +521,8 @@ let workflows = [
             setUpDotNetSdk
 
             step(
-                id = "update-tdlib",
-                name = "Update TDLib",
+                id = "update-dependency",
+                name = $"Update {dependencyName}",
                 shell = "pwsh",
                 run = $"dotnet fsi \"{script}\"",
                 env = Map.ofList [
@@ -535,17 +535,17 @@ let workflows = [
                 name = "Create a pull request",
                 usesSpec = Auto "peter-evans/create-pull-request",
                 options = Map.ofList [
-                    "author", "TDLib automation <friedrich@fornever.me>"
-                    "body", "${{ steps.update-tdlib.outputs.body }}"
-                    "branch", "${{ steps.update-tdlib.outputs.branch-name }}"
-                    "commit-message", "${{ steps.update-tdlib.outputs.commit-message }}"
-                    "title", "${{ steps.update-tdlib.outputs.title }}"
+                    "author", "tdlib-native automation <friedrich@fornever.me>"
+                    "body", "${{ steps.update-dependency.outputs.body }}"
+                    "branch", "${{ steps.update-dependency.outputs.branch-name }}"
+                    "commit-message", "${{ steps.update-dependency.outputs.commit-message }}"
+                    "title", "${{ steps.update-dependency.outputs.title }}"
                 ]
             )
         ]
 
-        updateJob "update-tdlib" "./update-tdlib.fsx"
-        updateJob "update-tdsharp" "./update-tdsharp.fsx"
+        updateJob "update-tdlib" "TDLib" "./update-tdlib.fsx"
+        updateJob "update-tdsharp" "tdsharp" "./update-tdsharp.fsx"
     ]
 ]
 
