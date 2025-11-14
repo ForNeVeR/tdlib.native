@@ -10,7 +10,7 @@ param (
     [switch] $GenerateResultKey,
     [string] $CacheKeyFile = "$RepoRoot/.github/cache-key.json",
     [string] $ResultKeyFile = "$ArtifactsDirectory/cache-key.json",
-    [string] $CacheVersion = 'v5'
+    [string] $CacheVersion = 'v6'
 )
 
 $ErrorActionPreference = 'Stop'
