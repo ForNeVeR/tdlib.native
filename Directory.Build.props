@@ -7,7 +7,7 @@ SPDX-License-Identifier: BSL-1.0
 <Project>
     <PropertyGroup Label="Packaging">
         <!-- REUSE-IgnoreStart -->
-        <VersionPrefix>1.8.45</VersionPrefix>
+        <VersionPrefix>1.8.56</VersionPrefix>
         <PackageLicenseExpression>BSL-1.0</PackageLicenseExpression>
         <Copyright>2025 tdlib.native contributors</Copyright>
         <PackageProjectUrl>https://github.com/ForNeVeR/tdlib.native</PackageProjectUrl>
