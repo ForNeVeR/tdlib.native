@@ -167,7 +167,6 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Check out the sources
       uses: actions/checkout@v5
@@ -188,9 +187,13 @@ jobs:
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 7.0.x
+    - id: version
+      name: Read version
+      shell: pwsh
+      run: echo "version=$(common/Get-Version.ps1 -RefName $env:GITHUB_REF)" >> $env:GITHUB_OUTPUT
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack tdlib.native.linux-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build
+      run: dotnet pack tdlib.native.linux-x64.proj -p:Version=${{ steps.version.outputs.version }}-test --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -207,7 +210,6 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Check out the sources
       uses: actions/checkout@v5
@@ -225,9 +227,13 @@ jobs:
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 7.0.x
+    - id: version
+      name: Read version
+      shell: pwsh
+      run: echo "version=$(common/Get-Version.ps1 -RefName $env:GITHUB_REF)" >> $env:GITHUB_OUTPUT
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack tdlib.native.osx-arm64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build
+      run: dotnet pack tdlib.native.osx-arm64.proj -p:Version=${{ steps.version.outputs.version }}-test --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -244,7 +250,6 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Check out the sources
       uses: actions/checkout@v5
@@ -262,9 +267,13 @@ jobs:
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 7.0.x
+    - id: version
+      name: Read version
+      shell: pwsh
+      run: echo "version=$(common/Get-Version.ps1 -RefName $env:GITHUB_REF)" >> $env:GITHUB_OUTPUT
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack tdlib.native.osx-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build
+      run: dotnet pack tdlib.native.osx-x64.proj -p:Version=${{ steps.version.outputs.version }}-test --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -281,7 +290,6 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - name: Check out the sources
       uses: actions/checkout@v5
@@ -307,9 +315,13 @@ jobs:
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 7.0.x
+    - id: version
+      name: Read version
+      shell: pwsh
+      run: echo "version=$(common/Get-Version.ps1 -RefName $env:GITHUB_REF)" >> $env:GITHUB_OUTPUT
     - name: Pack NuGet
       shell: pwsh
-      run: dotnet pack tdlib.native.win-x64.proj -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build
+      run: dotnet pack tdlib.native.win-x64.proj -p:Version=${{ steps.version.outputs.version }}-test --output build
     - name: NuGet cache
       uses: actions/cache@v4
       with:
@@ -329,7 +341,6 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
-      PACKAGE_VERSION_BASE: 1.8.45
     steps:
     - uses: actions/checkout@v5
     - name: 'Download artifact: ubuntu-22.04.x86-64'
@@ -369,9 +380,9 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - id: version
-      name: Read version from ref
+      name: Read version
       shell: pwsh
-      run: "\"version=$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { \"$env:PACKAGE_VERSION_BASE-test\" })\" >> $env:GITHUB_OUTPUT"
+      run: echo "version=$(common/Get-Version.ps1 -RefName $env:GITHUB_REF)" >> $env:GITHUB_OUTPUT
     - name: Prepare the release notes
       uses: ForNeVeR/ChangelogAutomation.action@v2
       with:

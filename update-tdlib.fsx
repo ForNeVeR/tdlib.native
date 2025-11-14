@@ -10,6 +10,7 @@
 open System
 open System.IO
 open System.Text.RegularExpressions
+open System.Xml.Linq
 open Medallion.Shell
 open Octokit
 open TruePath
@@ -17,20 +18,22 @@ open TruePath.SystemIo
 
 let repoRoot = AbsolutePath __SOURCE_DIRECTORY__
 
-let gitHubActionsFile = repoRoot / "github-actions.fsx"
+let directoryBuildProps = repoRoot / "Directory.Build.props"
 
-let readCurrentVersion(): Version =
-    if not <| gitHubActionsFile.Exists() then
-        failwithf $"{gitHubActionsFile.FileName} not found at expected path: \"{gitHubActionsFile.Value}\"."
+let readCurrentVersion() =
+    if not <| directoryBuildProps.Exists() then
+        failwithf $"Directory.Build.props not found at expected path: \"{directoryBuildProps.Value}\"."
 
-    let content = gitHubActionsFile.ReadAllText()
-    let regex = Regex "\"PACKAGE_VERSION_BASE\", \"(.*?)\""
+    let doc = XDocument.Load directoryBuildProps.Value
+    let versionString =
+        doc.Descendants(XName.Get "VersionPrefix")
+        |> Seq.tryExactlyOne
+        |> Option.map _.Value.Trim()
+        |> Option.map Version.Parse
 
-    let result = regex.Match content
-    if not result.Success then
-        failwithf $"Cannot find the PACKAGE_VERSION_BASE defined in \"{gitHubActionsFile.Value}\"."
-
-    result.Groups[1].Value |> Version.Parse
+    match versionString with
+    | Some v -> v
+    | None -> failwith "Directory.Build.props does not contain a valid <Version> element."
 
 let tagNamePrefix = "tdlib/"
 let tagNameToVersion(name: string) =
@@ -54,21 +57,16 @@ let readLatestVersion() = task {
         |> Seq.maxBy (fun t -> tagNameToVersion t.Name)
 }
 
-let updateGitHubActionsFile version =
-    let content = gitHubActionsFile.ReadAllText()
-    let versionRegex = Regex "\"PACKAGE_VERSION_BASE\", \"(.*?)\""
-    let newContent = versionRegex.Replace(content, $"\"PACKAGE_VERSION_BASE\", \"{version}\"")
-    gitHubActionsFile.WriteAllText newContent
+let updateVersion(version: string) =
+    let currentContent = directoryBuildProps.ReadAllText()
+    let versionRegex = Regex "<VersionPrefix>.*?</VersionPrefix>"
+    let newContent = versionRegex.Replace(currentContent, $"<VersionPrefix>{version}</VersionPrefix>")
+    directoryBuildProps.WriteAllText newContent
 
 let processCommandResult(result: CommandResult) =
     if result.StandardOutput.Length > 0 then printfn $"%s{result.StandardOutput}"
     if result.StandardError.Length > 0 then printfn $"Standard error: %s{result.StandardError}"
     if not result.Success then failwithf $"Command failed with exit code {result.ExitCode}."
-
-let generateGitHubActions() =
-    printfn $"Running {gitHubActionsFile.FileName}…"
-    Command.Run("dotnet", "fsi", gitHubActionsFile.Value).Result |> processCommandResult
-    printfn $"{gitHubActionsFile.FileName} executed successfully."
 
 let updateChangelog(version: string) =
     let changelogFile = repoRoot / "CHANGELOG.md"
@@ -129,8 +127,7 @@ let updateTo(tag: RepositoryTag) =
     let commitHash = tag.Commit.Sha
 
     updateGitSubmodule commitHash
-    updateGitHubActionsFile version
-    generateGitHubActions()
+    updateVersion version
     updateChangelog version
 
     {|

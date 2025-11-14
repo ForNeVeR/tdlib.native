@@ -102,12 +102,20 @@ let setUpDotNetSdk = step(
     ]
 )
 
+let getVersion stepId = step(
+    id = stepId,
+    name = "Read version",
+    shell = "pwsh",
+    run = "echo \"version=$(common/Get-Version.ps1 -RefName $env:GITHUB_REF)\" >> $env:GITHUB_OUTPUT"
+)
+
 let nuGetPackagePath = "${{ github.workspace }}/.github/nuget-packages"
-let dotNetEnv = [
-    "DOTNET_NOLOGO", "1"
-    "DOTNET_CLI_TELEMETRY_OPTOUT", "1"
-    "NUGET_PACKAGES", nuGetPackagePath
-]
+let dotNetEnv =
+    [
+        "DOTNET_NOLOGO", "1"
+        "DOTNET_CLI_TELEMETRY_OPTOUT", "1"
+        "NUGET_PACKAGES", nuGetPackagePath
+    ] |> Seq.map(fun (k, v) -> setEnv k v)
 
 let nuGetCache = step(
     name = "NuGet cache",
@@ -117,12 +125,6 @@ let nuGetCache = step(
         "key", "${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}"
     ]
 )
-
-let testEnv =
-    [
-        yield! dotNetEnv
-        "PACKAGE_VERSION_BASE", "1.8.45"
-    ] |> Seq.map(fun (k, v) -> setEnv k v)
 
 type Workflows =
     static member BuildArtifacts(
@@ -187,7 +189,7 @@ type Workflows =
     ) = job (Names.testJob platform arch) [
         needs(Names.buildJob platform arch)
         runsOn image
-        yield! testEnv
+        yield! dotNetEnv
 
         checkoutWithSubmodules
         yield! installScript |> Option.toList |> Seq.map(pwsh "Install")
@@ -196,9 +198,13 @@ type Workflows =
         yield! afterDownloadSteps |> Option.toList |> Seq.collect id
 
         setUpDotNetSdk
+
+        let versionStepId = "version"
+        getVersion versionStepId
+
         pwsh "Pack NuGet" (
             $"dotnet pack {Names.package platform arch}.proj" +
-            " -p:Version=${{ env.PACKAGE_VERSION_BASE }}-test --output build"
+            " -p:Version=${{ steps." + versionStepId + ".outputs.version }}-test --output build"
         )
         nuGetCache
         pwsh "Test" $"./common/test.ps1 -PackageName {Names.package platform arch}"
@@ -228,7 +234,7 @@ let workflows = [
 
         job "verify-workflows" [
             runsOn ubuntuLatest
-            yield! dotNetEnv |> Seq.map(fun (x, y) -> setEnv x y)
+            yield! dotNetEnv
 
             step(
                 usesSpec = Auto "actions/checkout"
@@ -346,7 +352,7 @@ let workflows = [
                 Names.buildJob Platform.Windows Arch.X86_64
             ] |> Seq.map needs
 
-            yield! testEnv
+            yield! dotNetEnv
             checkout
 
             yield! downloadAndRepackArtifact Platform.Ubuntu22_04 Arch.X86_64
@@ -356,12 +362,8 @@ let workflows = [
 
             setUpDotNetSdk
 
-            step(
-                name = "Read version from ref",
-                id = "version",
-                shell = "pwsh",
-                run = "\"version=$(if ($env:GITHUB_REF.StartsWith('refs/tags/v')) { $env:GITHUB_REF -replace '^refs/tags/v', '' } else { \"$env:PACKAGE_VERSION_BASE-test\" })\" >> $env:GITHUB_OUTPUT"
-            )
+            let versionStepId = "version"
+            getVersion versionStepId
 
             step(
                 name = "Prepare the release notes",
@@ -378,7 +380,7 @@ let workflows = [
                     $"Pack NuGet package: {platform}.{arch}"
                     (
                         $"dotnet pack {Names.package platform arch}.proj" +
-                        " -p:Version=${{ steps.version.outputs.version }} --output build"
+                        " -p:Version=${{ steps." + versionStepId + ".outputs.version }} --output build"
                     )
 
             packPackageFor Platform.Ubuntu22_04 Arch.X86_64
@@ -391,7 +393,7 @@ let workflows = [
                 "common/New-NuGetSource.ps1"
             pwsh
                 "Pack NuGet package: main"
-                "dotnet pack tdlib.native.proj -p:Version=${{ steps.version.outputs.version }} --output build"
+                ("dotnet pack tdlib.native.proj -p:Version=${{ steps." + versionStepId + ".outputs.version }} --output build")
 
             step(name = "Upload NuGet packages", usesSpec = Auto "actions/upload-artifact", options = Map.ofList [
                 "name", "tdlib.nuget"
@@ -408,7 +410,7 @@ let workflows = [
                     ],
                     options = Map.ofList [
                         "tag_name", "${{ github.ref }}"
-                        "release_name", "v${{ steps.version.outputs.version }}"
+                        "release_name", "v${{ steps." + versionStepId + ".outputs.version }}"
                         "body_path", "./release-notes.md"
                     ]
                 )
@@ -450,14 +452,14 @@ let workflows = [
 
                 let uploadPlatformPackage platform arch =
                     uploadPackage (
-                        $"{Names.package platform arch}." + "${{ steps.version.outputs.version }}.nupkg"
+                        $"{Names.package platform arch}." + "${{ steps." + versionStepId + ".outputs.version }}.nupkg"
                     )
 
                 uploadPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
                 uploadPlatformPackage Platform.MacOS Arch.AArch64
                 uploadPlatformPackage Platform.MacOS Arch.X86_64
                 uploadPlatformPackage Platform.Windows Arch.X86_64
-                uploadPackage "tdlib.native.${{ steps.version.outputs.version }}.nupkg"
+                uploadPackage ("tdlib.native.${{ steps." + versionStepId + ".outputs.version }}.nupkg")
             ]
 
             let pushPackage (fileName: string) =
@@ -471,14 +473,14 @@ let workflows = [
 
             let pushPlatformPackage platform arch =
                 pushPackage (
-                    $"{Names.package platform arch}." + "${{ steps.version.outputs.version }}.nupkg"
+                    $"{Names.package platform arch}." + "${{ steps." + versionStepId + ".outputs.version }}.nupkg"
                 )
 
             pushPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
             pushPlatformPackage Platform.MacOS Arch.AArch64
             pushPlatformPackage Platform.MacOS Arch.X86_64
             pushPlatformPackage Platform.Windows Arch.X86_64
-            pushPackage "tdlib.native.${{ steps.version.outputs.version }}.nupkg"
+            pushPackage ("tdlib.native.${{ steps." + versionStepId + ".outputs.version }}.nupkg")
         ]
 
         job "verify-encoding" [
@@ -509,7 +511,7 @@ let workflows = [
 
             runsOn ubuntuLatest
 
-            yield! dotNetEnv |> Seq.map(fun (x, y) -> setEnv x y)
+            yield! dotNetEnv
 
             step(
                 name = "Check out the sources",

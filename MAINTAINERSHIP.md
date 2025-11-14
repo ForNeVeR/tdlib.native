@@ -28,7 +28,7 @@ Note that there's a script `update-tdlib.fsx` that follows these steps automatic
 
 1. Update the Git submodule containing the TDLib sources.
 2. Prepare a corresponding entry in the `CHANGELOG.md`.
-3. Update the `PACKAGE_VERSION_BASE` to the new library version in the `github-actions.fsx`.
+3. Update the `VersionPrefix` element to the new library version in the `Directory.Build.props` file.
 4. Regenerate the GitHub Actions workflow by running `dotnet fsi github-actions.fsx`.
 
 Rotate Keys
