@@ -537,7 +537,7 @@ let workflows = [
             )
 
             step(
-                condition = "(github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.update-tdlib.outputs.has-changes == 'true'",
+                condition = "(github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.update-dependency.outputs.has-changes == 'true'",
                 name = "Create a pull request",
                 usesSpec = Auto "peter-evans/create-pull-request",
                 options = Map.ofList [
