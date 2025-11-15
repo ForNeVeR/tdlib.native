@@ -131,7 +131,7 @@ let updateTo(tag: RepositoryTag) =
     updateChangelog version
 
     {|
-        BodyMarkdown = $"Update TDLib to version {version} and regenerate the API definitions."
+        BodyMarkdown = $"Update TDLib to version {version}."
         BranchName = $"dependencies/tdlib-{version}"
         CommitMessage = $"Update TDLib to {version}"
         PullRequestTitle = $"TDLib {version}"

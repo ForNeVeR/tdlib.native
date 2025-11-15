@@ -104,7 +104,7 @@ let updateTo(tag: RepositoryTag) =
     updateGitSubmodule commitHash
 
     {|
-        BodyMarkdown = $"Update tdsharp to version {version} and regenerate the API definitions."
+        BodyMarkdown = $"Update tdsharp to version {version}."
         BranchName = $"dependencies/tdsharp-{version}"
         CommitMessage = $"Update tdsharp to {version}"
         PullRequestTitle = $"tdsharp {version}"
