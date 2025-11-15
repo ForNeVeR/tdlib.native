@@ -15,6 +15,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - **(Breaking change!)** The package for Ubuntu 20.04 (OpenSSL v1.1) is no longer maintained nor updated (because [the corresponding GitHub runner is no longer available](https://github.com/actions/runner-images/issues/11101)).
 
+### Added
+- New AArch64 packages for Windows and Linux (Ubuntu-22.04-based).
+
 ### Changed
 - Update to [TDLib v1.8.56.1](https://github.com/ForNeVeR/tdlib-versioned/releases/tag/tdlib%2Fv1.8.56.1).
 - x86-64 builds for macOS are now built against macOS 15, not macOS 13.
