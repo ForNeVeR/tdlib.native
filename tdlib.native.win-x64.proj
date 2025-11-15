@@ -10,6 +10,12 @@ SPDX-License-Identifier: BSL-1.0
         <Description>
             NuGet packaging for tdlib: Telegram client library. Windows version for x86-64 architecture.
         </Description>
+        <Copyright>
+            $(Copyright),
+            <!-- OpenSSL -->1998-2025 The OpenSSL Project Authors,
+            1995-1998 Eric A. Young, Tim J. Hudson,
+            <!-- ZLib -->1995-2024 Jean-loup Gailly and Mark Adler
+        </Copyright>
         <PackageLicenseExpression>
             $(PackageLicenseExpression) AND Apache-2.0 <!-- OpenSSL --> AND Zlib <!-- zlib -->
         </PackageLicenseExpression>
