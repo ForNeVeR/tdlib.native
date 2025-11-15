@@ -20,7 +20,7 @@ let mainBranch = "master"
 let macOs14 = "macos-14"
 let macOs15 = "macos-15-intel"
 let ubuntu22_04 = "ubuntu-22.04"
-let ubuntu22_04arm = "ubuntu-22.04-arm"
+let ubuntu22_04Arm = "ubuntu-22.04-arm"
 let ubuntuLatest = "ubuntu-latest"
 let windows2022 = "windows-2022"
 let windows11Arm = "windows-11-arm"
@@ -258,7 +258,7 @@ let workflows = [
         )
 
         Workflows.BuildJob(
-            image = ubuntu22_04arm,
+            image = ubuntu22_04Arm,
             platform = Platform.Ubuntu22_04,
             arch = Arch.AArch64,
             installScript = "./linux/install.ps1 -ForBuild",
@@ -324,7 +324,7 @@ let workflows = [
         )
 
         Workflows.TestJob(
-            image = ubuntu22_04,
+            image = ubuntu22_04Arm,
             platform = Platform.Ubuntu22_04,
             arch = Arch.AArch64,
             installScript = "./linux/install.ps1 -ForTests",

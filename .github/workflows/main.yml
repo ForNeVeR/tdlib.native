@@ -266,7 +266,7 @@ jobs:
   test-ubuntu-22-04-aarch64:
     needs:
     - build-ubuntu-22-04-aarch64
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04-arm
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
