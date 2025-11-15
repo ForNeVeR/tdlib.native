@@ -400,6 +400,12 @@ let workflows = [
                 "path", "./build/*.nupkg"
             ])
 
+            step(
+                name = "Verify NuGet packages",
+                shell = "pwsh",
+                run = "common/Test-Package.ps1"
+            )
+
             yield! ifCalledOnTagPush [
                 step(
                     name = "Create release",
