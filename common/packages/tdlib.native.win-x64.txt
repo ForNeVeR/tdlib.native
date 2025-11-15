@@ -1,0 +1,8 @@
+CHANGELOG.md
+LICENSE.txt
+README.md
+runtimes/win-x64/native/libcrypto-3-x64.dll
+runtimes/win-x64/native/libssl-3-x64.dll
+runtimes/win-x64/native/tdjson.dll
+runtimes/win-x64/native/zlib1.dll
+tdlib.native.win-x64.nuspec

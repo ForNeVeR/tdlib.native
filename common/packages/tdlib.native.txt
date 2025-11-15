@@ -1,0 +1,4 @@
+CHANGELOG.md
+LICENSE.txt
+README.md
+tdlib.native.nuspec

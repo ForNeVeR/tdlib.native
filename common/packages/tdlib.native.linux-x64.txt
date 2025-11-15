@@ -1,0 +1,5 @@
+CHANGELOG.md
+LICENSE.txt
+README.md
+runtimes/linux-x64/native/libtdjson.so
+tdlib.native.linux-x64.nuspec
