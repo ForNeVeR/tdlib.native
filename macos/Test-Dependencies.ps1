@@ -59,7 +59,7 @@ if ($GenerateGold) {
     $goldContent = Get-Content -Raw $GoldFile
     $tempContent = Get-Content -Raw $ResultFile
     if ($goldContent -ne $tempContent) {
-        Write-Output "Current contents are following:`n"
+        Write-Output "Expected contents are following:`n"
         Write-Output $tempContent
         throw "File contents are not equal: $GoldFile and $ResultFile"
     }
