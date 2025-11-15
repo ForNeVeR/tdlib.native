@@ -28,6 +28,7 @@ if ($ForBuild) {
         )
 
         Write-Output 'Installing dependencies.'
+        sudo apt-get update
         sudo apt-get install -y @dependencies
         if (!$?) {
             throw 'Cannot install dependencies from apt-get'
