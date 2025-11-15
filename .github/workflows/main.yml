@@ -246,8 +246,6 @@ jobs:
       run: ./linux/Test-Dependencies.ps1 -Platform ubuntu-22.04 -DotNetArch x64 -PackageName tdlib.native.linux-x64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: 7.0.x
     - id: version
       name: Read version
       shell: pwsh
@@ -289,8 +287,6 @@ jobs:
       run: ./linux/Test-Dependencies.ps1 -Platform ubuntu-22.04 -DotNetArch arm64 -PackageName tdlib.native.linux-arm64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: 7.0.x
     - id: version
       name: Read version
       shell: pwsh
@@ -329,8 +325,6 @@ jobs:
       run: ./macos/Test-Dependencies.ps1 -DotNetArch arm64 -PackageName tdlib.native.osx-arm64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: 7.0.x
     - id: version
       name: Read version
       shell: pwsh
@@ -369,8 +363,6 @@ jobs:
       run: ./macos/Test-Dependencies.ps1 -DotNetArch x64 -PackageName tdlib.native.osx-x64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: 7.0.x
     - id: version
       name: Read version
       shell: pwsh
@@ -417,8 +409,6 @@ jobs:
       run: ./windows/Test-Dependencies.ps1 -DotNetArch x64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: 7.0.x
     - id: version
       name: Read version
       shell: pwsh
@@ -465,8 +455,6 @@ jobs:
       run: ./windows/Test-Dependencies.ps1 -DotNetArch arm64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: 7.0.x
     - id: version
       name: Read version
       shell: pwsh
@@ -547,8 +535,6 @@ jobs:
       run: Set-Location build/tdlib.native.win-x64/runtimes/win-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.native.windows.x86-64.zip *
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: 7.0.x
     - id: version
       name: Read version
       shell: pwsh

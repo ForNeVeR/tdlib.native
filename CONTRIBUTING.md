@@ -16,7 +16,7 @@ Then run the following shell command:
 $ dotnet fsi github-actions.fsx
 ```
 
-(You should have [.NET SDK][dotnet-sdk] version 8 or later to run it.)
+(You should have [.NET SDK][dotnet-sdk] version 9 or later to run it.)
 
 License Automation
 ------------------

@@ -34,8 +34,6 @@ jobs:
         path: ${{ github.workspace }}/.github/nuget-packages
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: 7.0.x
     - id: update-dependency
       name: Update TDLib
       shell: pwsh
@@ -70,8 +68,6 @@ jobs:
         path: ${{ github.workspace }}/.github/nuget-packages
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: 7.0.x
     - id: update-dependency
       name: Update tdsharp
       shell: pwsh
