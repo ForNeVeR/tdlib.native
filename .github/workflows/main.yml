@@ -243,7 +243,7 @@ jobs:
         path: build/tdlib.native.linux-x64/runtimes/linux-x64/native
     - name: Verify library dependencies
       shell: pwsh
-      run: ./linux/Test-Dependencies.ps1 -Platform ubuntu-22.04 -PackageName tdlib.native.linux-x64
+      run: ./linux/Test-Dependencies.ps1 -Platform ubuntu-22.04 -DotNetArch x64 -PackageName tdlib.native.linux-x64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
       with:
@@ -286,7 +286,7 @@ jobs:
         path: build/tdlib.native.linux-arm64/runtimes/linux-arm64/native
     - name: Verify library dependencies
       shell: pwsh
-      run: ./linux/Test-Dependencies.ps1 -Platform ubuntu-22.04 -PackageName tdlib.native.linux-arm64
+      run: ./linux/Test-Dependencies.ps1 -Platform ubuntu-22.04 -DotNetArch arm64 -PackageName tdlib.native.linux-arm64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
       with:
@@ -414,7 +414,7 @@ jobs:
       run: ./windows/install.ps1
     - name: Verify library dependencies
       shell: pwsh
-      run: ./windows/Test-Dependencies.ps1
+      run: ./windows/Test-Dependencies.ps1 -DotNetArch x64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
       with:
@@ -462,7 +462,7 @@ jobs:
       run: ./windows/install.ps1
     - name: Verify library dependencies
       shell: pwsh
-      run: ./windows/Test-Dependencies.ps1
+      run: ./windows/Test-Dependencies.ps1 -DotNetArch arm64
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v5
       with:

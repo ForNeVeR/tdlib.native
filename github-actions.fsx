@@ -309,6 +309,7 @@ let workflows = [
             pwsh "Verify library dependencies" (
                 "./linux/Test-Dependencies.ps1" +
                 $" -Platform {platform}" +
+                $" -DotNetArch {Names.archToDotNet arch}" +
                 $" -PackageName {Names.package platform arch}"
             )
 
@@ -357,27 +358,27 @@ let workflows = [
             ]
         )
 
-        let testWindowsDependencies = [
+        let testWindowsDependencies arch = [
             step(name = "Cache downloads for Windows", usesSpec = Auto "actions/cache", options = Map.ofList [
                 "path", "build/downloads"
                 "key", "${{ hashFiles('windows/install.ps1') }}"
             ])
             pwsh "Install dependencies" "./windows/install.ps1"
-            pwsh "Verify library dependencies" "./windows/Test-Dependencies.ps1"
+            pwsh "Verify library dependencies" $"./windows/Test-Dependencies.ps1 -DotNetArch {Names.archToDotNet arch}"
         ]
 
         Workflows.TestJob(
             image = windows2022,
             platform = Platform.Windows,
             arch = Arch.X86_64,
-            afterDownloadSteps = testWindowsDependencies
+            afterDownloadSteps = testWindowsDependencies Arch.X86_64
         )
 
         Workflows.TestJob(
             image = windows11Arm,
             platform = Platform.Windows,
             arch = Arch.AArch64,
-            afterDownloadSteps = testWindowsDependencies
+            afterDownloadSteps = testWindowsDependencies Arch.AArch64
         )
 
         job "release" [
