@@ -1,0 +1,20 @@
+<!--
+SPDX-FileCopyrightText: 2022-2025 Friedrich von Never <friedrich@fornever.me>
+
+SPDX-License-Identifier: BSL-1.0
+-->
+
+<Project Sdk="Microsoft.Build.NoTargets/3.7.134">
+    <PropertyGroup>
+        <PackageId>tdlib.native.win-arm64</PackageId>
+        <Description>
+            NuGet packaging for tdlib: Telegram client library. Windows version for AArch64 architecture.
+        </Description>
+        <PackageLicenseExpression>
+            $(PackageLicenseExpression) AND Apache-2.0 <!-- OpenSSL --> AND Zlib <!-- zlib -->
+        </PackageLicenseExpression>
+    </PropertyGroup>
+    <ItemGroup>
+        <Content Include="build\$(PackageId)\runtimes\win-arm64\**" Exclude="**\cache-key.json" PackagePath="runtimes\win-arm64" />
+    </ItemGroup>
+</Project>
