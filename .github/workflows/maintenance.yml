@@ -42,7 +42,7 @@ jobs:
       run: dotnet fsi "./update-tdlib.fsx"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.update-tdlib.outputs.has-changes == 'true'
+    - if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.update-dependency.outputs.has-changes == 'true'
       name: Create a pull request
       uses: peter-evans/create-pull-request@v7
       with:
@@ -78,7 +78,7 @@ jobs:
       run: dotnet fsi "./update-tdsharp.fsx"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.update-tdlib.outputs.has-changes == 'true'
+    - if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.update-dependency.outputs.has-changes == 'true'
       name: Create a pull request
       uses: peter-evans/create-pull-request@v7
       with:
