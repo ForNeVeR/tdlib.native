@@ -3,11 +3,14 @@
 # SPDX-License-Identifier: BSL-1.0
 
 param (
+    [Parameter(Mandatory = $true)]
+    [string] $DotNetArch,
+
     [string] $Dependencies = "$PSScriptRoot/../build/tools/dependencies/Dependencies.exe",
 
     [string] $Package = "$PSScriptRoot/../build/tdlib.native.win-x64/runtimes/win-x64/native",
-    [string] $GoldFile = "$PSScriptRoot/../windows/libraries.gold.txt",
-    [string] $ResultFile = "$PSScriptRoot/../windows/libraries.temp.txt",
+    [string] $GoldFile = "$PSScriptRoot/../windows/libraries.$DotNetArch.gold.txt",
+    [string] $ResultFile = "$PSScriptRoot/../windows/libraries.$DotNetArch.temp.txt",
     [switch] $GenerateGold
 )
 
