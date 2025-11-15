@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased] (1.8.56.1)
 ### Removed
 - **(Breaking change!)** The package for Ubuntu 20.04 (OpenSSL v1.1) is no longer maintained nor updated (because [the corresponding GitHub runner is no longer available](https://github.com/actions/runner-images/issues/11101)).
+- [#132](https://github.com/ForNeVeR/tdlib.native/issues/132): removed a duplicated file `libtdjson.so.1.8.45` from the Linux packages. Only the normal `.so` now remains. Thanks to @Jackhammer88!
 
 ### Changed
 - Update to [TDLib v1.8.56.1](https://github.com/ForNeVeR/tdlib-versioned/releases/tag/tdlib%2Fv1.8.56.1).
