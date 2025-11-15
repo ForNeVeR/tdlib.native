@@ -98,10 +98,7 @@ let downloadArtifact platform arch =
 
 let setUpDotNetSdk = step(
     name = "Set up .NET SDK",
-    usesSpec = Auto "actions/setup-dotnet",
-    options = Map.ofList [
-        "dotnet-version", "7.0.x"
-    ]
+    usesSpec = Auto "actions/setup-dotnet"
 )
 
 let getVersion stepId = step(
