@@ -20,9 +20,11 @@ SPDX-License-Identifier: BSL-1.0
         <copyright>$copyright$</copyright>
         <tags>$tags$</tags>
         <dependencies>
+            <dependency id="tdlib.native.linux-arm64" version="$version$" />
             <dependency id="tdlib.native.linux-x64" version="$version$" />
             <dependency id="tdlib.native.osx-arm64" version="$version$" />
             <dependency id="tdlib.native.osx-x64" version="$version$" />
+            <dependency id="tdlib.native.win-arm64" version="$version$" />
             <dependency id="tdlib.native.win-x64" version="$version$" />
         </dependencies>
     </metadata>

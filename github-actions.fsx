@@ -20,8 +20,10 @@ let mainBranch = "master"
 let macOs14 = "macos-14"
 let macOs15 = "macos-15-intel"
 let ubuntu22_04 = "ubuntu-22.04"
+let ubuntu22_04arm = "ubuntu-22.04-arm"
 let ubuntuLatest = "ubuntu-latest"
 let windows2022 = "windows-2022"
+let windows11Arm = "windows-11-arm"
 
 let pwsh name script =
     step(name = name, shell = "pwsh", run = script)
@@ -256,6 +258,14 @@ let workflows = [
         )
 
         Workflows.BuildJob(
+            image = ubuntu22_04arm,
+            platform = Platform.Ubuntu22_04,
+            arch = Arch.AArch64,
+            installScript = "./linux/install.ps1 -ForBuild",
+            artifactFileName = "libtdjson.so"
+        )
+
+        Workflows.BuildJob(
             image = macOs14,
             platform = Platform.MacOS,
             arch = Arch.AArch64,
@@ -275,6 +285,14 @@ let workflows = [
             image = windows2022,
             platform = Platform.Windows,
             arch = Arch.X86_64,
+            buildScriptArgs = @"-VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake",
+            artifactFileName = "tdjson.dll"
+        )
+
+        Workflows.BuildJob(
+            image = windows11Arm,
+            platform = Platform.Windows,
+            arch = Arch.AArch64,
             buildScriptArgs = @"-VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake",
             artifactFileName = "tdjson.dll"
         )
@@ -304,6 +322,16 @@ let workflows = [
             ]
         )
 
+        Workflows.TestJob(
+            image = ubuntu22_04,
+            platform = Platform.Ubuntu22_04,
+            arch = Arch.AArch64,
+            installScript = "./linux/install.ps1 -ForTests",
+            afterDownloadSteps = [
+                testLinuxDependencies Platform.Ubuntu22_04 Arch.AArch64
+            ]
+        )
+
         let testMacOsDependencies platform arch =
             pwsh "Verify library dependencies" (
                 "./macos/Test-Dependencies.ps1" +
@@ -329,35 +357,48 @@ let workflows = [
             ]
         )
 
+        let testWindowsDependencies = [
+            step(name = "Cache downloads for Windows", usesSpec = Auto "actions/cache", options = Map.ofList [
+                "path", "build/downloads"
+                "key", "${{ hashFiles('windows/install.ps1') }}"
+            ])
+            pwsh "Install dependencies" "./windows/install.ps1"
+            pwsh "Verify library dependencies" "./windows/Test-Dependencies.ps1"
+        ]
+
         Workflows.TestJob(
             image = windows2022,
             platform = Platform.Windows,
             arch = Arch.X86_64,
-            afterDownloadSteps = [
-                step(name = "Cache downloads for Windows", usesSpec = Auto "actions/cache", options = Map.ofList [
-                    "path", "build/downloads"
-                    "key", "${{ hashFiles('windows/install.ps1') }}"
-                ])
-                pwsh "Install dependencies" "./windows/install.ps1"
-                pwsh "Verify library dependencies" "./windows/Test-Dependencies.ps1"
-            ]
+            afterDownloadSteps = testWindowsDependencies
+        )
+
+        Workflows.TestJob(
+            image = windows11Arm,
+            platform = Platform.Windows,
+            arch = Arch.AArch64,
+            afterDownloadSteps = testWindowsDependencies
         )
 
         job "release" [
             runsOn ubuntuLatest
             yield! [
-                Names.buildJob Platform.Ubuntu22_04 Arch.X86_64
                 Names.buildJob Platform.MacOS Arch.AArch64
                 Names.buildJob Platform.MacOS Arch.X86_64
+                Names.buildJob Platform.Ubuntu22_04 Arch.AArch64
+                Names.buildJob Platform.Ubuntu22_04 Arch.X86_64
+                Names.buildJob Platform.Windows Arch.AArch64
                 Names.buildJob Platform.Windows Arch.X86_64
             ] |> Seq.map needs
 
             yield! dotNetEnv
             checkout
 
-            yield! downloadAndRepackArtifact Platform.Ubuntu22_04 Arch.X86_64
             yield! downloadAndRepackArtifact Platform.MacOS Arch.AArch64
             yield! downloadAndRepackArtifact Platform.MacOS Arch.X86_64
+            yield! downloadAndRepackArtifact Platform.Ubuntu22_04 Arch.AArch64
+            yield! downloadAndRepackArtifact Platform.Ubuntu22_04 Arch.X86_64
+            yield! downloadAndRepackArtifact Platform.Windows Arch.AArch64
             yield! downloadAndRepackArtifact Platform.Windows Arch.X86_64
 
             setUpDotNetSdk
@@ -383,9 +424,11 @@ let workflows = [
                         " -p:Version=${{ steps." + versionStepId + ".outputs.version }} --output build"
                     )
 
-            packPackageFor Platform.Ubuntu22_04 Arch.X86_64
             packPackageFor Platform.MacOS Arch.AArch64
             packPackageFor Platform.MacOS Arch.X86_64
+            packPackageFor Platform.Ubuntu22_04 Arch.AArch64
+            packPackageFor Platform.Ubuntu22_04 Arch.X86_64
+            packPackageFor Platform.Windows Arch.AArch64
             packPackageFor Platform.Windows Arch.X86_64
 
             pwsh
@@ -436,9 +479,11 @@ let workflows = [
                         ]
                     )
 
-                uploadArchive Platform.Ubuntu22_04 Arch.X86_64
                 uploadArchive Platform.MacOS Arch.AArch64
                 uploadArchive Platform.MacOS Arch.X86_64
+                uploadArchive Platform.Ubuntu22_04 Arch.AArch64
+                uploadArchive Platform.Ubuntu22_04 Arch.X86_64
+                uploadArchive Platform.Windows Arch.AArch64
                 uploadArchive Platform.Windows Arch.X86_64
 
                 let uploadPackage fileName =
@@ -461,9 +506,11 @@ let workflows = [
                         $"{Names.package platform arch}." + "${{ steps." + versionStepId + ".outputs.version }}.nupkg"
                     )
 
-                uploadPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
                 uploadPlatformPackage Platform.MacOS Arch.AArch64
                 uploadPlatformPackage Platform.MacOS Arch.X86_64
+                uploadPlatformPackage Platform.Ubuntu22_04 Arch.AArch64
+                uploadPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
+                uploadPlatformPackage Platform.Windows Arch.AArch64
                 uploadPlatformPackage Platform.Windows Arch.X86_64
                 uploadPackage ("tdlib.native.${{ steps." + versionStepId + ".outputs.version }}.nupkg")
             ]
@@ -482,9 +529,11 @@ let workflows = [
                     $"{Names.package platform arch}." + "${{ steps." + versionStepId + ".outputs.version }}.nupkg"
                 )
 
-            pushPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
             pushPlatformPackage Platform.MacOS Arch.AArch64
             pushPlatformPackage Platform.MacOS Arch.X86_64
+            pushPlatformPackage Platform.Ubuntu22_04 Arch.AArch64
+            pushPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
+            pushPlatformPackage Platform.Windows Arch.AArch64
             pushPlatformPackage Platform.Windows Arch.X86_64
             pushPackage ("tdlib.native.${{ steps." + versionStepId + ".outputs.version }}.nupkg")
         ]

@@ -1,0 +1,17 @@
+<!--
+SPDX-FileCopyrightText: 2022-2025 Friedrich von Never <friedrich@fornever.me>
+
+SPDX-License-Identifier: BSL-1.0
+-->
+
+<Project Sdk="Microsoft.Build.NoTargets/3.7.134">
+    <PropertyGroup>
+        <PackageId>tdlib.native.linux-arm64</PackageId>
+        <Description>
+            NuGet packaging for tdlib: Telegram client library. Linux version for AArch64 architecture (compiled on Ubuntu 22.04, depends on OpenSSL v3).
+        </Description>
+    </PropertyGroup>
+    <ItemGroup>
+        <Content Include="build\$(PackageId)\runtimes\linux-arm64\**" Exclude="**\cache-key.json" PackagePath="runtimes\linux-arm64" />
+    </ItemGroup>
+</Project>

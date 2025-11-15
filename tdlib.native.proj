@@ -8,7 +8,7 @@ SPDX-License-Identifier: BSL-1.0
     <PropertyGroup>
         <PackageId>tdlib.native</PackageId>
         <Description>
-            NuGet packaging for tdlib: Telegram client library. Meta-package pulling x64 dependencies for Windows, Ubuntu 22.04 and macOS, and AArch64 dependency for macOS.
+            NuGet packaging for tdlib: Telegram client library. Meta-package pulling AArch64 and x86-64 dependencies for Linux, macOS, and Windows.
         </Description>
         <NuspecFile>tdlib.native.nuspec</NuspecFile>
         <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);SetPackageProperties</GenerateNuspecDependsOn>
