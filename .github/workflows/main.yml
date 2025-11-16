@@ -179,7 +179,7 @@ jobs:
         path: artifacts
     - name: Build
       shell: pwsh
-      run: ./windows/build.ps1 -VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake
+      run: ./windows/build.ps1 -VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake -DotNetArch x64
     - name: Prepare artifact
       shell: pwsh
       run: ./windows/prepare-artifacts.ps1
@@ -208,7 +208,7 @@ jobs:
         path: artifacts
     - name: Build
       shell: pwsh
-      run: ./windows/build.ps1 -VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake
+      run: ./windows/build.ps1 -VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake -DotNetArch arm64
     - name: Prepare artifact
       shell: pwsh
       run: ./windows/prepare-artifacts.ps1

@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: BSL-1.0
 
 param (
+    [Parameter(Mandatory = $true)] [string] $DotNetArch,
     [string] $td = "$PSScriptRoot/../td",
-    [string] $Platform = 'x64-windows',
     [Parameter(Mandatory = $true)] [string] $VcpkgToolchain,
     [string] $CheckUpToDateScript = "$PSScriptRoot/../common/Test-UpToDate.ps1",
     [switch] $SkipUpToDateCheck
@@ -18,13 +18,19 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
         New-Item -Type Directory $td/build
     }
 
+    $vcPkgPlatform = switch ($DotNetArch) {
+        'x64' { 'x64-windows' }
+        'arm64' { 'arm64-windows' }
+        else { throw "Unknown architecture: $DotNetArch." }
+    }
+
     Push-Location $td/build
     try {
         $vcpkgArguments = @(
             'install'
-            "gperf:$platform"
-            "openssl:$platform"
-            "zlib:$platform"
+            "gperf:$vcPkgPlatform"
+            "openssl:$vcPkgPlatform"
+            "zlib:$vcPkgPlatform"
         )
         $cmakeArguments = @(
             "-DCMAKE_TOOLCHAIN_FILE=$VcpkgToolchain"
@@ -38,8 +44,12 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
             'Release'
         )
 
-        if ($Platform -eq 'x64-windows') {
+        if ($DotNetArch -eq 'x64') {
             $cmakeArguments += @('-A', 'X64')
+        } elseif ($DotNetArch -eq 'arm64') {
+            $cmakeArguments += @('-A', 'ARM64')
+        }  else {
+            else { throw "Unknown architecture: $DotNetArch." }
         }
 
         vcpkg @vcpkgArguments
