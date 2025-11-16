@@ -25,6 +25,9 @@ Copy-Item $package $PackageSource
 
 Push-Location "$TdSharpRoot/$TdSharpTestProjectName"
 try {
+    Write-Output 'Removing the global.json file of the submodule to disable its override by the submodule…'
+    Remove-Item "$TdSharpRoot/global.json"
+
     Write-Output "Removing a package $BasePackageName from the project $TdSharpTestProjectName"
     & $dotnet remove "$TdSharpTestProjectName.csproj" package $BasePackageName
     if (!$?) { throw 'Cannot uninstall package from the test project' }
