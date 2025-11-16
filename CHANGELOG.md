@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] (1.8.56.1)
+## [1.8.56.1] - 2025-11-16
 ### Removed
 - **(Breaking change!)** The package for Ubuntu 20.04 (OpenSSL v1.1) is no longer maintained nor updated (because [the corresponding GitHub runner is no longer available](https://github.com/actions/runner-images/issues/11101)).
 - [#132](https://github.com/ForNeVeR/tdlib.native/issues/132): removed a duplicated file `libtdjson.so.1.8.45` from the Linux packages. Only the normal `.so` now remains. Thanks to @Jackhammer88!
@@ -125,4 +125,5 @@ Initial release supporting TDLib v1.2.0.
 [1.8.21.2]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.21.1...v1.8.21.2
 [1.8.29]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.21.2...v1.8.29
 [1.8.45]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.29...v1.8.45
-[Unreleased]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.45...HEAD
+[1.8.56.1]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.45...v1.8.56.1
+[Unreleased]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.56.1...HEAD

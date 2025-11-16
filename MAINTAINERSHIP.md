@@ -17,10 +17,11 @@ Publish a New Version
 
    Note that the Windows package bundles its dependencies, so their licenses have to be checked as well.
 5. Update the copyright information in the `Copyright` element of the `Directory.Build.props` file.
-6. Create a pull request, verify that the tests are okay. Merge it afterward.
-7. Make sure the NuGet key you use for publishing is still active. If not, then rotate the key as explained in the corresponding section of this document.
-8. Push a version tag (`v1.x.x`) to this repository. CI servers will do their job and upload the artifacts to the [Releases][releases] page.
-9. If the release is not synchronized with a corresponding release of [tdsharp][], then it's recommended to [unlist][docs.unlist] it until the corresponding release of tdsharp is available. This will help the users to do a coordinated update and not update only a part of the libraries.
+6. Update the `<VersionPrefix>` in the `Directory.Build.props` file.
+7. Create a pull request, verify that the tests are okay. Merge it afterward.
+8. Make sure the NuGet key you use for publishing is still active. If not, then rotate the key as explained in the corresponding section of this document.
+9. Push a version tag (`v1.x.x`) to this repository. CI servers will do their job and upload the artifacts to the [Releases][releases] page.
+10. If the release is not synchronized with a corresponding release of [tdsharp][], then it's recommended to [unlist][docs.unlist] it until the corresponding release of tdsharp is available. This will help the users to do a coordinated update and not update only a part of the libraries.
 
 Update TDLib
 ------------
