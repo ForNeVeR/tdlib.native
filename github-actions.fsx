@@ -278,21 +278,18 @@ let workflows = [
             artifactFileName = "libtdjson.dylib"
         )
 
-        Workflows.BuildJob(
-            image = windows2022,
-            platform = Platform.Windows,
-            arch = Arch.X86_64,
-            buildScriptArgs = @"-VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake",
-            artifactFileName = "tdjson.dll"
-        )
+        let windowsBuildJob image arch =
+            Workflows.BuildJob(
+                image = image,
+                platform = Platform.Windows,
+                arch = arch,
+                buildScriptArgs =
+                    $@"-VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake -DotNetArch {Names.archToDotNet arch}",
+                artifactFileName = "tdjson.dll"
+            )
 
-        Workflows.BuildJob(
-            image = windows11Arm,
-            platform = Platform.Windows,
-            arch = Arch.AArch64,
-            buildScriptArgs = @"-VcpkgToolchain c:\vcpkg\scripts\buildsystems\vcpkg.cmake",
-            artifactFileName = "tdjson.dll"
-        )
+        windowsBuildJob windows2022 Arch.X86_64
+        windowsBuildJob windows11Arm Arch.AArch64
 
         let downloadAndRepackArtifact platform arch = [
             downloadArtifact platform arch
