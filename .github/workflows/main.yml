@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: REUSE license check
       uses: fsfe/reuse-action@v6
   verify-workflows:
@@ -31,14 +31,14 @@ jobs:
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/setup-dotnet@v5
     - run: dotnet fsi ./github-actions.fsx verify
   build-ubuntu-22-04-x86-64:
     runs-on: ubuntu-22.04
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: Generate cache key
@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-22.04-arm
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: Generate cache key
@@ -102,7 +102,7 @@ jobs:
     runs-on: macos-14
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: Generate cache key
@@ -134,7 +134,7 @@ jobs:
     runs-on: macos-15-intel
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: Generate cache key
@@ -166,7 +166,7 @@ jobs:
     runs-on: windows-2022
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: Generate cache key
@@ -195,7 +195,7 @@ jobs:
     runs-on: windows-11-arm
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: Generate cache key
@@ -230,7 +230,7 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: Install
@@ -271,7 +271,7 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: Install
@@ -312,7 +312,7 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: 'Download artifact: macos.aarch64'
@@ -350,7 +350,7 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: 'Download artifact: macos.x86-64'
@@ -388,7 +388,7 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: 'Download artifact: windows.x86-64'
@@ -434,7 +434,7 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
     - name: 'Download artifact: windows.aarch64'
@@ -484,7 +484,7 @@ jobs:
       DOTNET_NOLOGO: 1
       NUGET_PACKAGES: ${{ github.workspace }}/.github/nuget-packages
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: 'Download artifact: macos.aarch64'
       uses: actions/download-artifact@v6
       with:
@@ -742,7 +742,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out the sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: Verify encoding
       shell: pwsh
       run: Install-Module VerifyEncoding -Repository PSGallery -RequiredVersion 2.2.1 -Force && Test-Encoding
