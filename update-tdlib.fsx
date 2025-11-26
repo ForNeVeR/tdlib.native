@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: BSL-1.0
 
-#r "nuget: TruePath, 1.10.0"
+#r "nuget: TruePath, 1.11.0"
 #r "nuget: TruePath.SystemIo, 1.10.0"
 #r "nuget: Octokit, 14.0.0"
 #r "nuget: MedallionShell, 1.6.2"
