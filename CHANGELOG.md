@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased] (1.8.58)### Changed
+- Update to [TDLib v1.8.58](https://github.com/ForNeVeR/tdlib-versioned/releases/tag/tdlib%2Fv1.8.58).
+
 ## [1.8.56.1] - 2025-11-16
 ### Removed
 - **(Breaking change!)** The package for Ubuntu 20.04 (OpenSSL v1.1) is no longer maintained nor updated (because [the corresponding GitHub runner is no longer available](https://github.com/actions/runner-images/issues/11101)).
