@@ -42,7 +42,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.update-dependency.outputs.has-changes == 'true'
       name: Create a pull request
-      uses: peter-evans/create-pull-request@v7
+      uses: peter-evans/create-pull-request@v8
       with:
         author: tdlib-native automation <friedrich@fornever.me>
         body: ${{ steps.update-dependency.outputs.body }}
@@ -76,7 +76,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && steps.update-dependency.outputs.has-changes == 'true'
       name: Create a pull request
-      uses: peter-evans/create-pull-request@v7
+      uses: peter-evans/create-pull-request@v8
       with:
         author: tdlib-native automation <friedrich@fornever.me>
         body: ${{ steps.update-dependency.outputs.body }}
