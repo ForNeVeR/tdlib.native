@@ -37,8 +37,8 @@ let processCommandResult(result: CommandResult, assertSuccess: bool) =
 
 let assertCommandResult result = processCommandResult(result, true)
 
-let isDescendant potentialDescendant potentialAscendant =
-    if potentialDescendant = potentialAscendant then false
+let isAncestor (potentialAncestor: string) (potentialDescendant: string) =
+    if potentialAncestor = potentialDescendant then false
     else
 
     let commandResult =
@@ -46,7 +46,7 @@ let isDescendant potentialDescendant potentialAscendant =
             "git",
             arguments = [|
                 "merge-base";
-                "--is-ancestor"; potentialAscendant; potentialDescendant
+                "--is-ancestor"; potentialAncestor; potentialDescendant
             |],
             options = fun opts -> opts.WorkingDirectory tdSharpSources.Value |> ignore
         ).Result
@@ -76,17 +76,18 @@ let readLatestVersion() = task {
 }
 
 let fetchGitSubmodule() =
-    printfn "Fetching the Git sources…"
+    printfn "Initializing the Git submodule…"
     Command.Run(
         "git",
-        "submodule", "update", "--init", "--remote", "--", tdSharpSources.Value
+        "submodule", "update", "--init", "--", tdSharpSources.Value
     ).Result |> assertCommandResult
+    printfn "Fetching the Git submodule…"
     Command.Run(
         "git",
         arguments = [| "fetch"; "--all" |],
         options = fun opts -> opts.WorkingDirectory tdSharpSources.Value |> ignore
     ).Result |> assertCommandResult
-    printfn "Git sources fetched."
+    printfn "Git submodule fetched."
 
 let updateGitSubmodule(commitHash: string) =
     printfn $"Checking out the Git submodule at commit {commitHash}…"
@@ -118,7 +119,7 @@ let latestCommit = latestTag.Commit.Sha
 
 let result =
     printfn $"Current commit: {currentCommit}, latest commit: {latestCommit}."
-    if isDescendant currentCommit latestCommit then
+    if isAncestor currentCommit latestCommit then
         printfn $"Updating to {latestTag.Name} ({latestCommit})…"
         Some <| updateTo latestTag
     else
