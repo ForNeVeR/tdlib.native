@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2018-2025 tdlib.native contributors <https://github.com/ForNeVeR/tdlib.native>
+SPDX-FileCopyrightText: 2018-2026 tdlib.native contributors <https://github.com/ForNeVeR/tdlib.native>
 
 SPDX-License-Identifier: BSL-1.0
 -->
@@ -10,8 +10,8 @@ SPDX-License-Identifier: BSL-1.0
         <VersionPrefix>1.8.60</VersionPrefix>
         <PackageLicenseExpression>BSL-1.0</PackageLicenseExpression>
         <Copyright>
-            2018-2025 TDLib authors,
-            2018-2025 tdlib.native contributors
+            2018-2026 TDLib authors,
+            2018-2026 tdlib.native contributors
         </Copyright>
         <PackageProjectUrl>https://github.com/ForNeVeR/tdlib.native</PackageProjectUrl>
         <Description>NuGet packaging for tdlib: Telegram client library.</Description>

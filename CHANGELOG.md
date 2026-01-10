@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2022-2025 tdlib.native contributors <https://github.com/ForNeVeR/tdlib.native>
+SPDX-FileCopyrightText: 2022-2026 tdlib.native contributors <https://github.com/ForNeVeR/tdlib.native>
 
 SPDX-License-Identifier: BSL-1.0
 -->
@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] (1.8.60)
+## [1.8.60] - 2026-01-10
 ### Changed
 - Update to [TDLib v1.8.60](https://github.com/ForNeVeR/tdlib-versioned/releases/tag/tdlib%2Fv1.8.60).
 
@@ -140,4 +140,5 @@ Initial release supporting TDLib v1.2.0.
 [1.8.56.1]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.45...v1.8.56.1
 [1.8.58]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.56.1...v1.8.58
 [1.8.59]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.58...v1.8.59
-[Unreleased]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.59...HEAD
+[1.8.60]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.59...v1.8.60
+[Unreleased]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.60...HEAD
