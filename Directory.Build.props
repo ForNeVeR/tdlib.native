@@ -20,7 +20,7 @@ SPDX-License-Identifier: BSL-1.0
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ChangelogAutomation.MSBuild" Version="3.0.3" PrivateAssets="All" />
+        <PackageReference Include="ChangelogAutomation.MSBuild" Version="3.0.4" PrivateAssets="All" />
         <Content Include="LICENSE.txt" PackagePath="/" />
         <Content Include="README.md" PackagePath="/" />
         <Content Include="CHANGELOG.md" PackagePath="/" />
