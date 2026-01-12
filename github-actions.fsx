@@ -1,5 +1,5 @@
 let licenseHeader = """
-# SPDX-FileCopyrightText: 2018-2025 tdlib.native contributors <https://github.com/ForNeVeR/tdlib.native>
+# SPDX-FileCopyrightText: 2018-2026 tdlib.native contributors <https://github.com/ForNeVeR/tdlib.native>
 #
 # SPDX-License-Identifier: BSL-1.0
 
@@ -214,6 +214,7 @@ let workflows = [
         header licenseHeader
         name "Main"
         onPushTo mainBranch
+        onPushTo "renovate/**"
         onPushTags "v*"
         onPullRequestTo mainBranch
         onSchedule(day = DayOfWeek.Monday)
@@ -551,6 +552,7 @@ let workflows = [
         header licenseHeader
         name "Maintenance"
         onPushTo mainBranch
+        onPushTo "renovate/**"
         onPullRequestTo mainBranch
         onSchedule(cron = "0 0 * * *")
         onWorkflowDispatch
