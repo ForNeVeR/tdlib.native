@@ -5,7 +5,7 @@ let licenseHeader = """
 
 # This file is auto-generated.""".Trim()
 
-#r "nuget: Generaptor.Library, 1.10.0"
+#r "nuget: Generaptor.Library, 1.11.0"
 
 open System
 open System.IO
