@@ -63,7 +63,7 @@ jobs:
       shell: pwsh
       run: if (!(Test-Path -LiteralPath 'artifacts/libtdjson.so')) { throw 'File not found' }
     - name: Upload build result
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: tdlib.native.ubuntu-22.04.x86-64
         path: artifacts/*
@@ -95,7 +95,7 @@ jobs:
       shell: pwsh
       run: if (!(Test-Path -LiteralPath 'artifacts/libtdjson.so')) { throw 'File not found' }
     - name: Upload build result
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: tdlib.native.ubuntu-22.04.aarch64
         path: artifacts/*
@@ -127,7 +127,7 @@ jobs:
       shell: pwsh
       run: if (!(Test-Path -LiteralPath 'artifacts/libtdjson.dylib')) { throw 'File not found' }
     - name: Upload build result
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: tdlib.native.macos.aarch64
         path: artifacts/*
@@ -159,7 +159,7 @@ jobs:
       shell: pwsh
       run: if (!(Test-Path -LiteralPath 'artifacts/libtdjson.dylib')) { throw 'File not found' }
     - name: Upload build result
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: tdlib.native.macos.x86-64
         path: artifacts/*
@@ -188,7 +188,7 @@ jobs:
       shell: pwsh
       run: if (!(Test-Path -LiteralPath 'artifacts/tdjson.dll')) { throw 'File not found' }
     - name: Upload build result
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: tdlib.native.windows.x86-64
         path: artifacts/*
@@ -217,7 +217,7 @@ jobs:
       shell: pwsh
       run: if (!(Test-Path -LiteralPath 'artifacts/tdjson.dll')) { throw 'File not found' }
     - name: Upload build result
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: tdlib.native.windows.aarch64
         path: artifacts/*
@@ -238,7 +238,7 @@ jobs:
       shell: pwsh
       run: ./linux/install.ps1 -ForTests
     - name: 'Download artifact: ubuntu-22.04.x86-64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.ubuntu-22.04.x86-64
         path: build/tdlib.native.linux-x64/runtimes/linux-x64/native
@@ -279,7 +279,7 @@ jobs:
       shell: pwsh
       run: ./linux/install.ps1 -ForTests
     - name: 'Download artifact: ubuntu-22.04.aarch64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.ubuntu-22.04.aarch64
         path: build/tdlib.native.linux-arm64/runtimes/linux-arm64/native
@@ -317,7 +317,7 @@ jobs:
       with:
         submodules: true
     - name: 'Download artifact: macos.aarch64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.macos.aarch64
         path: build/tdlib.native.osx-arm64/runtimes/osx-arm64/native
@@ -355,7 +355,7 @@ jobs:
       with:
         submodules: true
     - name: 'Download artifact: macos.x86-64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.macos.x86-64
         path: build/tdlib.native.osx-x64/runtimes/osx-x64/native
@@ -393,7 +393,7 @@ jobs:
       with:
         submodules: true
     - name: 'Download artifact: windows.x86-64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.windows.x86-64
         path: build/tdlib.native.win-x64/runtimes/win-x64/native
@@ -439,7 +439,7 @@ jobs:
       with:
         submodules: true
     - name: 'Download artifact: windows.aarch64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.windows.aarch64
         path: build/tdlib.native.win-arm64/runtimes/win-arm64/native
@@ -487,7 +487,7 @@ jobs:
     steps:
     - uses: actions/checkout@v6
     - name: 'Download artifact: macos.aarch64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.macos.aarch64
         path: build/tdlib.native.osx-arm64/runtimes/osx-arm64/native
@@ -495,7 +495,7 @@ jobs:
       shell: pwsh
       run: Set-Location build/tdlib.native.osx-arm64/runtimes/osx-arm64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.native.macos.aarch64.zip *
     - name: 'Download artifact: macos.x86-64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.macos.x86-64
         path: build/tdlib.native.osx-x64/runtimes/osx-x64/native
@@ -503,7 +503,7 @@ jobs:
       shell: pwsh
       run: Set-Location build/tdlib.native.osx-x64/runtimes/osx-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.native.macos.x86-64.zip *
     - name: 'Download artifact: ubuntu-22.04.aarch64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.ubuntu-22.04.aarch64
         path: build/tdlib.native.linux-arm64/runtimes/linux-arm64/native
@@ -511,7 +511,7 @@ jobs:
       shell: pwsh
       run: Set-Location build/tdlib.native.linux-arm64/runtimes/linux-arm64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.native.ubuntu-22.04.aarch64.zip *
     - name: 'Download artifact: ubuntu-22.04.x86-64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.ubuntu-22.04.x86-64
         path: build/tdlib.native.linux-x64/runtimes/linux-x64/native
@@ -519,7 +519,7 @@ jobs:
       shell: pwsh
       run: Set-Location build/tdlib.native.linux-x64/runtimes/linux-x64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.native.ubuntu-22.04.x86-64.zip *
     - name: 'Download artifact: windows.aarch64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.windows.aarch64
         path: build/tdlib.native.win-arm64/runtimes/win-arm64/native
@@ -527,7 +527,7 @@ jobs:
       shell: pwsh
       run: Set-Location build/tdlib.native.win-arm64/runtimes/win-arm64/native && zip -r $env:GITHUB_WORKSPACE/tdlib.native.windows.aarch64.zip *
     - name: 'Download artifact: windows.x86-64'
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: tdlib.native.windows.x86-64
         path: build/tdlib.native.win-x64/runtimes/win-x64/native
@@ -571,7 +571,7 @@ jobs:
       shell: pwsh
       run: dotnet pack tdlib.native.proj -p:Version=${{ steps.version.outputs.version }} --output build
     - name: Upload NuGet packages
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: tdlib.nuget
         path: ./build/*.nupkg
