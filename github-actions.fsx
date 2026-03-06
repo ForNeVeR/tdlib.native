@@ -5,6 +5,7 @@ let licenseHeader = """
 
 # This file is auto-generated.""".Trim()
 
+#r "nuget: Generaptor, 1.11.0"
 #r "nuget: Generaptor.Library, 1.11.0"
 
 open System
@@ -446,69 +447,38 @@ let workflows = [
             )
 
             yield! ifCalledOnTagPush [
+                let artifactDescriptors = [
+                    Platform.MacOS, Arch.AArch64
+                    Platform.MacOS, Arch.X86_64
+                    Platform.Ubuntu22_04, Arch.AArch64
+                    Platform.Ubuntu22_04, Arch.X86_64
+                    Platform.Windows, Arch.AArch64
+                    Platform.Windows, Arch.X86_64
+                ]
+
+                let allFiles = [
+                    yield! artifactDescriptors
+                        |> Seq.map(fun(platform, arch) ->
+                            $"./{Names.ciArtifact platform arch}.zip"
+                        )
+
+                    yield! artifactDescriptors
+                        |> Seq.map(fun(platform, arch) ->
+                            $"./build/{Names.package platform arch}." + "${{ steps." + versionStepId + ".outputs.version }}.nupkg"
+                        )
+
+                    "./build/tdlib.native.${{ steps." + versionStepId + ".outputs.version }}.nupkg"
+                ]
+
                 step(
-                    name = "Create release",
-                    id = "release",
-                    usesSpec = Auto "actions/create-release",
-                    env = Map.ofList [
-                        "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                    ],
+                    name = "Create a release",
+                    usesSpec = Auto "softprops/action-gh-release",
                     options = Map.ofList [
-                        "tag_name", "${{ github.ref }}"
-                        "release_name", "v${{ steps." + versionStepId + ".outputs.version }}"
+                        "name", "v${{ steps." + versionStepId + ".outputs.version }}"
                         "body_path", "./release-notes.md"
+                        "files", allFiles |> String.concat "\n"
                     ]
                 )
-
-                let uploadArchive platform arch =
-                    step(
-                        name = $"Upload archive: {platform}.{arch}",
-                        usesSpec = Auto "actions/upload-release-asset",
-                        env = Map.ofList [
-                            "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                        ],
-                        options = Map.ofList [
-                            "upload_url", "${{ steps.release.outputs.upload_url }}"
-                            "asset_name", $"{Names.ciArtifact platform arch}.zip"
-                            "asset_path", $"./{Names.ciArtifact platform arch}.zip"
-                            "asset_content_type", "application/zip"
-                        ]
-                    )
-
-                uploadArchive Platform.MacOS Arch.AArch64
-                uploadArchive Platform.MacOS Arch.X86_64
-                uploadArchive Platform.Ubuntu22_04 Arch.AArch64
-                uploadArchive Platform.Ubuntu22_04 Arch.X86_64
-                uploadArchive Platform.Windows Arch.AArch64
-                uploadArchive Platform.Windows Arch.X86_64
-
-                let uploadPackage fileName =
-                    step(
-                        name = $"Upload NuGet package: {fileName}",
-                        usesSpec = Auto "actions/upload-release-asset",
-                        env = Map.ofList [
-                            "GITHUB_TOKEN", "${{ secrets.GITHUB_TOKEN }}"
-                        ],
-                        options = Map.ofList [
-                            "upload_url", "${{ steps.release.outputs.upload_url }}"
-                            "asset_name", fileName
-                            "asset_path", $"./build/{fileName}"
-                            "asset_content_type", "application/zip"
-                        ]
-                    )
-
-                let uploadPlatformPackage platform arch =
-                    uploadPackage (
-                        $"{Names.package platform arch}." + "${{ steps." + versionStepId + ".outputs.version }}.nupkg"
-                    )
-
-                uploadPlatformPackage Platform.MacOS Arch.AArch64
-                uploadPlatformPackage Platform.MacOS Arch.X86_64
-                uploadPlatformPackage Platform.Ubuntu22_04 Arch.AArch64
-                uploadPlatformPackage Platform.Ubuntu22_04 Arch.X86_64
-                uploadPlatformPackage Platform.Windows Arch.AArch64
-                uploadPlatformPackage Platform.Windows Arch.X86_64
-                uploadPackage ("tdlib.native.${{ steps." + versionStepId + ".outputs.version }}.nupkg")
             ]
 
             let pushPackage (fileName: string) =
