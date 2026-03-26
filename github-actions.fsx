@@ -513,7 +513,7 @@ let workflows = [
             step(
                 name = "Verify encoding",
                 shell = "pwsh",
-                run = "Install-Module VerifyEncoding -Repository PSGallery -RequiredVersion 2.2.1 -Force && Test-Encoding"
+                run = "Install-Module VerifyEncoding -Repository PSGallery -RequiredVersion 2.3.0 -Force && Test-Encoding"
             )
         ]
     ]
