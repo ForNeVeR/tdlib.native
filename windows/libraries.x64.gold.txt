@@ -44,8 +44,8 @@ tdjson.dll
   VCRUNTIME140_1.dll
   VCRUNTIME140.dll
   WS2_32.dll
-  zlib1.dll
-zlib1.dll
+  z.dll
+z.dll
   api-ms-win-crt-convert-l1-1-0.dll
   api-ms-win-crt-heap-l1-1-0.dll
   api-ms-win-crt-runtime-l1-1-0.dll

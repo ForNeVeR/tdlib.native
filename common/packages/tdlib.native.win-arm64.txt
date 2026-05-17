@@ -4,5 +4,5 @@ README.md
 runtimes/win-arm64/native/libcrypto-3-arm64.dll
 runtimes/win-arm64/native/libssl-3-arm64.dll
 runtimes/win-arm64/native/tdjson.dll
-runtimes/win-arm64/native/zlib1.dll
+runtimes/win-arm64/native/z.dll
 tdlib.native.win-arm64.nuspec
