@@ -46,7 +46,7 @@ jobs:
       shell: pwsh
       run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
     - name: Cache artifacts
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: ubuntu-22.04.x86-64.${{ hashFiles('.github/cache-key.json') }}
         path: artifacts
@@ -78,7 +78,7 @@ jobs:
       shell: pwsh
       run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
     - name: Cache artifacts
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: ubuntu-22.04.aarch64.${{ hashFiles('.github/cache-key.json') }}
         path: artifacts
@@ -110,7 +110,7 @@ jobs:
       shell: pwsh
       run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
     - name: Cache artifacts
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: macos.aarch64.${{ hashFiles('.github/cache-key.json') }}
         path: artifacts
@@ -142,7 +142,7 @@ jobs:
       shell: pwsh
       run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
     - name: Cache artifacts
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: macos.x86-64.${{ hashFiles('.github/cache-key.json') }}
         path: artifacts
@@ -174,7 +174,7 @@ jobs:
       shell: pwsh
       run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
     - name: Cache artifacts
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: windows.x86-64.${{ hashFiles('.github/cache-key.json') }}
         path: artifacts
@@ -203,7 +203,7 @@ jobs:
       shell: pwsh
       run: ./common/Test-UpToDate.ps1 -GenerateCacheKey
     - name: Cache artifacts
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: windows.aarch64.${{ hashFiles('.github/cache-key.json') }}
         path: artifacts
@@ -255,7 +255,7 @@ jobs:
       shell: pwsh
       run: dotnet pack tdlib.native.linux-x64.proj -p:Version=${{ steps.version.outputs.version }}-test --output build
     - name: NuGet cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
         path: ${{ github.workspace }}/.github/nuget-packages
@@ -296,7 +296,7 @@ jobs:
       shell: pwsh
       run: dotnet pack tdlib.native.linux-arm64.proj -p:Version=${{ steps.version.outputs.version }}-test --output build
     - name: NuGet cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
         path: ${{ github.workspace }}/.github/nuget-packages
@@ -334,7 +334,7 @@ jobs:
       shell: pwsh
       run: dotnet pack tdlib.native.osx-arm64.proj -p:Version=${{ steps.version.outputs.version }}-test --output build
     - name: NuGet cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
         path: ${{ github.workspace }}/.github/nuget-packages
@@ -372,7 +372,7 @@ jobs:
       shell: pwsh
       run: dotnet pack tdlib.native.osx-x64.proj -p:Version=${{ steps.version.outputs.version }}-test --output build
     - name: NuGet cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
         path: ${{ github.workspace }}/.github/nuget-packages
@@ -398,7 +398,7 @@ jobs:
         name: tdlib.native.windows.x86-64
         path: build/tdlib.native.win-x64/runtimes/win-x64/native
     - name: Cache downloads for Windows
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: ${{ hashFiles('windows/install.ps1') }}
         path: build/downloads
@@ -418,7 +418,7 @@ jobs:
       shell: pwsh
       run: dotnet pack tdlib.native.win-x64.proj -p:Version=${{ steps.version.outputs.version }}-test --output build
     - name: NuGet cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
         path: ${{ github.workspace }}/.github/nuget-packages
@@ -444,7 +444,7 @@ jobs:
         name: tdlib.native.windows.aarch64
         path: build/tdlib.native.win-arm64/runtimes/win-arm64/native
     - name: Cache downloads for Windows
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: ${{ hashFiles('windows/install.ps1') }}
         path: build/downloads
@@ -464,7 +464,7 @@ jobs:
       shell: pwsh
       run: dotnet pack tdlib.native.win-arm64.proj -p:Version=${{ steps.version.outputs.version }}-test --output build
     - name: NuGet cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
         path: ${{ github.workspace }}/.github/nuget-packages
