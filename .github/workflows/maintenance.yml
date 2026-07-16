@@ -34,7 +34,7 @@ jobs:
         key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
         path: ${{ github.workspace }}/.github/nuget-packages
     - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
     - id: update-dependency
       name: Update TDLib
       shell: pwsh
@@ -68,7 +68,7 @@ jobs:
         key: ${{ runner.os }}.nuget.${{ hashFiles('**/*.*proj') }}
         path: ${{ github.workspace }}/.github/nuget-packages
     - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
     - id: update-dependency
       name: Update tdsharp
       shell: pwsh
