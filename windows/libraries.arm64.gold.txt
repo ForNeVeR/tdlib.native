@@ -39,6 +39,7 @@ tdjson.dll
   libcrypto-3-arm64.dll
   libssl-3-arm64.dll
   MSVCP140.dll
+  MSWSOCK.dll
   Normaliz.dll
   VCRUNTIME140.dll
   WS2_32.dll
