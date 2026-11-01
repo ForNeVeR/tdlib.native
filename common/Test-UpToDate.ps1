@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Friedrich von Never <friedrich@fornever.me>
+# SPDX-FileCopyrightText: 2024-2026 Friedrich von Never <friedrich@fornever.me>
 #
 # SPDX-License-Identifier: BSL-1.0
 
@@ -10,7 +10,7 @@ param (
     [switch] $GenerateResultKey,
     [string] $CacheKeyFile = "$RepoRoot/.github/cache-key.json",
     [string] $ResultKeyFile = "$ArtifactsDirectory/cache-key.json",
-    [string] $CacheVersion = 'v7'
+    [string] $CacheVersion = 'v8'
 )
 
 $ErrorActionPreference = 'Stop'

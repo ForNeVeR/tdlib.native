@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2018-2025 Friedrich von Never <friedrich@fornever.me>
+SPDX-FileCopyrightText: 2018-2026 Friedrich von Never <friedrich@fornever.me>
 
 SPDX-License-Identifier: BSL-1.0
 -->
@@ -13,8 +13,8 @@ This is a project to pack [TDLib][tdlib] (the Telegram Database library) binarie
 - [Ubuntu 22.04][spec.ubuntu-22.04] (x86-64) _(GitHub Actions image: `ubuntu-22.04`)_
 - [Windows 11][spec.windows-arm] (AArch64) _(GitHub Actions image: `windows-11-arm`)_
 - [Windows Server 2022][spec.windows] (x86-64) _(GitHub Actions image: `windows-2022`)_
-- [macOS 14][spec.macos-14] (AArch64) _(GitHub Actions image: `macos-14`)_
-- [macOS 15][spec.macos-15] (x86-64) _(GitHub Actions image: `macos-15`)_
+- [macOS 15][spec.macos-15-arm] (AArch64) _(GitHub Actions image: `macos-15`)_
+- [macOS 15][spec.macos-15] (x86-64) _(GitHub Actions image: `macos-15-intel`)_
 
 We aim to create a transparent process with no manual intervention, where every artifact is produced in a clean CI environment and uploaded automatically.
 
@@ -86,7 +86,7 @@ The license indication in the project's sources is compliant with the [REUSE spe
 [releases]: https://github.com/ForNeVeR/tdlib.native/releases
 [reuse.spec]: https://reuse.software/spec-3.3/
 [reuse]: https://reuse.software/
-[spec.macos-14]: https://github.com/actions/runner-images/blob/main/images/macos/macos-14-Readme.md
+[spec.macos-15-arm]: https://github.com/actions/runner-images/blob/main/images/macos/macos-15-arm64-Readme.md
 [spec.macos-15]: https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md
 [spec.ubuntu-22.04-arm]: https://github.com/actions/partner-runner-images/blob/main/images/arm-ubuntu-22-image.md
 [spec.ubuntu-22.04]: https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md
