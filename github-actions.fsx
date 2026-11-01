@@ -18,8 +18,8 @@ open type Generaptor.Library.Patterns
 
 let mainBranch = "master"
 
-let macOs14 = "macos-14"
-let macOs15 = "macos-15-intel"
+let macOs15Arm = "macos-15"
+let macOs15Intel = "macos-15-intel"
 let ubuntu22_04 = "ubuntu-22.04"
 let ubuntu22_04Arm = "ubuntu-22.04-arm"
 let ubuntuLatest = "ubuntu-latest"
@@ -265,7 +265,7 @@ let workflows = [
         )
 
         Workflows.BuildJob(
-            image = macOs14,
+            image = macOs15Arm,
             platform = Platform.MacOS,
             arch = Arch.AArch64,
             installScript = "./macos/install.ps1",
@@ -273,7 +273,7 @@ let workflows = [
         )
 
         Workflows.BuildJob(
-            image = macOs15,
+            image = macOs15Intel,
             platform = Platform.MacOS,
             arch = Arch.X86_64,
             installScript = "./macos/install.ps1",
@@ -337,7 +337,7 @@ let workflows = [
             )
 
         Workflows.TestJob(
-            image = macOs14,
+            image = macOs15Arm,
             platform = Platform.MacOS,
             arch = Arch.AArch64,
             afterDownloadSteps = [
@@ -346,7 +346,7 @@ let workflows = [
         )
 
         Workflows.TestJob(
-            image = macOs15,
+            image = macOs15Intel,
             platform = Platform.MacOS,
             arch = Arch.X86_64,
             afterDownloadSteps = [

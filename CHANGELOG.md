@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [1.8.69] - 2026-11-02
 ### Changed
 - Update to [TDLib v1.8.69](https://github.com/ForNeVeR/tdlib-versioned/releases/tag/tdlib%2Fv1.8.69).
+- AArch64 builds for macOS are now built against macOS 15, not macOS 14.
 
 ## [1.8.67] - 2026-08-27
 ### Changed

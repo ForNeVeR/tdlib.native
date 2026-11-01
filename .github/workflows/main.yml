@@ -100,7 +100,7 @@ jobs:
         name: tdlib.native.ubuntu-22.04.aarch64
         path: artifacts/*
   build-macos-aarch64:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
     - name: Check out the sources
       uses: actions/checkout@v7
@@ -306,7 +306,7 @@ jobs:
   test-macos-aarch64:
     needs:
     - build-macos-aarch64
-    runs-on: macos-14
+    runs-on: macos-15
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       DOTNET_NOLOGO: 1
