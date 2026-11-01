@@ -378,6 +378,9 @@ let workflows = [
         )
 
         job "release" [
+            jobPermission(PermissionKind.Contents, AccessKind.Write)
+            jobPermission(PermissionKind.IdToken, AccessKind.Write)
+
             runsOn ubuntuLatest
             yield! [
                 Names.buildJob Platform.MacOS Arch.AArch64
@@ -446,6 +449,19 @@ let workflows = [
                 run = "common/Test-Package.ps1"
             )
 
+            let nuGetPushCondition = "github.event_name == 'push' && contains(github.ref, 'refs/tags/')"
+            let nuGetLoginStepId = "nuget-login"
+
+            step(
+                id = nuGetLoginStepId,
+                name = "Log in to NuGet",
+                condition = nuGetPushCondition,
+                usesSpec = Auto "NuGet/login",
+                options = Map.ofList [
+                    "user", "${{ secrets.NUGET_USER }}"
+                ]
+            )
+
             yield! ifCalledOnTagPush [
                 let artifactDescriptors = [
                     Platform.MacOS, Arch.AArch64
@@ -484,9 +500,9 @@ let workflows = [
             let pushPackage (fileName: string) =
                 step(
                     name = $"Push {Path.GetFileNameWithoutExtension fileName} to nuget.org",
-                    condition = "github.event_name == 'push' && contains(github.ref, 'refs/tags/')",
+                    condition = nuGetPushCondition,
                     run = "dotnet nuget push --source https://api.nuget.org/v3/index.json" +
-                        " --api-key ${{ secrets.NUGET_KEY }}" +
+                        " --api-key ${{ steps." + nuGetLoginStepId + ".outputs.NUGET_API_KEY }}" +
                         $" ./build/{fileName}"
                 )
 
