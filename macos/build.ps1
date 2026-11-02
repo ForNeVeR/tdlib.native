@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2018-2025 Friedrich von Never <friedrich@fornever.me>
+# SPDX-FileCopyrightText: 2018-2026 Friedrich von Never <friedrich@fornever.me>
 #
 # SPDX-License-Identifier: BSL-1.0
 
@@ -18,7 +18,7 @@ if ($SkipUpToDateCheck -or !$(& $CheckUpToDateScript)) {
 
     $architecture = machine
     $isArm64 = $architecture -eq 'arm64e'
-    $openSslDir = if ($isArm64) { '/opt/homebrew/opt/openssl' } else { '/usr/local/opt/openssl' }
+    $openSslDir = if ($isArm64) { '/opt/homebrew/opt/openssl@3' } else { '/usr/local/opt/openssl@3' }
 
     Push-Location $td/build
     try {
