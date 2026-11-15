@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] (1.8.70)
+## [1.8.70] - 2026-11-15
 ### Changed
 - Update to [TDLib v1.8.70](https://github.com/ForNeVeR/tdlib-versioned/releases/tag/tdlib%2Fv1.8.70).
 
@@ -181,4 +181,5 @@ Initial release supporting TDLib v1.2.0.
 [1.8.66]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.64.1...v1.8.66
 [1.8.67]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.66...v1.8.67
 [1.8.69]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.67...v1.8.69
-[Unreleased]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.69...HEAD
+[1.8.70]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.69...v1.8.70
+[Unreleased]: https://github.com/ForNeVeR/tdlib.native/compare/v1.8.70...HEAD
