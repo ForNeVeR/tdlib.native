@@ -27,6 +27,14 @@ libssl-3-x64.dll
   libcrypto-3-x64.dll
   VCRUNTIME140.dll
   WS2_32.dll
+libz.dll
+  api-ms-win-crt-convert-l1-1-0.dll
+  api-ms-win-crt-heap-l1-1-0.dll
+  api-ms-win-crt-runtime-l1-1-0.dll
+  api-ms-win-crt-stdio-l1-1-0.dll
+  api-ms-win-crt-string-l1-1-0.dll
+  KERNEL32.dll
+  VCRUNTIME140.dll
 tdjson.dll
   api-ms-win-crt-convert-l1-1-0.dll
   api-ms-win-crt-heap-l1-1-0.dll
@@ -39,18 +47,10 @@ tdjson.dll
   KERNEL32.dll
   libcrypto-3-x64.dll
   libssl-3-x64.dll
+  libz.dll
   MSVCP140.dll
   MSWSOCK.dll
   Normaliz.dll
   VCRUNTIME140_1.dll
   VCRUNTIME140.dll
   WS2_32.dll
-  z.dll
-z.dll
-  api-ms-win-crt-convert-l1-1-0.dll
-  api-ms-win-crt-heap-l1-1-0.dll
-  api-ms-win-crt-runtime-l1-1-0.dll
-  api-ms-win-crt-stdio-l1-1-0.dll
-  api-ms-win-crt-string-l1-1-0.dll
-  KERNEL32.dll
-  VCRUNTIME140.dll
